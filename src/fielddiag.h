@@ -8,24 +8,26 @@
 
 #include <fstream>
 
-class FieldDiag : public SimpleDiagnostic<DataGrid,HDFostream>
+class FieldDiag : public SimpleDiagnostic<DataGridContainer,HDFostream>
 {
   public:
     void fetchField(Storage &storage);
   private:
     std::string fieldId;
+    DataGridContainer field;
   protected:
-    typedef SimpleDiagnostic<DataGrid,HDFostream> ParentType;
+    typedef SimpleDiagnostic<DataGridContainer,HDFostream> ParentType;
     ParameterMap* MakeParamMap (ParameterMap* pm = NULL);  
 };
 
-class FieldSliceDiag : public SimpleDiagnostic<DataGrid2d,HDFostream>
+class FieldSliceDiag : public SimpleDiagnostic<DataGrid2dContainer,HDFostream>
 {
   public:
     void fetchField(Storage &storage);
   private:
     std::string fieldId;
     DataGrid2d slice;
+    DataGrid2dContainer sliceContainer;
     DataGrid *field;
     
     int pos;
@@ -38,7 +40,7 @@ class FieldSliceDiag : public SimpleDiagnostic<DataGrid2d,HDFostream>
     
     bool active;
   protected:
-    typedef SimpleDiagnostic<DataGrid2d,HDFostream> ParentType;
+    typedef SimpleDiagnostic<DataGrid2dContainer,HDFostream> ParentType;
     ParameterMap* MakeParamMap (ParameterMap* pm = NULL);
     void write(); 
 };

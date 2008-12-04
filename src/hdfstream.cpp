@@ -1,5 +1,8 @@
 #include "hdfstream.h"
 
+#ifndef SINGLE_PROCESSOR
+#include <mpi.h>
+#endif
 
 HDFstream::HDFstream()
   : file_id(-1),
@@ -80,8 +83,18 @@ int HDFistream::open(const char* fname)
 {
   close();
 
+#ifndef SINGLE_PROCESSOR
+  /* setup file access template */
+  hid_t plist_id = H5Pcreate (H5P_FILE_ACCESS);
+  /* set Parallel access with communicator */
+  H5Pset_fapl_mpio(plist_id, MPI_COMM_WORLD, MPI_INFO_NULL);   
+  /* open the file collectively */
+  file_id = H5Fopen (fname, H5F_ACC_RDONLY, plist_id);
+  /* Release file-access template */
+  H5Pclose(plist_id);
+#else
   file_id = H5Fopen (fname, H5F_ACC_RDONLY, H5P_DEFAULT);
-  
+#endif  
   sets_count = 0;
   return 1;
 }
@@ -106,7 +119,19 @@ HDFostream::HDFostream(const char* fname)
 int HDFostream::open(const char* fname)
 {
   sets_count = 0;
+  
+#ifndef SINGLE_PROCESSOR
+  /* setup file access template */
+  hid_t plist_id = H5Pcreate(H5P_FILE_ACCESS);
+  /* set Parallel access with communicator */
+  H5Pset_fapl_mpio(plist_id, MPI_COMM_WORLD, MPI_INFO_NULL);  
+  file_id = H5Fcreate (fname, H5F_ACC_TRUNC, H5P_DEFAULT, plist_id);
+  /* Release file-access template */
+  H5Pclose(plist_id);
+#else
   file_id = H5Fcreate (fname, H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
+#endif  
+
   return file_id;
 }
 

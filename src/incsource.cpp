@@ -257,10 +257,21 @@ void SideInjectSourceFunc::setTime(int Time)
   
 //  std::cerr << "Reading Block " << blocks[transverse1] << std::endl;
   data.setBlockName(blocks[transverse1]);
-  data >> F1;
+  
+//==========================================================
+// The following line is commented because it does not
+// agree with the new HDFStream
+
+//  data >> F1;
+
 //  std::cerr << "Reading Block " << blocks[transverse2] << std::endl;
   data.setBlockName(blocks[transverse2]);
-  data >> F2;
+
+//==========================================================
+// The following line is commented because it does not
+// agree with the new HDFStream
+
+//  data >> F2;
   
 //  std::cerr << "Adjusting Parameters\n";
   data.close();

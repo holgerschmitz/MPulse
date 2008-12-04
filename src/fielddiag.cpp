@@ -16,7 +16,11 @@ ParameterMap* FieldDiag::MakeParamMap (ParameterMap* pm)
 
 void FieldDiag::fetchField(Storage &storage)
 {
-  this->setField(&(storage.getGrid(fieldId)));
+  field.grid = &storage.getGrid(fieldId);
+  field.global_min = Globals::instance().gridLow();
+  field.global_max = Globals::instance().gridHigh();
+  
+  this->setField(&field);
 }
 
 //-----------------------------------------------------------------------------
@@ -38,6 +42,8 @@ void FieldSliceDiag::fetchField(Storage &storage)
   this->field = &storage.getGrid(fieldId);
   GridIndex low = storage.getLow();
   GridIndex high = storage.getHigh();
+  GridIndex glow = Globals::instance().gridLow();
+  GridIndex ghigh = Globals::instance().gridHigh();
   
   switch (plane[0]) {
     case 'y':
@@ -64,28 +70,35 @@ void FieldSliceDiag::fetchField(Storage &storage)
   high2 = high[dim2];
   
   active = (pos>low[normal]) && (pos<high[normal]);
-  
-  if (!active) return;
-  
+  if (!active) {
+    high1 = low1-1;
+    high2 = low2-1;
+  }
+    
   slice.resize(GridIndex2d(low1, low2), GridIndex2d(high1, high2));
-  this->setField(&slice);
+  sliceContainer.grid = &slice;
+  sliceContainer.global_min = GridIndex2d(glow[dim1], glow[dim2]);
+  sliceContainer.global_max = GridIndex2d(ghigh[dim1], ghigh[dim2]);
+  
+  this->setField(&sliceContainer);
 }
 
 void FieldSliceDiag::write()
 {
-  if (!active) return;
+  if (active)
+  {
+    GridIndex i;
+    i[normal] = pos;
 
-  GridIndex i;
-  i[normal] = pos;
-  
-  int d1 = dim1;
-  int d2 = dim2;
-  
-  for (i[d1]=low1; i[d1]<=high1; ++i[d1])
-    for (i[d2]=low2; i[d2]<=high2; ++i[d2])
-    {
-      slice(i[d1],i[d2]) = (*field)(i[0], i[1], i[2]);
-    }
+    int d1 = dim1;
+    int d2 = dim2;
+
+    for (i[d1]=low1; i[d1]<=high1; ++i[d1])
+      for (i[d2]=low2; i[d2]<=high2; ++i[d2])
+      {
+        slice(i[d1],i[d2]) = (*field)(i[0], i[1], i[2]);
+      }
+  }
     
   ParentType::write();
 }

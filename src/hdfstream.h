@@ -14,6 +14,23 @@
     */
 //-----------------------------------------------------------------------------
 //HDFstream
+
+template<typename TYPE, int RANK, template<int> class Checking>
+struct MatrixContainer
+{
+  schnek::Matrix<TYPE, RANK, Checking> *grid;
+  typename schnek::Matrix<TYPE, RANK, Checking>::IndexType global_min;
+  typename schnek::Matrix<TYPE, RANK, Checking>::IndexType global_max;
+};
+
+//typedef MatrixContainer<double, 3, schnek::MatrixNoArgCheck> DataGridContainer;
+//typedef MatrixContainer<double, 2, schnek::MatrixNoArgCheck> DataGrid2dContainer;
+
+typedef MatrixContainer<double, 3, schnek::MatrixAssertCheck> DataGridContainer;
+typedef MatrixContainer<double, 2, schnek::MatrixAssertCheck> DataGrid2dContainer;
+
+
+
 /** @brief IO class for handling HDF files
   *  
   * This is the abstract base class for HDF-IO- classes.
@@ -76,7 +93,7 @@ class HDFistream : public HDFstream {
        
     /// stream input operator for a schnek::Matrix 
     template<typename TYPE, int RANK, template<int> class Checking>
-    HDFistream& operator>>(schnek::Matrix<TYPE, RANK, Checking>& m);
+    HDFistream& operator>>(MatrixContainer<TYPE, RANK, Checking>& m);
 };
 //HDFistream
 //-----------------------------------------------------------------------------
@@ -98,7 +115,7 @@ class HDFostream : public HDFstream {
     
     /// stream output operator for a matrix
     template<typename TYPE, int RANK, template<int> class Checking>
-    HDFostream& operator<< (const schnek::Matrix<TYPE, RANK, Checking>&);    
+    HDFostream& operator<< (const MatrixContainer<TYPE, RANK, Checking>&);    
 };
 
 template<typename TYPE>
