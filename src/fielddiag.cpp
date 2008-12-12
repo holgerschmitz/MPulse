@@ -27,9 +27,25 @@ void FieldDiag::fetchField(Storage &storage)
 //---------   FieldSliceDiag
 //-----------------------------------------------------------------------------
 
+void FieldSliceDiag::open(const std::string &fname)
+{
+  output.open(fname.c_str());
+}
+
+FieldSliceDiag::~FieldSliceDiag()
+{
+  output.close();
+}
+
+void FieldSliceDiag::close()
+{
+  output.close();
+}
+
+
 ParameterMap* FieldSliceDiag::MakeParamMap (ParameterMap* pm)
 {
-  pm = ParentType::MakeParamMap(pm);
+  pm = DiagnosticInterface::MakeParamMap(pm);
 
   (*pm)["field"] = WParameter(new ParameterValue<std::string>(&fieldId,""));
   (*pm)["plane"] = WParameter(new ParameterValue<std::string>(&plane,"x"));
@@ -70,17 +86,12 @@ void FieldSliceDiag::fetchField(Storage &storage)
   high2 = high[dim2];
   
   active = (pos>low[normal]) && (pos<high[normal]);
-  if (!active) {
-    high1 = low1-1;
-    high2 = low2-1;
-  }
+  output.setActive(active);
     
   slice.resize(GridIndex2d(low1, low2), GridIndex2d(high1, high2));
   sliceContainer.grid = &slice;
   sliceContainer.global_min = GridIndex2d(glow[dim1], glow[dim2]);
   sliceContainer.global_max = GridIndex2d(ghigh[dim1], ghigh[dim2]);
-  
-  this->setField(&sliceContainer);
 }
 
 void FieldSliceDiag::write()
@@ -100,7 +111,7 @@ void FieldSliceDiag::write()
       }
   }
     
-  ParentType::write();
+  output << sliceContainer;
 }
 
 //-----------------------------------------------------------------------------

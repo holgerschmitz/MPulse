@@ -18,6 +18,7 @@
 template<typename TYPE, int RANK, template<int> class Checking>
 struct MatrixContainer
 {
+  bool active;
   schnek::Matrix<TYPE, RANK, Checking> *grid;
   typename schnek::Matrix<TYPE, RANK, Checking>::IndexType global_min;
   typename schnek::Matrix<TYPE, RANK, Checking>::IndexType global_max;
@@ -49,6 +50,10 @@ class HDFstream {
     /// counter for the sets with a given blockname read from or written to the file
     int sets_count;  
     
+    /// Specifies if the stream is active in this process (in case of parallel execution)
+    bool active;
+    bool activeModified;
+    
   public:
     /// constructor 
     HDFstream();
@@ -69,8 +74,19 @@ class HDFstream {
     void setBlockName(std::string blockname_);
     /// assign 
     HDFstream& operator = (const HDFstream&);
+    
+    void setActive(bool active_) { active = active_; activeModified = true; }
+    
   protected:
     std::string getNextBlockName();
+    
+#ifndef SINGLE_PROCESSOR
+    void makeMPIGroup();
+  
+    MPI_Comm mpiComm;
+    bool commSet;
+#endif
+
 };
 
 //HDFstream

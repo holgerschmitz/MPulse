@@ -7,6 +7,10 @@
 template<typename TYPE, int RANK, template<int> class Checking>
 HDFistream& HDFistream::operator>>(MatrixContainer<TYPE, RANK, Checking>& m)
 {
+#ifndef SINGLE_PROCESSOR
+  if (!active) return *this;
+#endif
+
   std::string dset_name = getNextBlockName();
 
   typedef typename schnek::Matrix<TYPE, RANK, Checking>::IndexType IndexType;
@@ -34,38 +38,35 @@ HDFistream& HDFistream::operator>>(MatrixContainer<TYPE, RANK, Checking>& m)
   assert(dataset != -1);
   
 #ifndef SINGLE_PROCESSOR
-  if (m.active)
-  {
-    /* create a file dataspace independently */
-    hid_t file_dataspace = H5Dget_space(dataset);
-    assert(file_dataspace != -1);
+  /* create a file dataspace independently */
+  hid_t file_dataspace = H5Dget_space(dataset);
+  assert(file_dataspace != -1);
 
-    hid_t ret=H5Sselect_hyperslab(file_dataspace, 
-                                  H5S_SELECT_SET, 
-                                  start, 
-                                  NULL,
-	                                locdims, 
-                                  NULL);
-    assert(ret != -1);
+  hid_t ret=H5Sselect_hyperslab(file_dataspace, 
+                                H5S_SELECT_SET, 
+                                start, 
+                                NULL,
+	                              locdims, 
+                                NULL);
+  assert(ret != -1);
 
-    /* create a memory dataspace independently */
-    hid_t mem_dataspace = H5Screate_simple(RANK, locdims, NULL);
-    assert (mem_dataspace != -1);
+  /* create a memory dataspace independently */
+  hid_t mem_dataspace = H5Screate_simple(RANK, locdims, NULL);
+  assert (mem_dataspace != -1);
 
 
-    /* read the data independently */
-    ret = H5Dread(dataset,
-                  H5DataType<TYPE>::type, 
-                  mem_dataspace, 
-                  file_dataspace,
-	                H5P_DEFAULT,
-                  data);
-    assert(ret != -1);
+  /* read the data independently */
+  ret = H5Dread(dataset,
+                H5DataType<TYPE>::type, 
+                mem_dataspace, 
+                file_dataspace,
+	              H5P_DEFAULT,
+                data);
+  assert(ret != -1);
 
-    /* release all IDs created */
-    H5Sclose(mem_dataspace);
-    H5Sclose(file_dataspace);
-  }
+  /* release all IDs created */
+  H5Sclose(mem_dataspace);
+  H5Sclose(file_dataspace);
 #else
   /* read the data on single processor */
   hid_t ret = H5Dread(dataset,
@@ -88,6 +89,10 @@ HDFistream& HDFistream::operator>>(MatrixContainer<TYPE, RANK, Checking>& m)
 template<typename TYPE, int RANK, template<int> class Checking>
 HDFostream& HDFostream::operator<< (const MatrixContainer<TYPE, RANK, Checking>& m)
 {
+#ifndef SINGLE_PROCESSOR
+  if (!active) return *this;
+#endif
+
   std::string dset_name = getNextBlockName();
   
   typedef typename schnek::Matrix<TYPE, RANK, Checking>::IndexType IndexType;
@@ -139,17 +144,9 @@ HDFostream& HDFostream::operator<< (const MatrixContainer<TYPE, RANK, Checking>&
   /* create a file dataspace independently */
   hid_t file_dataspace = H5Dget_space(dataset);
 
-  if (!empty)
-  {
-    ret = H5Sselect_hyperslab(file_dataspace,  H5S_SELECT_SET, 
+  ret = H5Sselect_hyperslab(file_dataspace,  H5S_SELECT_SET, 
                               start, NULL, locdims, NULL);
-    assert(ret != -1);
-  }
-  else
-  {
-    ret = H5Sselect_none(file_dataspace);
-    assert(ret != -1);
-  }
+  assert(ret != -1);
 
   /* create a memory dataspace independently */
   hid_t mem_dataspace = H5Screate_simple (RANK, locdims, NULL);
