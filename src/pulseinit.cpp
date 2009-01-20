@@ -40,13 +40,13 @@ void GaussPulseInit::init(Storage &fields)
   for (int i=low[0]; i<=high[0]; ++i)
     for (int j=low[1]; j<=high[1]; ++j)
     {
-//      double iie = i-xh;
-//      double jje = j-yh;
-//      double rre = (iie*iie*dx2 + jje*jje*dy2) / rr0;
-      
-//      double iib = i+0.5-xh;
-//      double jjb = j+0.5-yh;
-//      double rrb = (iib*iib*dx2 + jjb*jjb*dy2) / rr0;
+      double iie = i-xh;
+      double jje = j-yh;
+      double rre = (iie*iie*dx2 + jje*jje*dy2) / rr0;
+    
+      double iib = i+0.5-xh;
+      double jjb = j+0.5-yh;
+      double rrb = (iib*iib*dx2 + jjb*jjb*dy2) / rr0;
       
       for (int k=low[2]+bound; k<=high[2]-bound; ++k)
       {
@@ -56,10 +56,10 @@ void GaussPulseInit::init(Storage &fields)
         double kze = k*nkz;
         double kzb = (k+0.5)*nkz;
         
- //       double ampe = cos(kze - C*rre)*exp(-nze*nze/zz0 - rre);
- //       double ampb = cos(kzb - C*rrb)*exp(-nzb*nzb/zz0 - rrb);
-        double ampe = cos(kze)*exp(-nze*nze/zz0);
-        double ampb = cos(kzb)*exp(-nzb*nzb/zz0);
+        double ampe = cos(kze - C*rre)*exp(-nze*nze/zz0 - rre);
+        double ampb = cos(kzb - C*rrb)*exp(-nzb*nzb/zz0 - rrb);
+ //       double ampe = cos(kze)*exp(-nze*nze/zz0);
+ //       double ampb = cos(kzb)*exp(-nzb*nzb/zz0);
         
         Ex(i,j,k) = ex*ampe;
         Ey(i,j,k) = ey*ampe;

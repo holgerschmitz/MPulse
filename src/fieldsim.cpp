@@ -87,6 +87,7 @@ void FieldSimulation::init()
     initializer->init(*this);
     if (!Globals::instance().isRestart())
       solver->stepSchemeInit(dt);
+    std::cerr << ">>> solver->stepSchemeInit >>>\n";
   }
 }
 

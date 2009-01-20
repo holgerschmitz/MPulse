@@ -14,6 +14,24 @@
     */
 //-----------------------------------------------------------------------------
 //HDFstream
+
+template<typename TYPE, int RANK, template<int> class Checking>
+struct MatrixContainer
+{
+  bool active;
+  schnek::Matrix<TYPE, RANK, Checking> *grid;
+  typename schnek::Matrix<TYPE, RANK, Checking>::IndexType global_min;
+  typename schnek::Matrix<TYPE, RANK, Checking>::IndexType global_max;
+};
+
+//typedef MatrixContainer<double, 3, schnek::MatrixNoArgCheck> DataGridContainer;
+//typedef MatrixContainer<double, 2, schnek::MatrixNoArgCheck> DataGrid2dContainer;
+
+typedef MatrixContainer<double, 3, schnek::MatrixAssertCheck> DataGridContainer;
+typedef MatrixContainer<double, 2, schnek::MatrixAssertCheck> DataGrid2dContainer;
+
+
+
 /** @brief IO class for handling HDF files
   *  
   * This is the abstract base class for HDF-IO- classes.
@@ -31,6 +49,10 @@ class HDFstream {
     std::string blockname;
     /// counter for the sets with a given blockname read from or written to the file
     int sets_count;  
+    
+    /// Specifies if the stream is active in this process (in case of parallel execution)
+    bool active;
+    bool activeModified;
     
   public:
     /// constructor 
@@ -52,8 +74,19 @@ class HDFstream {
     void setBlockName(std::string blockname_);
     /// assign 
     HDFstream& operator = (const HDFstream&);
+    
+    void setActive(bool active_) { active = active_; activeModified = true; }
+    
   protected:
     std::string getNextBlockName();
+    
+#ifndef SINGLE_PROCESSOR
+    void makeMPIGroup();
+  
+    MPI_Comm mpiComm;
+    bool commSet;
+#endif
+
 };
 
 //HDFstream
@@ -76,7 +109,7 @@ class HDFistream : public HDFstream {
        
     /// stream input operator for a schnek::Matrix 
     template<typename TYPE, int RANK, template<int> class Checking>
-    HDFistream& operator>>(schnek::Matrix<TYPE, RANK, Checking>& m);
+    HDFistream& operator>>(MatrixContainer<TYPE, RANK, Checking>& m);
 };
 //HDFistream
 //-----------------------------------------------------------------------------
@@ -98,7 +131,7 @@ class HDFostream : public HDFstream {
     
     /// stream output operator for a matrix
     template<typename TYPE, int RANK, template<int> class Checking>
-    HDFostream& operator<< (const schnek::Matrix<TYPE, RANK, Checking>&);    
+    HDFostream& operator<< (const MatrixContainer<TYPE, RANK, Checking>&);    
 };
 
 template<typename TYPE>

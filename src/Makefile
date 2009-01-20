@@ -74,7 +74,7 @@ all: mpulse
 
 mpulse: $(MPULSE_OBJECTS) 
 	$(CXX) $^ -o $@ $(OFLAGS) $(LDFLAGS) $(LOADLIBS)
-	cp $@ $(HOME)/bin/$(X_OSTYPE)/
+	cp $@ $(HOME)/bin/$(X_OSTYPE)/mpulse_hdfmpi
 
 
 %.o: %.cpp

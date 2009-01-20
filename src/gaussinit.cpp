@@ -78,6 +78,7 @@ void PlaneGaussPulseInit::init(Storage &fields)
         Bz(i,j,k) = -bz*ampb;
       }
   
+  std::cerr << ">>> INITIALIZING Gaussian Pulse >>>\n";
 }
 
 

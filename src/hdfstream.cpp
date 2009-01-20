@@ -1,18 +1,31 @@
 #include "hdfstream.h"
 
+#ifndef SINGLE_PROCESSOR
+#include <mpi.h>
+#endif
 
 HDFstream::HDFstream()
   : file_id(-1),
     status(0),
     blockname("data"),
-    sets_count(0)
+    sets_count(0),
+    active(true),
+    activeModified(false)
+#ifndef SINGLE_PROCESSOR
+    , commSet(false)
+#endif
 {}
 
 HDFstream::HDFstream(const HDFstream& hdf)
   : file_id(hdf.file_id),
     status(hdf.status),
     blockname(hdf.blockname),
-    sets_count(hdf.sets_count)
+    sets_count(hdf.sets_count),
+    active(true),
+    activeModified(false)
+#ifndef SINGLE_PROCESSOR
+    , commSet(false)
+#endif
 {}
 
 HDFstream &HDFstream::operator=(const HDFstream& hdf)
@@ -21,6 +34,12 @@ HDFstream &HDFstream::operator=(const HDFstream& hdf)
   status = hdf.status;
   sets_count = hdf.sets_count;
   blockname = hdf.blockname;
+  active = hdf.active;
+  activeModified = hdf.activeModified;
+#ifndef SINGLE_PROCESSOR
+  mpiComm = hdf.mpiComm;
+  commSet = hdf.commSet;
+#endif
   return *this;
 }
 
@@ -61,6 +80,53 @@ std::string HDFstream::getNextBlockName()
   return bname.str();
 }
 
+#ifndef SINGLE_PROCESSOR
+void HDFstream::makeMPIGroup()
+{
+  if (!activeModified) {
+    if (!commSet)
+    {
+      mpiComm = MPI_COMM_WORLD;
+      commSet = true;
+    }
+    return;
+  }
+  
+  int rank, size;
+  MPI_Group worldGroup, activeGroup;
+  
+  MPI_Comm_size(MPI_COMM_WORLD, &size);
+  MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+  MPI_Comm_group(MPI_COMM_WORLD, &worldGroup);
+  
+  int *inputArr = new int[size];
+  int *activeArr = new int[size];
+  
+  for (int i=0; i<size; ++i) inputArr[i] = 0;
+  if (active) inputArr[rank] = 1;
+
+  MPI_Allreduce(inputArr, activeArr, size, MPI_INT, MPI_SUM, MPI_COMM_WORLD);
+
+  int count = 0;  
+  for (int i=0; i<size; ++i)
+  {
+    if (activeArr[i]>0) {
+      inputArr[count] = i;
+      ++count;
+    }
+  }
+  
+  MPI_Group_incl(worldGroup, count, inputArr, &activeGroup);
+  MPI_Comm_create(MPI_COMM_WORLD, activeGroup, &mpiComm);
+
+  delete[] activeArr;
+  delete[] inputArr;
+  
+  activeModified = false;
+}
+#endif
+
+
 // ----------------------------------------------------------------------
 
 HDFistream::HDFistream() 
@@ -80,8 +146,23 @@ int HDFistream::open(const char* fname)
 {
   close();
 
+#ifndef SINGLE_PROCESSOR
+  makeMPIGroup();
+  if (active)
+  {
+    /* setup file access template */
+    hid_t plist_id = H5Pcreate (H5P_FILE_ACCESS);
+
+    /* set Parallel access with communicator */
+    H5Pset_fapl_mpio(plist_id, mpiComm, MPI_INFO_NULL);   
+    /* open the file collectively */
+    file_id = H5Fopen (fname, H5F_ACC_RDONLY, plist_id);
+    /* Release file-access template */
+    H5Pclose(plist_id);
+  }
+#else
   file_id = H5Fopen (fname, H5F_ACC_RDONLY, H5P_DEFAULT);
-  
+#endif  
   sets_count = 0;
   return 1;
 }
@@ -106,7 +187,23 @@ HDFostream::HDFostream(const char* fname)
 int HDFostream::open(const char* fname)
 {
   sets_count = 0;
+  
+#ifndef SINGLE_PROCESSOR
+  makeMPIGroup();
+  if (active)
+  {
+    /* setup file access template */
+    hid_t plist_id = H5Pcreate(H5P_FILE_ACCESS);
+    /* set Parallel access with communicator */
+    H5Pset_fapl_mpio(plist_id, mpiComm, MPI_INFO_NULL);  
+    file_id = H5Fcreate (fname, H5F_ACC_TRUNC, H5P_DEFAULT, plist_id);
+    /* Release file-access template */
+    H5Pclose(plist_id);
+  }
+#else
   file_id = H5Fcreate (fname, H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
+#endif  
+
   return file_id;
 }
 

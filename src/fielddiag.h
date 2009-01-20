@@ -8,24 +8,60 @@
 
 #include <fstream>
 
-class FieldDiag : public SimpleDiagnostic<DataGrid,HDFostream>
+class FieldDiag : public SimpleDiagnostic<DataGridContainer,HDFostream>
 {
   public:
     void fetchField(Storage &storage);
   private:
     std::string fieldId;
+    DataGridContainer field;
   protected:
-    typedef SimpleDiagnostic<DataGrid,HDFostream> ParentType;
+    typedef SimpleDiagnostic<DataGridContainer,HDFostream> ParentType;
     ParameterMap* MakeParamMap (ParameterMap* pm = NULL);  
 };
 
-class FieldSliceDiag : public SimpleDiagnostic<DataGrid2d,HDFostream>
+class FieldSliceDiag : public DiagnosticInterface
+// : public SimpleDiagnostic<DataGrid2dContainer,HDFostream>
 {
+// methods and properties formerly implemented in SimpleDiagnostic
+
+  private:	  
+    /// Stream to write to
+    HDFostream output;
+	  
+    ///"true" if diagnostic is performed globaly
+    bool single_out;
+  public:
+	  ///default constructor
+    FieldSliceDiag() { single_out=false; }
+	  
+    ///destrcutor
+    ~FieldSliceDiag();
+    
+  protected:
+	  ///open a file stream, 
+    void open(const std::string &);
+	  
+    ///write diagnostics
+    void write();
+	  
+    ///close the file 
+    void close();
+	  
+    ///returns the single_out member
+    bool singleOut() { return single_out; }
+  public:
+	  ///set the single_out member
+    void setSingleOut(bool single_out_) { single_out = single_out_; }
+
+// methods and properties inherently part of FieldSliceDiag
+
   public:
     void fetchField(Storage &storage);
   private:
     std::string fieldId;
     DataGrid2d slice;
+    DataGrid2dContainer sliceContainer;
     DataGrid *field;
     
     int pos;
@@ -38,9 +74,10 @@ class FieldSliceDiag : public SimpleDiagnostic<DataGrid2d,HDFostream>
     
     bool active;
   protected:
-    typedef SimpleDiagnostic<DataGrid2d,HDFostream> ParentType;
+    typedef SimpleDiagnostic<DataGrid2dContainer,HDFostream> ParentType;
     ParameterMap* MakeParamMap (ParameterMap* pm = NULL);
-    void write(); 
+
+
 };
 
 
