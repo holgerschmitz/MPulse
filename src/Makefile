@@ -32,7 +32,9 @@ MPULSE_SOURCES = hdfstream.cpp \
 	process.cpp \
 	pulseinit.cpp \
 	rebuild.cpp \
+    shortpulseinject.cpp \
 	sources.cpp \
+	specfunc.cpp \
 	storage.cpp \
 	waveinit.cpp
 
@@ -60,7 +62,9 @@ MPULSE_OBJECTS = hdfstream.o \
 	process.o \
 	pulseinit.o \
 	rebuild.o \
+    shortpulseinject.o \
 	sources.o \
+	specfunc.o \
 	storage.o \
 	waveinit.o
 
@@ -74,7 +78,7 @@ all: mpulse
 
 mpulse: $(MPULSE_OBJECTS) 
 	$(CXX) $^ -o $@ $(OFLAGS) $(LDFLAGS) $(LOADLIBS)
-	cp $@ $(HOME)/bin/$(X_OSTYPE)/mpulse_hdfmpi
+	cp $@ $(HOME)/bin/$(X_OSTYPE)/mpulse
 
 
 %.o: %.cpp

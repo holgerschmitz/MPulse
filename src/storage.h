@@ -46,11 +46,16 @@ class Storage
     void forAllGrids(const Func &func);
     
     DataGrid *addGrid(const std::string &gridid);
+    DataGrid *addGrid(const std::string &gridid, GridIndex lowg, GridIndex highg);
     void addToGroup(const std::string &groupid, const std::string &gridid);
 
     DataGrid &getBorderLayer(const std::string &gridid, Direction dir);
     bool hasBorderLayer(const std::string &gridid, Direction dir);
-    DataGrid *addBorderLayer(const std::string &gridid, Direction dir, int thickness, int distance=0);
+    DataGrid *addBorderLayer(const std::string &gridid, 
+                             Direction dir, 
+                             int thickness, 
+                             int distance=0, 
+                             int ghostcells=0);
     
     DataLine &getLine(const std::string &lineid);
     bool hasLine(const std::string &lineid);
@@ -88,7 +93,12 @@ class Storage
     template<class Func>
     void forAllGrids(GridMap &gm, Func &func);
     
-    bool getBorderExtent(Direction dir, int thickness, int distance, GridIndex &blow, GridIndex &bhigh);
+    bool getBorderExtent(Direction dir, 
+                         int thickness, 
+                         int distance, 
+                         int ghostcells, 
+                         GridIndex &blow, 
+                         GridIndex &bhigh);
     
     struct GridDeleter 
     {

@@ -167,7 +167,7 @@ HDFostream& HDFostream::operator<< (const MatrixContainer<TYPE, RANK, Checking>&
   H5Sclose(file_dataspace);
 #else
   /* write data on single processor */
-  hid_t ret = H5Dwrite(dataset, 
+  ret = H5Dwrite(dataset, 
                        H5DataType<TYPE>::type, 
                        H5S_ALL, 
                        H5S_ALL,	    
