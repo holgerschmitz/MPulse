@@ -2,7 +2,7 @@
 #define HDFSTREAM_H
 //-----------------------------------------------------------------------------
 
-#include <H5LT.h>
+#include <hdf5.h>
 
 #include <schnek/matrix.h>
 
