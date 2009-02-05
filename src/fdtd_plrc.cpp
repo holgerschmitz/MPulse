@@ -197,6 +197,9 @@ void FDTD_PLRCLinCore::plrcStepD(double dt,
 
   // after this Dx, Dy and Dz actually contain D - P_L
   
+//  if ((Jx!=0.0) || (Jy!=0.0) || (Jz!=0.0))
+//    std::cerr << i << ' ' << j << ' ' << k << ' ' << Jx << ' ' << Jy << ' ' << Jz << '\n';
+  
 //  if (fabs(Jx+Jy+Jz) > 1e-40) std::cerr << "Current " << Jx << " " << Jy << " " << Jz << std::endl;
 
   double exn =
@@ -359,6 +362,7 @@ void FDTD_PLRCNonlinCore::plrcStepD(double dt,
 
   // after this Dx, Dy and Dz actually contain D - P_L
 
+
   double cx =
     ( 
       (numer + chi*E2)*ex
@@ -396,7 +400,7 @@ void FDTD_PLRCNonlinCore::plrcStepD(double dt,
   double E = sqrt(E2);
   double A = chi/denom;
   double C = sqrt(cx*cx + cy*cy + cz*cz);
-
+      
   if (C>0)
   {
     // Newton iteration

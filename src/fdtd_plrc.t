@@ -16,6 +16,12 @@
 template<class PLRCImplementation>
 void FDTD_PLRCSolver<PLRCImplementation>::initStorage(Storage *storage_)
 {
+  if ((this->LOm2[0] == 0) || (this->LOm2[1] == 0) || (this->LOm2[2] == 0))
+  {
+    std::cerr << "FDTD_PLRCSolver: Omega should not be zero!\n";
+    exit(-1);
+  }
+  
   for (typename OptFieldList::iterator it=this->optfields.begin();
         it != this->optfields.end();
         ++it
@@ -417,9 +423,9 @@ ParameterMap* FDTD_PLRCSolver<PLRCImplementation>::MakeParamMap (ParameterMap* p
   (*pm)["L2delta"] = WParameter(new ParameterValue<double>(&this->LDelta[1],0.0));
   (*pm)["L3delta"] = WParameter(new ParameterValue<double>(&this->LDelta[2],0.0));
   
-  (*pm)["L1Om2"] = WParameter(new ParameterValue<double>(&this->LOm2[0],0.0));
-  (*pm)["L2Om2"] = WParameter(new ParameterValue<double>(&this->LOm2[1],0.0));
-  (*pm)["L3Om2"] = WParameter(new ParameterValue<double>(&this->LOm2[2],0.0));
+  (*pm)["L1Om2"] = WParameter(new ParameterValue<double>(&this->LOm2[0],1.0));
+  (*pm)["L2Om2"] = WParameter(new ParameterValue<double>(&this->LOm2[1],1.0));
+  (*pm)["L3Om2"] = WParameter(new ParameterValue<double>(&this->LOm2[2],1.0));
   
   (*pm)["plasma"] = WParameter(
       new ParameterRebuild<PlasmaDensity, OptField>(&this->optfields)

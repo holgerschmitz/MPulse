@@ -61,6 +61,10 @@ class ShortPulseInjectSourceFunc
     
     Vector getField(int i, int j, int k, int time, double factor);
     Complex calcPsi(double t, double x, double y, double z);
+    
+    Complex Exfunc(double x, double y, double z, double t);
+    Complex Bxfunc(double x, double y, double z, double t);
+    Complex Byfunc(double x, double y, double z, double t);
            
     double DX;
     double DY;

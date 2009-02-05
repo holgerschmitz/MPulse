@@ -5,6 +5,8 @@
 #include <hdf5.h>
 
 #include <schnek/matrix.h>
+#include "mpulse.h"
+
 
 //-----------------------------------------------------------------------------
   /** @file hdfstream.h
@@ -24,12 +26,8 @@ struct MatrixContainer
   typename schnek::Matrix<TYPE, RANK, Checking>::IndexType global_max;
 };
 
-//typedef MatrixContainer<double, 3, schnek::MatrixNoArgCheck> DataGridContainer;
-//typedef MatrixContainer<double, 2, schnek::MatrixNoArgCheck> DataGrid2dContainer;
-
-typedef MatrixContainer<double, 3, schnek::MatrixAssertCheck> DataGridContainer;
-typedef MatrixContainer<double, 2, schnek::MatrixAssertCheck> DataGrid2dContainer;
-
+typedef MatrixContainer<double, 3, MPulseGridChecker> DataGridContainer;
+typedef MatrixContainer<double, 2, MPulseGridChecker> DataGrid2dContainer;
 
 
 /** @brief IO class for handling HDF files

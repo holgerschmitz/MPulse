@@ -4,13 +4,15 @@
 #include <schnek/matrix.h>
 #include <schnek/fixedarray.h>
 
-//typedef schnek::Matrix<double, 1> DataGrid1d;
-//typedef schnek::Matrix<double, 2> DataGrid2d;
-//typedef schnek::Matrix<double, 3> DataGrid3d;
+#ifdef NDEBUG
+#define MPulseGridChecker schnek::MatrixNoArgCheck
+#else
+#define MPulseGridChecker schnek::MatrixAssertCheck
+#endif
 
-typedef schnek::Matrix<double, 1, schnek::MatrixAssertCheck> DataGrid1d;
-typedef schnek::Matrix<double, 2, schnek::MatrixAssertCheck> DataGrid2d;
-typedef schnek::Matrix<double, 3, schnek::MatrixAssertCheck> DataGrid3d;
+typedef schnek::Matrix<double, 1, MPulseGridChecker> DataGrid1d;
+typedef schnek::Matrix<double, 2, MPulseGridChecker> DataGrid2d;
+typedef schnek::Matrix<double, 3, MPulseGridChecker> DataGrid3d;
 
 typedef schnek::FixedArray<double, 3> Vector;
 

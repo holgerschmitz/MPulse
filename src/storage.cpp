@@ -123,19 +123,20 @@ DataGrid *Storage::addBorderLayer(const std::string &gridid,
     case down:  
     default:    gm = &gridsD; break;
   }
+  GridMap &bgrids = *gm;
   
+  GridIndex b_low, b_high;
   if (gm->count(gridid) == 0)
   {
-    GridIndex b_low, b_high;
     if (getBorderExtent(dir, thickness, distance, ghostcells, b_low, b_high))
     {
       g = new DataGrid(b_low, b_high);
       (*g) = 0;
-      gm->operator[](gridid) = g;
+      bgrids[gridid] = g;
     }
   } else
   {
-    g = grids[gridid];
+    g = bgrids[gridid];
   }
   return g;
 }
@@ -284,6 +285,7 @@ bool Storage::getBorderExtent
   std::cerr << "Border Low " << blow[0] << " " << blow[1] << " " << blow[2] << std::endl;
   std::cerr << "Border High " << bhigh[0] << " " << bhigh[1] << " " << bhigh[2] << std::endl;
   */
+  assert(haveBorder);
   return haveBorder;
 }
 

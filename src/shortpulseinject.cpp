@@ -8,6 +8,7 @@
 
 IncidentSourceCurrent *ShortPulseInject::makeECurrent(int distance_, Direction dir_)
 {
+  std::cerr << "ShortPulseInjectSourceFunc::makeECurrent\n";
   typedef IncidentSourceECurrent<ShortPulseInjectSourceFunc> CurrentType;
   CurrentType *cur = new CurrentType(distance_,dir_);
   
@@ -17,6 +18,7 @@ IncidentSourceCurrent *ShortPulseInject::makeECurrent(int distance_, Direction d
 
 IncidentSourceCurrent *ShortPulseInject::makeHCurrent(int distance_, Direction dir_)
 {
+  std::cerr << "ShortPulseInjectSourceFunc::makeHCurrent\n";
   typedef IncidentSourceHCurrent<ShortPulseInjectSourceFunc> CurrentType;
   CurrentType *cur = new CurrentType(distance_,dir_);
   cur->setParam(length, width, om0, Shift, Phase, amp, eps, distance_);
@@ -30,6 +32,7 @@ bool ShortPulseInject::needCurrent(Direction dir_)
     
 ParameterMap* ShortPulseInject::MakeParamMap (ParameterMap* pm)
 {
+  std::cerr << "ShortPulseInjectSourceFunc::MakeParamMap\n";
   pm = IncidentSource::MakeParamMap(pm);
   
   (*pm)["length"] = WParameter(new ParameterValue<double>(&this->length,1.));
@@ -58,6 +61,7 @@ void ShortPulseInjectSourceFunc::setParam(double length_,
                                           double eps_,
                                           int distance_)
 {
+  std::cerr << "ShortPulseInjectSourceFunc::setParam\n";
   length = length_;
   width  = width_;
   om0     = om0_;
@@ -78,36 +82,84 @@ void ShortPulseInjectSourceFunc::setParam(double length_,
   DT = Globals::instance().dt() * lightspeed;
 
   old_time = -1;
+  YComp = Complex(0.0,0.0);
 }
 
 void ShortPulseInjectSourceFunc
     ::initSourceFunc(Storage *storage, DataGrid *pJx, DataGrid *pJy, DataGrid *pJz)
 {
-  PsiX  = storage->addBorderLayer("IncidentPsiX" , dir, 2, dist, 1);
-  PsiY  = storage->addBorderLayer("IncidentPsiY" , dir, 2, dist, 1);
-  PsiXp = storage->addBorderLayer("IncidentPsiXp", dir, 2, dist, 1);
-  PsiYp = storage->addBorderLayer("IncidentPsiYp", dir, 2, dist, 1);
+  std::cerr << "ShortPulseInjectSourceFunc::initSourceFunc\n";
+  PsiX  = storage->addBorderLayer("IncidentPsiX" , dir, 4, dist-2, 1);
+  PsiY  = storage->addBorderLayer("IncidentPsiY" , dir, 4, dist-2, 1);
+  PsiXp = storage->addBorderLayer("IncidentPsiXp", dir, 4, dist-2, 1);
+  PsiYp = storage->addBorderLayer("IncidentPsiYp", dir, 4, dist-2, 1);
+  std::cerr << "ShortPulseInjectSourceFunc::initSourceFunc ... done\n";
 }
 
 ShortPulseInjectSourceFunc::Complex 
   ShortPulseInjectSourceFunc::calcPsi(double t, double x, double y, double z)
 {
+//  return sin(om0*t-z/lightspeed);
+
   double r2 = x*x+y*y;
   Complex I(0,1);
   Complex q(z,ZRl);
   Complex tp = t - z/lightspeed - r2/(2.*q*lightspeed);
+//  Complex tp = t - z/lightspeed;
   
   double taubar = 0.5*om0*t;
   double tau = length;
   
+  return I*(ZRl/q)*exp(I*om0*tp);
+  
   Complex iphi(0,Phase);
-    
-  Complex wp = Faddeeva_2(tp/tau + I*taubar);
-  Complex wn = Faddeeva_2(tp/tau - I*taubar);
   
-  Complex psi = 0.5*amp*exp(-taubar*taubar)*(exp(iphi)*wn + exp(-iphi)*wp);
+  Complex tptau2 = tp*tp/(tau*tau);
+  Complex tautbtp2 = taubar*taubar/tptau2;
+
+// ===============================
+// Version 01
   
-  return ZRl*psi/q;
+  Complex an = tp/tau - I*tau*taubar/tp;
+  Complex ap = tp/tau + I*tau*taubar/tp;
+  
+  Complex e1 = 0.5*exp(-iphi - tptau2 - 2.*I*taubar);
+  Complex e2 = exp(-ap*ap);
+  Complex e3 = exp(2.*iphi + 4.*I*taubar);
+  Complex e4 = exp(-an*an);
+  
+  Complex wp = Faddeeva_2(I*tp/tau + tau*taubar/tp);
+  Complex wn = Faddeeva_2(I*tp/tau - tau*taubar/tp);
+
+  Complex psi = I*(ZRl/q) * e1*(2. - e2*wn + e3*(2.-e4*wp));
+
+// ===============================
+// Version 02
+  
+//  Complex e1 = 0.5*exp(-iphi-2.*tptau2 - tautbtp2);  
+//  Complex e2 = exp(2.*iphi + 2.*tptau2);
+//  Complex e3 = exp(2.*taubar*(2.*I+taubar/tptau2));
+
+//  Complex wp = Faddeeva_2(I*tp/tau +   tau*taubar/tp);
+//  Complex wn = Faddeeva_2(- tp/tau + I*tau*taubar/tp);
+ 
+//  Complex psi = I*(ZRl/q) * e1*(e2*wn - e3*wp);
+
+
+
+
+//  std::cerr << ZRl/q << " " << real(e1) << " " << real(e2) << " " << real(e3) << " "
+//    << real(e4) << " " << real(e5) << " " << real(wp) << " "
+//    << real(wn)
+//    << "\n";
+  return psi;
+//  
+//  Complex wp = Faddeeva_2(tp/tau + I*taubar);
+//  Complex wn = Faddeeva_2(tp/tau - I*taubar);
+//  
+//  Complex psi = 0.5*amp*exp(-taubar*taubar)*(exp(iphi)*wn + exp(-iphi)*wp);
+//  
+//  return ZRl*psi/q;
 }
 
 void ShortPulseInjectSourceFunc::setTime(int time)
@@ -121,26 +173,9 @@ void ShortPulseInjectSourceFunc::setTime(int time)
   old_time = time;
   
   double t = time*DT-Shift/lightspeed;
-  // fast copy of the old field
   
   DataGrid &psix  = *PsiX,  &psiy  = *PsiY;
   DataGrid &psixp = *PsiXp, &psiyp = *PsiYp;
-
-  typedef DataGrid::const_storage_iterator CIterator;
-  typedef DataGrid::storage_iterator Iterator;
-  
-  CIterator srcX    = psix.cbegin();
-  CIterator srcXEnd = psix.cend();
-  Iterator  destX   = psixp.begin();
-
-  CIterator srcY    = psiy.cbegin();
-  CIterator srcYEnd = psiy.cend();
-  Iterator  destY   = psiyp.begin();
-  while (srcX != srcXEnd)
-  {
-    *destX = *srcX;    ++srcX;    ++destX;
-    *destY = *srcY;    ++srcY;    ++destY;
-  }
   
   // calculate the new field
   
@@ -159,6 +194,7 @@ void ShortPulseInjectSourceFunc::setTime(int time)
     
   for (int k=lowz; k<=highz; ++k)
   {
+    double poszo = (k-mz)*DZ;
     double poszh = (k+0.5-mz)*DZ;
     
     for (int i=lowx; i<=highx; ++i)
@@ -168,22 +204,38 @@ void ShortPulseInjectSourceFunc::setTime(int time)
 
       for (int j=lowy; j<=highy; ++j)
       {
+          // copy old values first
+          
+          psixp(i,j,k) = psix(i,j,k);
+          psiyp(i,j,k) = psiy(i,j,k);
+          
+          // calculate new values
+          
           double posyo = (j-my)*DY;        
           double posyh = (j+0.5-my)*DY;
           
+          // This is the way it should be
           Complex px = calcPsi(t, posxh, posyo, poszh);
           Complex py = YComp*calcPsi(t, posxo, posyh, poszh);
+          
+          // This is a trial version (on dual grid)
+          // Complex px = calcPsi(t, posxo, posyh, poszo);
+          // Complex py = YComp*calcPsi(t, posxh, posyo, poszo);
           
           psix(i,j,k) = px.real();
           psiy(i,j,k) = py.real();
       }
     }
-  }
-  
+  }  
 }
 
 Vector ShortPulseInjectSourceFunc::getEField(int i, int j, int k, int time)
 {
+//  double z = k*DZ;
+//  double t = time*DT;
+  
+//  return Vector(cos(om0*t-z/lightspeed),0,0);
+
   double ex, ey, ez;
 
   DataGrid &psix  = *PsiX,  &psiy  = *PsiY;
@@ -205,6 +257,11 @@ Vector ShortPulseInjectSourceFunc::getEField(int i, int j, int k, int time)
 
 Vector ShortPulseInjectSourceFunc::getHField(int i, int j, int k, int time)
 {
+//  double z = (k-0.5)*DZ;
+//  double t = time*DT;
+  
+//  return Vector(0,cos(om0*t-z/lightspeed),0);
+
   double bx, by, bz;
 
   DataGrid &psix  = *PsiX,  &psiy  = *PsiY;

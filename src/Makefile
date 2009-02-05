@@ -33,6 +33,7 @@ MPULSE_SOURCES = hdfstream.cpp \
 	pulseinit.cpp \
 	rebuild.cpp \
 	shortpulseinject.cpp \
+	shortpulsefunctions.cpp \
 	sources.cpp \
 	specfunc.cpp \
 	storage.cpp \
@@ -63,6 +64,7 @@ MPULSE_OBJECTS = hdfstream.o \
 	pulseinit.o \
 	rebuild.o \
 	shortpulseinject.o \
+	shortpulsefunctions.o \
 	sources.o \
 	specfunc.o \
 	storage.o \
