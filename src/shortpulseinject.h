@@ -56,15 +56,15 @@ class ShortPulseInjectSourceFunc
     Vector getHField(int i, int j, int k, int time);
 
     void setTime(int Time);
-  private:
+
     typedef std::complex<double> Complex;
+  private:
     
     Vector getField(int i, int j, int k, int time, double factor);
     Complex calcPsi(double t, double x, double y, double z);
     
-    Complex Exfunc(double x, double y, double z, double t);
-    Complex Bxfunc(double x, double y, double z, double t);
-    Complex Byfunc(double x, double y, double z, double t);
+    Complex Efunc(double x, double y, double z, double t);
+    Complex Bfunc(double x, double y, double z, double t, bool bx);
            
     double DX;
     double DY;
@@ -88,6 +88,10 @@ class ShortPulseInjectSourceFunc
     int highx;
     int lowy;
     int highy;
+    
+    double centrex;
+    double centrey;
+    double centrez;
 
     double amp;
     double eps;

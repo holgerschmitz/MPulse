@@ -83,6 +83,13 @@ void ShortPulseInjectSourceFunc::setParam(double length_,
 
   old_time = -1;
   YComp = Complex(0.0,0.0);
+
+  GridIndex gridLow = Globals::instance().gridLow();
+  GridIndex gridHigh = Globals::instance().gridHigh();
+    
+  centrex = 0.5*double(gridHigh[0] + gridLow[0]);
+  centrey = 0.5*double(gridHigh[1] + gridLow[1]);
+  centrez = 0.5*double(gridHigh[2] + gridLow[2]);
 }
 
 void ShortPulseInjectSourceFunc
@@ -107,8 +114,8 @@ ShortPulseInjectSourceFunc::Complex
   Complex tp = t - z/lightspeed - r2/(2.*q*lightspeed);
 //  Complex tp = t - z/lightspeed;
   
-  double taubar = 0.5*om0*t;
   double tau = length;
+  double taubar = 0.5*om0*tau;
   
   return I*(ZRl/q)*exp(I*om0*tp);
   
@@ -120,18 +127,18 @@ ShortPulseInjectSourceFunc::Complex
 // ===============================
 // Version 01
   
-  Complex an = tp/tau - I*tau*taubar/tp;
-  Complex ap = tp/tau + I*tau*taubar/tp;
+//  Complex an = tp/tau - I*tau*taubar/tp;
+//  Complex ap = tp/tau + I*tau*taubar/tp;
+//  
+//  Complex e1 = 0.5*exp(-iphi - tptau2 - 2.*I*taubar);
+//  Complex e2 = exp(-ap*ap);
+//  Complex e3 = exp(2.*iphi + 4.*I*taubar);
+//  Complex e4 = exp(-an*an);
   
-  Complex e1 = 0.5*exp(-iphi - tptau2 - 2.*I*taubar);
-  Complex e2 = exp(-ap*ap);
-  Complex e3 = exp(2.*iphi + 4.*I*taubar);
-  Complex e4 = exp(-an*an);
-  
-  Complex wp = Faddeeva_2(I*tp/tau + tau*taubar/tp);
-  Complex wn = Faddeeva_2(I*tp/tau - tau*taubar/tp);
+//  Complex wp = Faddeeva_2(I*tp/tau + tau*taubar/tp);
+//  Complex wn = Faddeeva_2(I*tp/tau - tau*taubar/tp);
 
-  Complex psi = I*(ZRl/q) * e1*(2. - e2*wn + e3*(2.-e4*wp));
+//  Complex psi = I*(ZRl/q) * e1*(2. - e2*wn + e3*(2.-e4*wp));
 
 // ===============================
 // Version 02
@@ -152,18 +159,44 @@ ShortPulseInjectSourceFunc::Complex
 //    << real(e4) << " " << real(e5) << " " << real(wp) << " "
 //    << real(wn)
 //    << "\n";
-  return psi;
-//  
-//  Complex wp = Faddeeva_2(tp/tau + I*taubar);
-//  Complex wn = Faddeeva_2(tp/tau - I*taubar);
-//  
-//  Complex psi = 0.5*amp*exp(-taubar*taubar)*(exp(iphi)*wn + exp(-iphi)*wp);
-//  
-//  return ZRl*psi/q;
+//  return psi;
+  
+  Complex tpt = tp/tau;
+  Complex itb = I*taubar;
+  Complex ap = tpt + itb;
+  Complex an = tpt + itb;
+  
+  Complex C = exp(iphi);
+  Complex D = exp(-iphi);
+  Complex S(0,0);
+  
+  if (imag(ap)<0)
+  {
+    S = S + amp*C*exp(-tpt*tpt-2.*itb*tpt);
+    C = -C;
+    ap = -ap;
+  }
+  
+  if (imag(an)<0)
+  {
+    S = S + amp*C*exp(-tpt*tpt+2.*itb*tpt);
+    D = -D;
+    an = -an;
+  }
+  
+  Complex wp = Faddeeva_2(ap);
+  Complex wn = Faddeeva_2(an);
+  
+  Complex psi = S + 0.5*amp*exp(-taubar*taubar)*(C*wn + D*wp);
+  
+  return ZRl*psi/q;
 }
 
 void ShortPulseInjectSourceFunc::setTime(int time)
 {
+  // Now calculating on the fly!
+  return;
+  
   // Only needs to be updated if calculating the electric field
   // This is calculated in the HCurrent
   // Note: All currents share the same Psi fields
@@ -176,7 +209,7 @@ void ShortPulseInjectSourceFunc::setTime(int time)
   
   DataGrid &psix  = *PsiX,  &psiy  = *PsiY;
   DataGrid &psixp = *PsiXp, &psiyp = *PsiYp;
-  
+   
   // calculate the new field
   
   GridIndex low  = psix.getLow();
@@ -231,10 +264,61 @@ void ShortPulseInjectSourceFunc::setTime(int time)
 
 Vector ShortPulseInjectSourceFunc::getEField(int i, int j, int k, int time)
 {
-//  double z = k*DZ;
-//  double t = time*DT;
+/*
+  double z = k*DZ;
+  double t = time*DT;
+
+  return Vector(cos(om0*t-z/lightspeed),0,0);
+*/
+
+
+  double ex=0, ey=0;
+  double posxo = (i-centrex)*DX;
+  double posxh = (i+0.5-centrex)*DX;
+  double posyo = (j-centrey)*DY;
+  double posyh = (j+0.5-centrey)*DY;
+  double poszo = (k-centrez)*DZ;
+  double posTime = time*DT;
+
+  Complex Exc = Efunc(posxh, posyo, poszo, posTime);
+  ex = Exc.real();
   
-//  return Vector(cos(om0*t-z/lightspeed),0,0);
+//  std::cerr << i << " "  << j << " "  << k << " " << ex << "\n";
+  
+  if (YComp != Complex(0,0))
+  {
+    Complex Eyc = YComp*Efunc(posxo, posyh, poszo, posTime);
+    ey = Eyc.real();
+  }
+
+  return Vector(ex,ey,0);
+
+/*
+  double ex, ey, ez;
+
+  DataGrid &psix  = *PsiX,  &psiy  = *PsiY;
+  DataGrid &psixp = *PsiXp, &psiyp = *PsiYp;
+
+  double ax  =   (psix(i,j,k)-psix(i,j,k-1))/DZ;
+  double ay  =   (psiy(i,j,k)-psiy(i,j,k-1))/DZ;
+  double az  = - (psix(i,j,k)-psix(i-1,j,k))/DX - (psiy(i,j,k)-psiy(i,j-1,k))/DY;
+  double axp =   (psixp(i,j,k)-psixp(i,j,k-1))/DZ;
+  double ayp =   (psiyp(i,j,k)-psiyp(i,j,k-1))/DZ;
+  double azp = - (psixp(i,j,k)-psixp(i-1,j,k))/DX - (psiyp(i,j,k)-psiyp(i,j-1,k))/DY;
+
+  ex = -(ax-axp)/(DT*lightspeed);
+  ey = -(ay-ayp)/(DT*lightspeed);
+  ez = -(az-azp)/(DT*lightspeed);
+
+  return Vector(ex,ey,ez);
+*/
+/*
+  double xo = (k-centrex)*DX;
+  double xh = (k+0.5-centrex)*DX;
+  double yo = (k-centrey)*DY;
+  double yh = (k+0.5-centrey)*DY;
+  double zo = (k-centrez)*DZ;
+  double t  = time*DT;
 
   double ex, ey, ez;
 
@@ -253,15 +337,37 @@ Vector ShortPulseInjectSourceFunc::getEField(int i, int j, int k, int time)
   ez = -(az-azp)/(DT*lightspeed);
 
   return Vector(ex,ey,ez);
+*/
 }
 
 Vector ShortPulseInjectSourceFunc::getHField(int i, int j, int k, int time)
 {
-//  double z = (k-0.5)*DZ;
-//  double t = time*DT;
-  
-//  return Vector(0,cos(om0*t-z/lightspeed),0);
+/*
+  double z = (k-0.5)*DZ;
+  double t = time*DT;
 
+  return Vector(0,cos(om0*t-z/lightspeed),0);
+*/
+
+  double bx=0, by=0;
+  double posxo = (i-centrex)*DX;
+  double posxh = (i+0.5-centrex)*DX;
+  double posyo = (j-centrey)*DY;
+  double posyh = (j+0.5-centrey)*DY;
+  double poszo = (k-centrez)*DZ;
+  double poszh = (k-0.5-centrez)*DZ;
+  double posTime = (time+0.5)*DT;
+
+  Complex Bxc = Bfunc(posxo, posyh, poszh, posTime, true);
+  bx = Bxc.real();
+  
+  Complex Byc = Bfunc(posxh, posyo, poszh, posTime, false);
+  by = Byc.real();
+
+  return Vector(bx,by,0);
+
+
+/*
   double bx, by, bz;
 
   DataGrid &psix  = *PsiX,  &psiy  = *PsiY;
@@ -284,6 +390,7 @@ Vector ShortPulseInjectSourceFunc::getHField(int i, int j, int k, int time)
   bz = (aypx-ay)/DX-(axpy-ax)/DY;
   
   return Vector(bx, by, bz);
+*/
 }
 
 
