@@ -355,13 +355,15 @@ Vector ShortPulseInjectSourceFunc::getHField(int i, int j, int k, int time)
   double posyo = (j-centrey)*DY;
   double posyh = (j+0.5-centrey)*DY;
   double poszo = (k-centrez)*DZ;
-  double poszh = (k-0.5-centrez)*DZ;
+  double poszh = (k+0.5-centrez)*DZ;
   double posTime = (time+0.5)*DT;
 
   Complex Bxc = Bfunc(posxo, posyh, poszh, posTime, true);
+//  Complex Bxc = Bfunc(posxh, posyo, poszh, posTime, true);
   bx = Bxc.real();
   
   Complex Byc = Bfunc(posxh, posyo, poszh, posTime, false);
+//  Complex Byc = Bfunc(posxo, posyh, poszh, posTime, false);
   by = Byc.real();
 
   return Vector(bx,by,0);
