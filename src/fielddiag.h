@@ -9,6 +9,7 @@
 #include <fstream>
 
 class FieldDiag : public SimpleDiagnostic<DataGridContainer,HDFostream>
+//class FieldDiag : public SimpleDiagnostic<DataGridContainer,std::ofstream>
 {
   public:
     void fetchField(Storage &storage);
@@ -17,6 +18,7 @@ class FieldDiag : public SimpleDiagnostic<DataGridContainer,HDFostream>
     DataGridContainer field;
   protected:
     typedef SimpleDiagnostic<DataGridContainer,HDFostream> ParentType;
+//    typedef SimpleDiagnostic<DataGridContainer,std::ofstream> ParentType;
     ParameterMap* MakeParamMap (ParameterMap* pm = NULL);  
 };
 

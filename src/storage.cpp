@@ -246,7 +246,7 @@ bool Storage::getBorderExtent
       }
       break;
     case down:
-      if (low[2]<glow[2]+thickness+distance)
+      if ((low[2]<glow[2]+thickness+distance) && (high[2]>=glow[2]+thickness))
       {
         bhigh[2] = glow[2]+thickness-1+distance;
         blow[2] = glow[2]+distance;
@@ -285,7 +285,7 @@ bool Storage::getBorderExtent
   std::cerr << "Border Low " << blow[0] << " " << blow[1] << " " << blow[2] << std::endl;
   std::cerr << "Border High " << bhigh[0] << " " << bhigh[1] << " " << bhigh[2] << std::endl;
   */
-  assert(haveBorder);
+  //assert(haveBorder);
   return haveBorder;
 }
 

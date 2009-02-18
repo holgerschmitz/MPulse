@@ -281,16 +281,26 @@ Vector ShortPulseInjectSourceFunc::getEField(int i, int j, int k, int time)
   double posTime = time*DT;
 
   Complex Exc = Efunc(posxh, posyo, poszo, posTime);
-  ex = Exc.real();
+  ex = Exc.real()/M_PI;
   
 //  std::cerr << i << " "  << j << " "  << k << " " << ex << "\n";
   
   if (YComp != Complex(0,0))
   {
     Complex Eyc = YComp*Efunc(posxo, posyh, poszo, posTime);
-    ey = Eyc.real();
+    ey = Eyc.real()/M_PI;
   }
 
+//override
+/*  double c = cos(0.3), s = sin(0.3);
+  double kz = c*om0/lightspeed;
+  double kx = s*om0/lightspeed;
+  double ky = 0;
+  double amp = sin(kx*posxh + ky*posyo + kz*poszo - om0*posTime)/lightspeed;
+  
+  ex = amp; //*c;
+  ey = 0;
+*/  
   return Vector(ex,ey,0);
 
 /*
@@ -354,18 +364,27 @@ Vector ShortPulseInjectSourceFunc::getHField(int i, int j, int k, int time)
   double posxh = (i+0.5-centrex)*DX;
   double posyo = (j-centrey)*DY;
   double posyh = (j+0.5-centrey)*DY;
-  double poszo = (k-centrez)*DZ;
+  
   double poszh = (k+0.5-centrez)*DZ;
   double posTime = (time+0.5)*DT;
 
   Complex Bxc = Bfunc(posxo, posyh, poszh, posTime, true);
 //  Complex Bxc = Bfunc(posxh, posyo, poszh, posTime, true);
-  bx = Bxc.real();
+  bx = Bxc.real()/M_PI;
   
   Complex Byc = Bfunc(posxh, posyo, poszh, posTime, false);
 //  Complex Byc = Bfunc(posxo, posyh, poszh, posTime, false);
-  by = Byc.real();
+  by = Byc.real()/M_PI;
 
+//override
+/*  double c = cos(0.3), s = sin(0.3);
+  double kz = c*om0/lightspeed;
+  double kx = s*om0/lightspeed;
+  double ky = 0;
+  double amp = sin(kx*posxh + ky*posyo + kz*poszh - om0*posTime);
+  bx = 0;
+  by = amp;
+*/
   return Vector(bx,by,0);
 
 

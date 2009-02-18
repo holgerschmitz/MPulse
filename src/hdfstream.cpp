@@ -154,7 +154,8 @@ int HDFistream::open(const char* fname)
     hid_t plist_id = H5Pcreate (H5P_FILE_ACCESS);
 
     /* set Parallel access with communicator */
-    H5Pset_fapl_mpio(plist_id, mpiComm, MPI_INFO_NULL);   
+//    H5Pset_fapl_mpio(plist_id, mpiComm, MPI_INFO_NULL);   
+    H5Pset_fapl_mpiposix(plist_id, mpiComm, 0);   
     /* open the file collectively */
     file_id = H5Fopen (fname, H5F_ACC_RDONLY, plist_id);
     /* Release file-access template */
@@ -195,7 +196,8 @@ int HDFostream::open(const char* fname)
     /* setup file access template */
     hid_t plist_id = H5Pcreate(H5P_FILE_ACCESS);
     /* set Parallel access with communicator */
-    H5Pset_fapl_mpio(plist_id, mpiComm, MPI_INFO_NULL);  
+//    H5Pset_fapl_mpio(plist_id, mpiComm, MPI_INFO_NULL);   
+    H5Pset_fapl_mpiposix(plist_id, mpiComm, 0);   
     file_id = H5Fcreate (fname, H5F_ACC_TRUNC, H5P_DEFAULT, plist_id);
     /* Release file-access template */
     H5Pclose(plist_id);
@@ -218,4 +220,25 @@ const hid_t H5DataType<float>::type = H5T_NATIVE_FLOAT;
 template<>
 const hid_t H5DataType<double>::type = H5T_NATIVE_DOUBLE;
 
+// ----------------------------------------------------------------------
+
+std::ostream &operator<<(std::ostream& out, const DataGridContainer &data)
+{
+  DataGrid &grid = *(data.grid);
+  GridIndex low = grid.getLow();
+  GridIndex high = grid.getHigh();
+  
+  for (int i=low[0]; i<=high[0]; ++i)
+  {
+    for (int j=low[1]; j<=high[1]; ++j)
+    {
+      for (int k=low[2]; k<=high[2]; ++k)
+      {
+        out << i << " " << j << " " << k << " " << grid(i,j,k) << "\n";
+      }
+      out << "\n";
+    }
+  }
+  return out;
+}
 

@@ -3,6 +3,7 @@
 //-----------------------------------------------------------------------------
 
 #include <hdf5.h>
+#include <iostream>
 
 #include <schnek/matrix.h>
 #include "mpulse.h"
@@ -28,6 +29,8 @@ struct MatrixContainer
 
 typedef MatrixContainer<double, 3, MPulseGridChecker> DataGridContainer;
 typedef MatrixContainer<double, 2, MPulseGridChecker> DataGrid2dContainer;
+
+std::ostream &operator<<(std::ostream& out, const DataGridContainer &);
 
 
 /** @brief IO class for handling HDF files
