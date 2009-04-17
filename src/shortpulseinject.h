@@ -26,7 +26,8 @@ class ShortPulseInject : public IncidentSource
     double length; // corresponds to pulse duration
     double width;
     double om0;
-    double Shift;
+    double TShift;
+    double ZShift;
     double Time;
     double Phase;
 
@@ -44,7 +45,8 @@ class ShortPulseInjectSourceFunc
     void setParam(double length_, 
                   double width_,
                   double om0_,
-                  double Shift_,
+                  double TShift_,
+                  double ZShift_,
                   double Phase_,
                   double amp_, 
                   double eps_, 
@@ -59,10 +61,7 @@ class ShortPulseInjectSourceFunc
 
     typedef std::complex<double> Complex;
   private:
-    
-    Vector getField(int i, int j, int k, int time, double factor);
-    Complex calcPsi(double t, double x, double y, double z);
-    
+        
     Complex Efunc(double x, double y, double z, double t);
     Complex Bfunc(double x, double y, double z, double t, bool bx);
            
@@ -79,7 +78,8 @@ class ShortPulseInjectSourceFunc
     double length; // corresponds to pulse duration
     double width;
     double om0;
-    double Shift;
+    double TShift;
+    double ZShift;
     double Phase;
 
     double ZRl;

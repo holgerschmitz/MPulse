@@ -81,7 +81,7 @@ class HDFstream {
   protected:
     std::string getNextBlockName();
     
-#ifndef SINGLE_PROCESSOR
+#ifdef USE_HDF_PARALLEL
     void makeMPIGroup();
   
     MPI_Comm mpiComm;

@@ -1,6 +1,6 @@
 #include "hdfstream.h"
 
-#ifndef SINGLE_PROCESSOR
+#ifdef USE_HDF_PARALLEL
 #include <mpi.h>
 #endif
 
@@ -11,7 +11,7 @@ HDFstream::HDFstream()
     sets_count(0),
     active(true),
     activeModified(false)
-#ifndef SINGLE_PROCESSOR
+#ifdef USE_HDF_PARALLEL
     , commSet(false)
 #endif
 {}
@@ -23,7 +23,7 @@ HDFstream::HDFstream(const HDFstream& hdf)
     sets_count(hdf.sets_count),
     active(true),
     activeModified(false)
-#ifndef SINGLE_PROCESSOR
+#ifdef USE_HDF_PARALLEL
     , commSet(false)
 #endif
 {}
@@ -36,7 +36,7 @@ HDFstream &HDFstream::operator=(const HDFstream& hdf)
   blockname = hdf.blockname;
   active = hdf.active;
   activeModified = hdf.activeModified;
-#ifndef SINGLE_PROCESSOR
+#ifdef USE_HDF_PARALLEL
   mpiComm = hdf.mpiComm;
   commSet = hdf.commSet;
 #endif
@@ -80,7 +80,7 @@ std::string HDFstream::getNextBlockName()
   return bname.str();
 }
 
-#ifndef SINGLE_PROCESSOR
+#ifdef USE_HDF_PARALLEL
 void HDFstream::makeMPIGroup()
 {
   if (!activeModified) {
@@ -146,7 +146,7 @@ int HDFistream::open(const char* fname)
 {
   close();
 
-#ifndef SINGLE_PROCESSOR
+#ifdef USE_HDF_PARALLEL
   makeMPIGroup();
   if (active)
   {
@@ -162,7 +162,8 @@ int HDFistream::open(const char* fname)
     H5Pclose(plist_id);
   }
 #else
-  file_id = H5Fopen (fname, H5F_ACC_RDONLY, H5P_DEFAULT);
+  if (active)
+    file_id = H5Fopen (fname, H5F_ACC_RDONLY, H5P_DEFAULT);
 #endif  
   sets_count = 0;
   return 1;
@@ -189,7 +190,7 @@ int HDFostream::open(const char* fname)
 {
   sets_count = 0;
   
-#ifndef SINGLE_PROCESSOR
+#ifdef USE_HDF_PARALLEL
   makeMPIGroup();
   if (active)
   {
@@ -203,7 +204,8 @@ int HDFostream::open(const char* fname)
     H5Pclose(plist_id);
   }
 #else
-  file_id = H5Fcreate (fname, H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
+  if (active)
+    file_id = H5Fcreate (fname, H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
 #endif  
 
   return file_id;
