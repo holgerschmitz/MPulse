@@ -69,7 +69,6 @@ class ShortPulseInjectSourceFunc
     double DY;
     double DZ;
     double DT;
-    int old_time;
 
     double lightspeed;
 

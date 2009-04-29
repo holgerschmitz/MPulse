@@ -90,7 +90,7 @@ ShortPulseInjectSourceFunc::Complex
   
   Complex Ef = S + A*exp(-tb*tb)*( B + C*Faddeeva_2(an) - D*Faddeeva_2(ap));
            
-  return -I*Ef/c;
+  return -I*Ef;
 }
 
 ShortPulseInjectSourceFunc::Complex

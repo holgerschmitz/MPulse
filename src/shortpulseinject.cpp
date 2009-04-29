@@ -64,28 +64,15 @@ void ShortPulseInjectSourceFunc::setParam(double length_,
                                           int distance_)
 {
   std::cerr << "ShortPulseInjectSourceFunc::setParam\n";
-  length = length_;
-  width  = width_;
-  om0     = om0_;
-  TShift  = TShift_;
-  ZShift  = ZShift_;
-  Phase  = 2*M_PI*Phase_;
-    
-  amp = amp_;
-  eps = eps_;
-  dist = distance_;
   
-  lightspeed = sqrt(1/eps);
-  ZRl = 0.5*om0*width*width/lightspeed;
   
+  // Grid Spacing and position
   
   DX = Globals::instance().gridDX();
   DY = Globals::instance().gridDY();
   DZ = Globals::instance().gridDZ();
-  DT = Globals::instance().dt() * lightspeed;
+  DT = Globals::instance().dt();
 
-  old_time = -1;
-  YComp = Complex(0.0,0.0);
 
   GridIndex gridLow = Globals::instance().gridLow();
   GridIndex gridHigh = Globals::instance().gridHigh();
@@ -93,6 +80,36 @@ void ShortPulseInjectSourceFunc::setParam(double length_,
   centrex = 0.5*double(gridHigh[0] + gridLow[0]);
   centrey = 0.5*double(gridHigh[1] + gridLow[1]);
   centrez = 0.5*double(gridHigh[2] + gridLow[2]);
+  
+  // setting most parameters
+
+  length = length_;
+  width  = width_;
+  om0     = om0_;
+  
+  eps = eps_;
+  dist = distance_;
+  
+  lightspeed = sqrt(1/eps);
+  
+  ZRl = 0.5*om0*width*width/lightspeed;
+  YComp = Complex(0.0,0.0);
+
+  // Adjusting so that amplitude corresponds to maximum amplitude in the
+  // center of the pulse
+  
+  Phase  = 0.0; //0.5*M_PI;
+  TShift  = 0.0; 
+  ZShift  = 0.0;
+
+  double Exmax = Efunc(0, 0, 0, 0).real();
+
+  // setting the rest of the parameters
+  amp = amp_/Exmax;
+  Phase  = 2*M_PI*Phase_;
+  
+  TShift  = TShift_;
+  ZShift  = ZShift_;
 }
 
 void ShortPulseInjectSourceFunc
@@ -125,12 +142,12 @@ Vector ShortPulseInjectSourceFunc::getEField(int i, int j, int k, int time)
   double posTime = time*DT - TShift;
 
   Complex Exc = Efunc(posxh, posyo, poszo, posTime);
-  ex = Exc.real()/M_PI;
+  ex = amp*Exc.real();
     
   if (YComp != Complex(0,0))
   {
     Complex Eyc = YComp*Efunc(posxo, posyh, poszo, posTime);
-    ey = Eyc.real()/M_PI;
+    ey = amp*Eyc.real();
   }
  
   return Vector(ex,ey,0);
@@ -153,11 +170,11 @@ Vector ShortPulseInjectSourceFunc::getHField(int i, int j, int k, int time)
 
   Complex Bxc = Bfunc(posxo, posyh, poszh, posTime, true);
 //  Complex Bxc = Bfunc(posxh, posyo, poszh, posTime, true);
-  bx = Bxc.real()/M_PI;
+  bx = amp*Bxc.real();
   
   Complex Byc = Bfunc(posxh, posyo, poszh, posTime, false);
 //  Complex Byc = Bfunc(posxo, posyh, poszh, posTime, false);
-  by = Byc.real()/M_PI;
+  by = amp*Byc.real();
 
   return Vector(bx,by,0);
 
