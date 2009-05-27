@@ -13,6 +13,8 @@ LDFLAGS = $(X_LIB) $(LX_LIB)
 EXTRA_HDF = ../src/$(X_OSTYPE)/hdfstream.o
 LOADLIBS = $(X_HDF_LIBS) $(EXTRA_HDF) -lm
 
+HDFJOINLIBS = $(X_HDF_LIBS) -lboost_program_options -lm 
+
 BINARY_PREFIX = $(X_ROOT_DIR)/bin/$(X_OSTYPE)
 
 CXX = $(X_CXX_STD)
@@ -33,6 +35,10 @@ slicetognu: slicetognu.o
 
 gnutopnm: gnutopnm.o
 	$(CXX) $^ -o $@ $(OFLAGS) $(LDFLAGS) $(LOADLIBS)
+	cp $@ $(HOME)/bin/
+    
+hdfjoin: hdfjoin.o
+	$(CXX) $^ -o $@ $(OFLAGS) $(LDFLAGS) $(HDFJOINLIBS) 
 	cp $@ $(HOME)/bin/
 
 

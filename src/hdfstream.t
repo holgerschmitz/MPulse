@@ -1,15 +1,13 @@
 #include <sstream>
 
-#ifndef SINGLE_PROCESSOR
+#ifdef USE_HDF_PARALLEL
 #include <mpi.h>
 #endif
 
 template<typename TYPE, int RANK, template<int> class Checking>
 HDFistream& HDFistream::operator>>(MatrixContainer<TYPE, RANK, Checking>& m)
 {
-#ifndef SINGLE_PROCESSOR
   if (!active) return *this;
-#endif
 
   std::string dset_name = getNextBlockName();
 
@@ -37,7 +35,7 @@ HDFistream& HDFistream::operator>>(MatrixContainer<TYPE, RANK, Checking>& m)
   hid_t dataset = H5Dopen(file_id, dset_name.c_str());
   assert(dataset != -1);
   
-#ifndef SINGLE_PROCESSOR
+#ifdef USE_HDF_PARALLEL
   /* create a file dataspace independently */
   hid_t file_dataspace = H5Dget_space(dataset);
   assert(file_dataspace != -1);
@@ -89,9 +87,7 @@ HDFistream& HDFistream::operator>>(MatrixContainer<TYPE, RANK, Checking>& m)
 template<typename TYPE, int RANK, template<int> class Checking>
 HDFostream& HDFostream::operator<< (const MatrixContainer<TYPE, RANK, Checking>& m)
 {
-#ifndef SINGLE_PROCESSOR
   if (!active) return *this;
-#endif
 
   std::string dset_name = getNextBlockName();
   
@@ -131,8 +127,12 @@ HDFostream& HDFostream::operator<< (const MatrixContainer<TYPE, RANK, Checking>&
   hid_t ret;
   
   /* setup dimensionality object */
+#ifdef USE_HDF_PARALLEL
   hid_t sid = H5Screate_simple (RANK, dims, NULL);  
-  
+#else
+  hid_t sid = H5Screate_simple (RANK, locdims, NULL);
+#endif
+
   /* create a dataset collectively */
   hid_t dataset = H5Dcreate(file_id, 
                             dset_name.c_str(), 
@@ -140,7 +140,7 @@ HDFostream& HDFostream::operator<< (const MatrixContainer<TYPE, RANK, Checking>&
                             sid, 
                             H5P_DEFAULT);
 
-#ifndef SINGLE_PROCESSOR
+#ifdef USE_HDF_PARALLEL
   /* create a file dataspace independently */
   hid_t file_dataspace = H5Dget_space(dataset);
 
@@ -157,7 +157,7 @@ HDFostream& HDFostream::operator<< (const MatrixContainer<TYPE, RANK, Checking>&
                  H5DataType<TYPE>::type, 
                  mem_dataspace, 
                  file_dataspace,	    
-	               H5P_DEFAULT, 
+                 H5P_DEFAULT, 
                  data);
 
   assert(ret != -1);
@@ -171,10 +171,10 @@ HDFostream& HDFostream::operator<< (const MatrixContainer<TYPE, RANK, Checking>&
                        H5DataType<TYPE>::type, 
                        H5S_ALL, 
                        H5S_ALL,	    
-	                     H5P_DEFAULT, 
+                       H5P_DEFAULT, 
                        data);
   assert(ret != -1);
-#endif			    
+#endif    
 
   /* close dataset collectively */					    
   ret=H5Dclose(dataset);

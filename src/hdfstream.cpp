@@ -1,6 +1,6 @@
 #include "hdfstream.h"
 
-#ifndef SINGLE_PROCESSOR
+#ifdef USE_HDF_PARALLEL
 #include <mpi.h>
 #endif
 
@@ -11,7 +11,7 @@ HDFstream::HDFstream()
     sets_count(0),
     active(true),
     activeModified(false)
-#ifndef SINGLE_PROCESSOR
+#ifdef USE_HDF_PARALLEL
     , commSet(false)
 #endif
 {}
@@ -23,7 +23,7 @@ HDFstream::HDFstream(const HDFstream& hdf)
     sets_count(hdf.sets_count),
     active(true),
     activeModified(false)
-#ifndef SINGLE_PROCESSOR
+#ifdef USE_HDF_PARALLEL
     , commSet(false)
 #endif
 {}
@@ -36,7 +36,7 @@ HDFstream &HDFstream::operator=(const HDFstream& hdf)
   blockname = hdf.blockname;
   active = hdf.active;
   activeModified = hdf.activeModified;
-#ifndef SINGLE_PROCESSOR
+#ifdef USE_HDF_PARALLEL
   mpiComm = hdf.mpiComm;
   commSet = hdf.commSet;
 #endif
@@ -80,7 +80,7 @@ std::string HDFstream::getNextBlockName()
   return bname.str();
 }
 
-#ifndef SINGLE_PROCESSOR
+#ifdef USE_HDF_PARALLEL
 void HDFstream::makeMPIGroup()
 {
   if (!activeModified) {
@@ -146,7 +146,7 @@ int HDFistream::open(const char* fname)
 {
   close();
 
-#ifndef SINGLE_PROCESSOR
+#ifdef USE_HDF_PARALLEL
   makeMPIGroup();
   if (active)
   {
@@ -154,14 +154,16 @@ int HDFistream::open(const char* fname)
     hid_t plist_id = H5Pcreate (H5P_FILE_ACCESS);
 
     /* set Parallel access with communicator */
-    H5Pset_fapl_mpio(plist_id, mpiComm, MPI_INFO_NULL);   
+//    H5Pset_fapl_mpio(plist_id, mpiComm, MPI_INFO_NULL);   
+    H5Pset_fapl_mpiposix(plist_id, mpiComm, 0);   
     /* open the file collectively */
     file_id = H5Fopen (fname, H5F_ACC_RDONLY, plist_id);
     /* Release file-access template */
     H5Pclose(plist_id);
   }
 #else
-  file_id = H5Fopen (fname, H5F_ACC_RDONLY, H5P_DEFAULT);
+  if (active)
+    file_id = H5Fopen (fname, H5F_ACC_RDONLY, H5P_DEFAULT);
 #endif  
   sets_count = 0;
   return 1;
@@ -188,20 +190,22 @@ int HDFostream::open(const char* fname)
 {
   sets_count = 0;
   
-#ifndef SINGLE_PROCESSOR
+#ifdef USE_HDF_PARALLEL
   makeMPIGroup();
   if (active)
   {
     /* setup file access template */
     hid_t plist_id = H5Pcreate(H5P_FILE_ACCESS);
     /* set Parallel access with communicator */
-    H5Pset_fapl_mpio(plist_id, mpiComm, MPI_INFO_NULL);  
+//    H5Pset_fapl_mpio(plist_id, mpiComm, MPI_INFO_NULL);   
+    H5Pset_fapl_mpiposix(plist_id, mpiComm, 0);   
     file_id = H5Fcreate (fname, H5F_ACC_TRUNC, H5P_DEFAULT, plist_id);
     /* Release file-access template */
     H5Pclose(plist_id);
   }
 #else
-  file_id = H5Fcreate (fname, H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
+  if (active)
+    file_id = H5Fcreate (fname, H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
 #endif  
 
   return file_id;
@@ -218,4 +222,25 @@ const hid_t H5DataType<float>::type = H5T_NATIVE_FLOAT;
 template<>
 const hid_t H5DataType<double>::type = H5T_NATIVE_DOUBLE;
 
+// ----------------------------------------------------------------------
+
+std::ostream &operator<<(std::ostream& out, const DataGridContainer &data)
+{
+  DataGrid &grid = *(data.grid);
+  GridIndex low = grid.getLow();
+  GridIndex high = grid.getHigh();
+  
+  for (int i=low[0]; i<=high[0]; ++i)
+  {
+    for (int j=low[1]; j<=high[1]; ++j)
+    {
+      for (int k=low[2]; k<=high[2]; ++k)
+      {
+        out << i << " " << j << " " << k << " " << grid(i,j,k) << "\n";
+      }
+      out << "\n";
+    }
+  }
+  return out;
+}
 

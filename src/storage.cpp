@@ -57,10 +57,15 @@ bool Storage::hasGrid(const std::string &gridid)
 
 DataGrid *Storage::addGrid(const std::string &gridid)
 {
+  return addGrid(gridid, low, high);
+}
+
+DataGrid *Storage::addGrid(const std::string &gridid, GridIndex lowg, GridIndex highg)
+{
   DataGrid *g = 0;
   if (grids.count(gridid) == 0)
   {
-    g = new DataGrid(low, high);
+    g = new DataGrid(lowg, highg);
     (*g) = 0;
     grids[gridid] = g;
   } else
@@ -98,7 +103,11 @@ bool Storage::hasBorderLayer(const std::string &gridid, Direction dir)
   return false;
 }
 
-DataGrid *Storage::addBorderLayer(const std::string &gridid, Direction dir, int thickness, int distance)
+DataGrid *Storage::addBorderLayer(const std::string &gridid, 
+                                  Direction dir, 
+                                  int thickness, 
+                                  int distance, 
+                                  int ghostcells)
 {
   DataGrid *g = 0;
   GridMap *gm;
@@ -114,19 +123,20 @@ DataGrid *Storage::addBorderLayer(const std::string &gridid, Direction dir, int 
     case down:  
     default:    gm = &gridsD; break;
   }
+  GridMap &bgrids = *gm;
   
+  GridIndex b_low, b_high;
   if (gm->count(gridid) == 0)
   {
-    GridIndex b_low, b_high;
-    if (getBorderExtent(dir, thickness, distance, b_low, b_high))
+    if (getBorderExtent(dir, thickness, distance, ghostcells, b_low, b_high))
     {
       g = new DataGrid(b_low, b_high);
       (*g) = 0;
-      gm->operator[](gridid) = g;
+      bgrids[gridid] = g;
     }
   } else
   {
-    g = grids[gridid];
+    g = bgrids[gridid];
   }
   return g;
 }
@@ -197,10 +207,11 @@ void Storage::applyBoundary(const std::string &groupid)
 
 bool Storage::getBorderExtent
   (
-    Direction dir, 
-    int thickness, 
-    int distance, 
-    GridIndex &blow, 
+    Direction dir,
+    int thickness,
+    int distance,
+    int ghostcells,
+    GridIndex &blow,
     GridIndex &bhigh
   )
 {
@@ -208,8 +219,13 @@ bool Storage::getBorderExtent
   GridIndex glow  = Globals::instance().gridLow();
   GridIndex ghigh = Globals::instance().gridHigh();
 
-  blow = low;
-  bhigh = high;
+  blow[0] = low[0]-ghostcells;
+  blow[1] = low[1]-ghostcells;
+  blow[2] = low[2]-ghostcells;
+  
+  bhigh[0] = high[0]+ghostcells;
+  bhigh[1] = high[1]+ghostcells;
+  bhigh[2] = high[2]+ghostcells;
   
   switch (dir)
   {
@@ -230,7 +246,7 @@ bool Storage::getBorderExtent
       }
       break;
     case down:
-      if (low[2]<glow[2]+thickness+distance)
+      if ((low[2]<glow[2]+thickness+distance) && (high[2]>=glow[2]+thickness))
       {
         bhigh[2] = glow[2]+thickness-1+distance;
         blow[2] = glow[2]+distance;
@@ -269,6 +285,7 @@ bool Storage::getBorderExtent
   std::cerr << "Border Low " << blow[0] << " " << blow[1] << " " << blow[2] << std::endl;
   std::cerr << "Border High " << bhigh[0] << " " << bhigh[1] << " " << bhigh[2] << std::endl;
   */
+  //assert(haveBorder);
   return haveBorder;
 }
 

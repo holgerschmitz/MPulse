@@ -4,7 +4,7 @@ include $(HOME)/src/makeinclude/include.mak
 OFLAGS  = $(X_OFLAGS) -Wall
 #OFLAGS  = $(X_OFLAGS_BRUTE) -Wall
 #OFLAGS  = $(X_OFLAGS_DEBUG) -Wall
-INCLUDE = $(X_INC) $(LX_INC) $(X_FFTW3_INC)
+INCLUDE = $(X_INC) $(X_BOOST_INC) $(X_HDF_INC) $(LX_INC) $(X_FFTW3_INC)
 CXX     = $(X_CXX)
 
 CXXFLAGS = $(OFLAGS)
@@ -32,7 +32,10 @@ MPULSE_SOURCES = hdfstream.cpp \
 	process.cpp \
 	pulseinit.cpp \
 	rebuild.cpp \
+	shortpulseinject.cpp \
+	shortpulsefunctions.cpp \
 	sources.cpp \
+	specfunc.cpp \
 	storage.cpp \
 	waveinit.cpp
 
@@ -60,7 +63,10 @@ MPULSE_OBJECTS = hdfstream.o \
 	process.o \
 	pulseinit.o \
 	rebuild.o \
+	shortpulseinject.o \
+	shortpulsefunctions.o \
 	sources.o \
+	specfunc.o \
 	storage.o \
 	waveinit.o
 
@@ -74,7 +80,7 @@ all: mpulse
 
 mpulse: $(MPULSE_OBJECTS) 
 	$(CXX) $^ -o $@ $(OFLAGS) $(LDFLAGS) $(LOADLIBS)
-	cp $@ $(HOME)/bin/$(X_OSTYPE)/mpulse_hdfmpi
+	cp $@ $(HOME)/bin/$(X_OSTYPE)/mpulse
 
 
 %.o: %.cpp
