@@ -128,13 +128,13 @@ void FDTD_Dispersion::stepD(double dt)
     
     for (int n=0;n<3;++n)
     {
-      double &px = pPx[n]->operator()(i,j,k);
-      double &py = pPy[n]->operator()(i,j,k);
-      double &pz = pPz[n]->operator()(i,j,k);
+      REAL &px = pPx[n]->operator()(i,j,k);
+      REAL &py = pPy[n]->operator()(i,j,k);
+      REAL &pz = pPz[n]->operator()(i,j,k);
       
-      double &pxp = pPxp[n]->operator()(i,j,k);
-      double &pyp = pPyp[n]->operator()(i,j,k);
-      double &pzp = pPzp[n]->operator()(i,j,k);
+      REAL &pxp = pPxp[n]->operator()(i,j,k);
+      REAL &pyp = pPyp[n]->operator()(i,j,k);
+      REAL &pzp = pPzp[n]->operator()(i,j,k);
       
       double a = dt2*LOm2[n];
       double b = a*LEps2[n];

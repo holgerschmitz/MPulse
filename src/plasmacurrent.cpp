@@ -61,9 +61,9 @@ void PlasmaCurrent::stepScheme(double dt)
     for (int j=low[1]; j<high[1]; ++j)
       for (int k=low[2]; k<high[2]; ++k)
   {
-    double &jx = Jx(i,j,k);
-    double &jy = Jy(i,j,k);
-    double &jz = Jz(i,j,k);
+    REAL &jx = Jx(i,j,k);
+    REAL &jy = Jy(i,j,k);
+    REAL &jz = Jz(i,j,k);
     double rho = Rho(i,j,k) + rho_bg;
     
     jx = (jx*gdtn - emdt*Ex(i,j,k)*rho)/gdtd;

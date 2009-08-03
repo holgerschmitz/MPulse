@@ -102,9 +102,9 @@ void FDTD_PLRCLinCore::plrcStepD(double dt,
                                  double dx, double dy, double dz,
                                  double Jx, double Jy, double Jz)
 {
-  double &ex = (*pEx)(i,j,k);
-  double &ey = (*pEy)(i,j,k);
-  double &ez = (*pEz)(i,j,k);
+  REAL &ex = (*pEx)(i,j,k);
+  REAL &ey = (*pEy)(i,j,k);
+  REAL &ez = (*pEz)(i,j,k);
   
 #ifndef NDEBUG
   {
@@ -139,27 +139,27 @@ void FDTD_PLRCLinCore::plrcStepD(double dt,
 
   for (int n=0;n<3;++n)
   {
-    double &pxr = pPsiRx[n]->operator()(i,j,k);
-    double &pyr = pPsiRy[n]->operator()(i,j,k);
-    double &pzr = pPsiRz[n]->operator()(i,j,k);
+    REAL &pxr = pPsiRx[n]->operator()(i,j,k);
+    REAL &pyr = pPsiRy[n]->operator()(i,j,k);
+    REAL &pzr = pPsiRz[n]->operator()(i,j,k);
 
-    double &pxi = pPsiIx[n]->operator()(i,j,k);
-    double &pyi = pPsiIy[n]->operator()(i,j,k);
-    double &pzi = pPsiIz[n]->operator()(i,j,k);
+    REAL &pxi = pPsiIx[n]->operator()(i,j,k);
+    REAL &pyi = pPsiIy[n]->operator()(i,j,k);
+    REAL &pzi = pPsiIz[n]->operator()(i,j,k);
 
     std::complex<double> D = plrcData.dchi0[n]-plrcData.dxi0[n];
 
-    std::complex<double> px = D*ex + std::complex<double>(pxr,pxi);
-    std::complex<double> py = D*ey + std::complex<double>(pyr,pyi);
-    std::complex<double> pz = D*ez + std::complex<double>(pzr,pzi);
+    std::complex<double> px = D*double(ex) + std::complex<double>(pxr,pxi);
+    std::complex<double> py = D*double(ey) + std::complex<double>(pyr,pyi);
+    std::complex<double> pz = D*double(ez) + std::complex<double>(pzr,pzi);
 
     Psix += std::real(px);
     Psiy += std::real(py);
     Psiz += std::real(pz);
 
-    px = plrcData.dxi0[n]*ex + plrcData.Crec[n]*px;
-    py = plrcData.dxi0[n]*ey + plrcData.Crec[n]*py;
-    pz = plrcData.dxi0[n]*ez + plrcData.Crec[n]*pz;
+    px = plrcData.dxi0[n]*double(ex) + plrcData.Crec[n]*px;
+    py = plrcData.dxi0[n]*double(ey) + plrcData.Crec[n]*py;
+    pz = plrcData.dxi0[n]*double(ez) + plrcData.Crec[n]*pz;
 
     pxr = std::real(px);
     pyr = std::real(py);
@@ -304,9 +304,9 @@ void FDTD_PLRCNonlinCore::plrcStepD(double dt,
                                     double dx, double dy, double dz,
                                     double Jx, double Jy, double Jz)
 {
-  double &ex = (*pEx)(i,j,k);
-  double &ey = (*pEy)(i,j,k);
-  double &ez = (*pEz)(i,j,k);
+  REAL &ex = (*pEx)(i,j,k);
+  REAL &ey = (*pEy)(i,j,k);
+  REAL &ez = (*pEz)(i,j,k);
 
   double kappaEdx = (*pKappaEdx)(i)*dx;
   double kappaEdy = (*pKappaEdy)(j)*dy;
@@ -318,27 +318,27 @@ void FDTD_PLRCNonlinCore::plrcStepD(double dt,
 
   for (int n=0;n<3;++n)
   {
-    double &pxr = pPsiRx[n]->operator()(i,j,k);
-    double &pyr = pPsiRy[n]->operator()(i,j,k);
-    double &pzr = pPsiRz[n]->operator()(i,j,k);
+    REAL &pxr = pPsiRx[n]->operator()(i,j,k);
+    REAL &pyr = pPsiRy[n]->operator()(i,j,k);
+    REAL &pzr = pPsiRz[n]->operator()(i,j,k);
 
-    double &pxi = pPsiIx[n]->operator()(i,j,k);
-    double &pyi = pPsiIy[n]->operator()(i,j,k);
-    double &pzi = pPsiIz[n]->operator()(i,j,k);
+    REAL &pxi = pPsiIx[n]->operator()(i,j,k);
+    REAL &pyi = pPsiIy[n]->operator()(i,j,k);
+    REAL &pzi = pPsiIz[n]->operator()(i,j,k);
 
     std::complex<double> D = plrcData.dchi0[n]-plrcData.dxi0[n];
 
-    std::complex<double> px = D*ex + std::complex<double>(pxr,pxi);
-    std::complex<double> py = D*ey + std::complex<double>(pyr,pyi);
-    std::complex<double> pz = D*ez + std::complex<double>(pzr,pzi);
+    std::complex<double> px = D*double(ex) + std::complex<double>(pxr,pxi);
+    std::complex<double> py = D*double(ey) + std::complex<double>(pyr,pyi);
+    std::complex<double> pz = D*double(ez) + std::complex<double>(pzr,pzi);
 
     Psix += std::real(px);
     Psiy += std::real(py);
     Psiz += std::real(pz);
 
-    px = plrcData.dxi0[n]*ex + plrcData.Crec[n]*px;
-    py = plrcData.dxi0[n]*ey + plrcData.Crec[n]*py;
-    pz = plrcData.dxi0[n]*ez + plrcData.Crec[n]*pz;
+    px = plrcData.dxi0[n]*double(ex) + plrcData.Crec[n]*px;
+    py = plrcData.dxi0[n]*double(ey) + plrcData.Crec[n]*py;
+    pz = plrcData.dxi0[n]*double(ez) + plrcData.Crec[n]*pz;
 
     pxr = std::real(px);
     pyr = std::real(py);

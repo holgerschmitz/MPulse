@@ -27,8 +27,8 @@ struct MatrixContainer
   typename schnek::Matrix<TYPE, RANK, Checking>::IndexType global_max;
 };
 
-typedef MatrixContainer<double, 3, MPulseGridChecker> DataGridContainer;
-typedef MatrixContainer<double, 2, MPulseGridChecker> DataGrid2dContainer;
+typedef MatrixContainer<REAL, 3, MPulseGridChecker> DataGridContainer;
+typedef MatrixContainer<REAL, 2, MPulseGridChecker> DataGrid2dContainer;
 
 std::ostream &operator<<(std::ostream& out, const DataGridContainer &);
 

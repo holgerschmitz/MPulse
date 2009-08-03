@@ -10,11 +10,14 @@
 #define MPulseGridChecker schnek::MatrixAssertCheck
 #endif
 
-typedef schnek::Matrix<double, 1, MPulseGridChecker> DataGrid1d;
-typedef schnek::Matrix<double, 2, MPulseGridChecker> DataGrid2d;
-typedef schnek::Matrix<double, 3, MPulseGridChecker> DataGrid3d;
+//typedef double REAL;
+typedef float REAL;
 
-typedef schnek::FixedArray<double, 3> Vector;
+typedef schnek::Matrix<REAL, 1, MPulseGridChecker> DataGrid1d;
+typedef schnek::Matrix<REAL, 2, MPulseGridChecker> DataGrid2d;
+typedef schnek::Matrix<REAL, 3, MPulseGridChecker> DataGrid3d;
+
+typedef schnek::FixedArray<REAL, 3> Vector;
 
 typedef DataGrid1d::IndexType GridIndex1d;
 typedef DataGrid2d::IndexType GridIndex2d;

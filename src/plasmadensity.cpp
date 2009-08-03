@@ -42,8 +42,8 @@ void PlasmaDensity::stepScheme(double dt)
     double ex = Ex(i,j,k);
     double ey = Ey(i,j,k);
     double ez = Ez(i,j,k);
-    double &rho = Rho(i,j,k);
-    double &sigma = Sigma(i,j,k);
+    REAL &rho = Rho(i,j,k);
+    REAL &sigma = Sigma(i,j,k);
     
     double I   = ex*ex + ey*ey + ez*ez;
     double IKm = ipow(I,Km);

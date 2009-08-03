@@ -279,13 +279,13 @@ void FDTD_PLRCSolver<PLRCImplementation>::initAccumulator(double dt)
             
     for (int n=0;n<3;++n)
     {
-      double &pxr = this->pPsiRx[n]->operator()(i,j,k);
-      double &pyr = this->pPsiRy[n]->operator()(i,j,k);
-      double &pzr = this->pPsiRz[n]->operator()(i,j,k);
+      REAL &pxr = this->pPsiRx[n]->operator()(i,j,k);
+      REAL &pyr = this->pPsiRy[n]->operator()(i,j,k);
+      REAL &pzr = this->pPsiRz[n]->operator()(i,j,k);
       
-      double &pxi = this->pPsiIx[n]->operator()(i,j,k);
-      double &pyi = this->pPsiIy[n]->operator()(i,j,k);
-      double &pzi = this->pPsiIz[n]->operator()(i,j,k);
+      REAL &pxi = this->pPsiIx[n]->operator()(i,j,k);
+      REAL &pyi = this->pPsiIy[n]->operator()(i,j,k);
+      REAL &pzi = this->pPsiIz[n]->operator()(i,j,k);
       
       std::complex<double> px = std::complex<double>(pxr,pxi);
       std::complex<double> py = std::complex<double>(pyr,pyi);
