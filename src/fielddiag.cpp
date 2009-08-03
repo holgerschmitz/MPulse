@@ -114,6 +114,91 @@ void FieldSliceDiag::write()
   output << sliceContainer;
 }
 
+
+//-----------------------------------------------------------------------------
+//---------   FieldLineDiag
+//-----------------------------------------------------------------------------
+
+void FieldLineDiag::open(const std::string &fname)
+{
+  output.open(fname.c_str());
+}
+
+FieldLineDiag::~FieldLineDiag()
+{
+  output.close();
+}
+
+void FieldLineDiag::close()
+{
+  output.close();
+}
+
+
+ParameterMap* FieldLineDiag::MakeParamMap (ParameterMap* pm)
+{
+  pm = DiagnosticInterface::MakeParamMap(pm);
+
+  (*pm)["field"] = WParameter(new ParameterValue<std::string>(&fieldId,""));
+  (*pm)["dim"] = WParameter(new ParameterValue<std::string>(&direction,"x"));
+  (*pm)["posx"] = WParameter(new ParameterValue<int>(&posx,5));
+  (*pm)["posy"] = WParameter(new ParameterValue<int>(&posy,5));
+  (*pm)["posz"] = WParameter(new ParameterValue<int>(&posz,5));
+  return pm;
+}
+
+void FieldLineDiag::fetchField(Storage &storage)
+{
+  this->field = &storage.getGrid(fieldId);
+  GridIndex low = storage.getLow();
+  GridIndex high = storage.getHigh();
+  GridIndex glow = Globals::instance().gridLow();
+  GridIndex ghigh = Globals::instance().gridHigh();
+  GridIndex pos(posx, posy, posz);
+  
+  switch (direction[0]) {
+    case 'y':
+      dim = 1;
+      trans1 = 0;
+      trans2 = 2;
+      break;
+    case 'z':
+      dim = 2;
+      trans1 = 0;
+      trans2 = 1;
+      break;
+    case 'x':
+    default :
+      dim = 0;
+      trans1 = 1;
+      trans2 = 2;
+      break;
+  }
+  
+  low = low[dim];       
+  high = high[dim];
+  
+  active = (pos[trans1]>low[trans1]) && (pos[trans1]<high[trans1])
+    && (pos[trans2]>low[trans2]) && (pos[trans2]<high[trans2]);
+  output.setActive(active);
+}
+
+void FieldSliceDiag::write()
+{
+  if (active)
+  {
+    std::string sep("");
+    GridIndex i(pos);
+    
+    for (i[dim]=low; i[dim]<=high; ++i[dim])
+    {
+      output << sep << (*field)(i[0], i[1], i[2]);
+      sep = " ";
+    }
+    output << std::endl;
+  }
+}
+
 //-----------------------------------------------------------------------------
 //---------   FieldEnergyDiag
 //-----------------------------------------------------------------------------

@@ -48,6 +48,7 @@ void FieldSimulation::init()
   
   typedef AllFieldDiag::DiagList::iterator Iter;
   typedef AllFieldDiag::SliceDiagList::iterator SliceIter;
+  typedef AllFieldDiag::LineDiagList::iterator LineIter;
   typedef AllFieldDiag::ExtraDiagList::iterator ExtraIter;
   
   for (
@@ -66,6 +67,15 @@ void FieldSimulation::init()
   )
   {
     (*sit)->fetchField(*this);
+  }
+      
+  for (
+    LineIter lit = fieldDiag.lines.begin();
+    lit != fieldDiag.lines.end();
+    ++lit
+  )
+  {
+    (*lit)->fetchField(*this);
   }
       
   for (
@@ -157,6 +167,10 @@ ParameterMap* FieldSimulation::MakeParamMap (ParameterMap* pm) {
   
   (*pm)["slicediag"] = WParameter(
       new ParameterRebuild<FieldSliceDiag, FieldSliceDiag>(&fieldDiag.slices)
+  );
+  
+  (*pm)["linediag"] = WParameter(
+      new ParameterRebuild<FieldLineDiag, FieldLineDiag>(&fieldDiag.lines)
   );
   
   (*pm)["energy"] = WParameter(
