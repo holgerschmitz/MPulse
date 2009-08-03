@@ -2,7 +2,7 @@
 include $(HOME)/src/makeinclude/include.mak
 
 #OFLAGS  = $(X_OFLAGS)
-OFLAGS  = $(X_OFLAGS_DEBUG) -DSINGLE_PROCESSOR
+OFLAGS  = $(X_OFLAGS) -DSINGLE_PROCESSOR
 INCLUDE = $(X_INC) $(LX_INC)
 
 CXXFLAGS = $(OFLAGS)
@@ -39,6 +39,10 @@ gnutopnm: gnutopnm.o
     
 hdfjoin: hdfjoin.o
 	$(CXX) $^ -o $@ $(OFLAGS) $(LDFLAGS) $(HDFJOINLIBS) 
+	cp $@ $(HOME)/bin/
+
+h5fft2d: h5fft2d.o
+	$(CXX) $^ -o $@ $(OFLAGS) $(LDFLAGS) -lhdf5 $(LOADLIBS) -lboost_program_options -lfftw3
 	cp $@ $(HOME)/bin/
 
 gnutoh5: gnutoh5.o
