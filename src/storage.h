@@ -55,7 +55,7 @@ class Storage
                              Direction dir, 
                              int thickness, 
                              int distance=0, 
-                             int ghostcells=0);
+                             int bordercells=0);
     
     DataLine &getLine(const std::string &lineid);
     bool hasLine(const std::string &lineid);
@@ -96,7 +96,7 @@ class Storage
     bool getBorderExtent(Direction dir, 
                          int thickness, 
                          int distance, 
-                         int ghostcells, 
+                         int bordercells, 
                          GridIndex &blow, 
                          GridIndex &bhigh);
     

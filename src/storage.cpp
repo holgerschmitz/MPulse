@@ -107,7 +107,7 @@ DataGrid *Storage::addBorderLayer(const std::string &gridid,
                                   Direction dir, 
                                   int thickness, 
                                   int distance, 
-                                  int ghostcells)
+                                  int bordercells)
 {
   DataGrid *g = 0;
   GridMap *gm;
@@ -128,7 +128,7 @@ DataGrid *Storage::addBorderLayer(const std::string &gridid,
   GridIndex b_low, b_high;
   if (gm->count(gridid) == 0)
   {
-    if (getBorderExtent(dir, thickness, distance, ghostcells, b_low, b_high))
+    if (getBorderExtent(dir, thickness, distance, bordercells, b_low, b_high))
     {
       g = new DataGrid(b_low, b_high);
       (*g) = 0;
@@ -210,7 +210,7 @@ bool Storage::getBorderExtent
     Direction dir,
     int thickness,
     int distance,
-    int ghostcells,
+    int bordercells,
     GridIndex &blow,
     GridIndex &bhigh
   )
@@ -219,13 +219,21 @@ bool Storage::getBorderExtent
   GridIndex glow  = Globals::instance().gridLow();
   GridIndex ghigh = Globals::instance().gridHigh();
 
-  blow[0] = low[0]-ghostcells;
-  blow[1] = low[1]-ghostcells;
-  blow[2] = low[2]-ghostcells;
+  blow[0] = low[0]+bordercells;
+  blow[1] = low[1]+bordercells;
+  blow[2] = low[2]+bordercells;
   
-  bhigh[0] = high[0]+ghostcells;
-  bhigh[1] = high[1]+ghostcells;
-  bhigh[2] = high[2]+ghostcells;
+  bhigh[0] = high[0]-bordercells;
+  bhigh[1] = high[1]-bordercells;
+  bhigh[2] = high[2]-bordercells;
+  
+  int borderfit = (bordercells!=0)?1:0;
+  
+  if ((bordercells!=0) && (thickness>1))
+  {
+    std::cerr << "Fatal Error: getBorderExtent does not allow thickness>1 and bordercells!=0 at the same time\n";
+    exit(-1);
+  }
   
   switch (dir)
   {
@@ -242,6 +250,10 @@ bool Storage::getBorderExtent
       {
         bhigh[1] = glow[1]+thickness-1+distance;
         blow[1] = glow[1]+distance;
+        
+        blow[0] += borderfit;
+        bhigh[0] -= borderfit;
+        
         haveBorder = true;
       }
       break;
@@ -250,6 +262,12 @@ bool Storage::getBorderExtent
       {
         bhigh[2] = glow[2]+thickness-1+distance;
         blow[2] = glow[2]+distance;
+        
+        blow[0] += borderfit;
+        blow[1] += borderfit;
+        bhigh[0] -= borderfit;
+        bhigh[1] -= borderfit;
+        
         haveBorder = true;
       }
       break;
@@ -266,6 +284,10 @@ bool Storage::getBorderExtent
       {
         blow[1] = ghigh[1]-thickness+1-distance;
         bhigh[1] = ghigh[1]-distance;
+        
+        blow[0] += borderfit;
+        bhigh[0] -= borderfit;
+        
         haveBorder = true;
       }
       break;
@@ -274,6 +296,12 @@ bool Storage::getBorderExtent
       {
         blow[2] = ghigh[2]-thickness+1-distance;
         bhigh[2] = ghigh[2]-distance;
+        
+        blow[0] += borderfit;
+        blow[1] += borderfit;
+        bhigh[0] -= borderfit;
+        bhigh[1] -= borderfit;
+        
         haveBorder = true;
       }
       break;

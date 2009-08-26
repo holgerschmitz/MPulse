@@ -115,12 +115,6 @@ void ShortPulseInjectSourceFunc::setParam(double length_,
 void ShortPulseInjectSourceFunc
     ::initSourceFunc(Storage *storage, DataGrid *pJx, DataGrid *pJy, DataGrid *pJz)
 {
-  std::cerr << "ShortPulseInjectSourceFunc::initSourceFunc\n";
-  PsiX  = storage->addBorderLayer("IncidentPsiX" , dir, 4, dist-2, 1);
-  PsiY  = storage->addBorderLayer("IncidentPsiY" , dir, 4, dist-2, 1);
-  PsiXp = storage->addBorderLayer("IncidentPsiXp", dir, 4, dist-2, 1);
-  PsiYp = storage->addBorderLayer("IncidentPsiYp", dir, 4, dist-2, 1);
-  std::cerr << "ShortPulseInjectSourceFunc::initSourceFunc ... done\n";
 }
 
 void ShortPulseInjectSourceFunc::setTime(int time)

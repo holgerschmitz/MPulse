@@ -102,11 +102,6 @@ class ShortPulseInjectSourceFunc
     bool isH;
     
     int dist;
-  private:
-    DataGrid *PsiX, *PsiY;
-    DataGrid *PsiXp, *PsiYp;
-  
-   
 };
 
 #endif
