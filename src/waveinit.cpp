@@ -45,13 +45,13 @@ void PlaneWaveInit::init(Storage &fields)
         double ampby = cos((i+0.5)*nkx + j*nky + (k+0.5)*nkz);
         double ampbz = cos((i+0.5)*nkx + (j+0.5)*nky + k*nkz);
         
-        Ex(i,j,k) = ex*ampex;
-        Ey(i,j,k) = ey*ampey;
-        Ez(i,j,k) = ez*ampez;
+        Ex(i,j,k) += ex*ampex;
+        Ey(i,j,k) += ey*ampey;
+        Ez(i,j,k) += ez*ampez;
         
-        Bx(i,j,k) = bx*ampbx;
-        By(i,j,k) = by*ampby;
-        Bz(i,j,k) = bz*ampbz;
+        Bx(i,j,k) += bx*ampbx;
+        By(i,j,k) += by*ampby;
+        Bz(i,j,k) += bz*ampbz;
       }
   
 }
