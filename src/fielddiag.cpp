@@ -121,7 +121,7 @@ void FieldSliceDiag::write()
 
 void FieldLineDiag::open(const std::string &fname)
 {
-  output.open(fname.c_str());
+  if (active) output.open(fname.c_str());
 }
 
 FieldLineDiag::~FieldLineDiag()
@@ -175,20 +175,19 @@ void FieldLineDiag::fetchField(Storage &storage)
       break;
   }
   
-  low = low[dim];       
-  high = high[dim];
+  this->low = low[dim];       
+  this->high = high[dim];
   
   active = (pos[trans1]>low[trans1]) && (pos[trans1]<high[trans1])
     && (pos[trans2]>low[trans2]) && (pos[trans2]<high[trans2]);
-  output.setActive(active);
 }
 
-void FieldSliceDiag::write()
+void FieldLineDiag::write()
 {
   if (active)
   {
     std::string sep("");
-    GridIndex i(pos);
+    GridIndex i(posx, posy, posz);
     
     for (i[dim]=low; i[dim]<=high; ++i[dim])
     {
