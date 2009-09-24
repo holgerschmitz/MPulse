@@ -88,11 +88,11 @@ void PlaneWaveSourceEFunc::setParam(Vector k_, Vector E_, Vector H_, double ramp
 Vector PlaneWaveSourceEFunc
     ::getHField(int i, int j, int l, int time)
 {
-  double realtime = dt*time;
+  double realtime = dt*(time-0.5);
 
-  double posx = k[0]*(i+0.5)*dx + k[1]*j*dy + k[2]*l*dz + om*realtime;
-  double posy = k[0]*i*dx + k[1]*(j+0.5)*dy + k[2]*l*dz + om*realtime;
-  double posz = k[0]*i*dx + k[1]*j*dy + k[2]*(l+0.5)*dz + om*realtime;
+  double posx = k[0]*i*dx + k[1]*(j+0.5)*dy + k[2]*(l+0.5)*dz + om*realtime;
+  double posy = k[0]*(i+0.5)*dx + k[1]*j*dy + k[2]*(l+0.5)*dz + om*realtime;
+  double posz = k[0]*(i+0.5)*dx + k[1]*(j+0.5)*dy + k[2]*l*dz + om*realtime;
   
   double hx = H[0]*sin(posx);
   double hy = H[1]*sin(posy);
@@ -129,11 +129,16 @@ void PlaneWaveSourceHFunc::setParam(Vector k_, Vector E_, Vector H_, double ramp
 Vector PlaneWaveSourceHFunc
     ::getEField(int i, int j, int l, int time)
 {
+//  double realtime = dt*time;
+//  double posx = k[0]*i*dx + k[1]*(j+0.5)*dy + k[2]*(l+0.5)*dz + om*realtime;
+//  double posy = k[0]*(i+0.5)*dx + k[1]*j*dy + k[2]*(l+0.5)*dz + om*realtime;
+//  double posz = k[0]*(i+0.5)*dx + k[1]*(j+0.5)*dy + k[2]*l*dz + om*realtime;
+
   double realtime = dt*time;
 
-  double posx = k[0]*i*dx + k[1]*(j+0.5)*dy + k[2]*(l+0.5)*dz + om*realtime;
-  double posy = k[0]*(i+0.5)*dx + k[1]*j*dy + k[2]*(l+0.5)*dz + om*realtime;
-  double posz = k[0]*(i+0.5)*dx + k[1]*(j+0.5)*dy + k[2]*l*dz + om*realtime;
+  double posx = k[0]*(i+0.5)*dx + k[1]*j*dy + k[2]*l*dz + om*realtime;
+  double posy = k[0]*i*dx + k[1]*(j+0.5)*dy + k[2]*l*dz + om*realtime;
+  double posz = k[0]*i*dx + k[1]*j*dy + k[2]*(l+0.5)*dz + om*realtime;
   
   double ex = E[0]*sin(posx);
   double ey = E[1]*sin(posy);

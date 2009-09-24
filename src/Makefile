@@ -19,6 +19,7 @@ MPULSE_SOURCES = hdfstream.cpp \
 	fdtd_plrc.cpp \
 	fielddiag.cpp \
 	fieldsim.cpp \
+  followmax.cpp \
 	freqdiag.cpp \
 	gaussinit.cpp \
 	gaussinject.cpp \
@@ -50,6 +51,7 @@ MPULSE_OBJECTS = hdfstream.o \
 	fdtd_plrc.o \
 	fielddiag.o \
 	fieldsim.o \
+  followmax.o \
 	freqdiag.o \
 	gaussinit.o \
 	gaussinject.o \
@@ -72,7 +74,7 @@ MPULSE_OBJECTS = hdfstream.o \
 
 LDFLAGS = $(X_LIB) $(LX_LIB)
 
-LOADLIBS = $(X_HDF_LIBS) $(X_FFTW3_LIB) -lm
+LOADLIBS = $(X_HDF5_LIBS) $(X_FFTW3_LIB) -lm
 
 BINARY_PREFIX = $(X_ROOT_DIR)/bin/$(X_OSTYPE)
 

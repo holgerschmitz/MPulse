@@ -144,6 +144,7 @@ ParameterMap* FieldLineDiag::MakeParamMap (ParameterMap* pm)
   (*pm)["posx"] = WParameter(new ParameterValue<int>(&posx,5));
   (*pm)["posy"] = WParameter(new ParameterValue<int>(&posy,5));
   (*pm)["posz"] = WParameter(new ParameterValue<int>(&posz,5));
+  (*pm)["format"] = WParameter(new ParameterValue<std::string>(&format,"lines"));
   return pm;
 }
 
@@ -155,6 +156,13 @@ void FieldLineDiag::fetchField(Storage &storage)
   GridIndex glow = Globals::instance().gridLow();
   GridIndex ghigh = Globals::instance().gridHigh();
   GridIndex pos(posx, posy, posz);
+  
+  if (format=="gnu") {
+    formatID = 1;
+  }
+  else {
+    formatID = 0;
+  }
   
   switch (direction[0]) {
     case 'y':
@@ -186,15 +194,28 @@ void FieldLineDiag::write()
 {
   if (active)
   {
-    std::string sep("");
-    GridIndex i(posx, posy, posz);
-    
-    for (i[dim]=low; i[dim]<=high; ++i[dim])
+    if (formatID == 0)
     {
-      output << sep << (*field)(i[0], i[1], i[2]);
-      sep = " ";
+      std::string sep("");
+      GridIndex i(posx, posy, posz);
+      
+      for (i[dim]=low; i[dim]<=high; ++i[dim])
+      {
+        output << sep << (*field)(i[0], i[1], i[2]);
+        sep = " ";
+      }
+      output << std::endl;
     }
-    output << std::endl;
+    else
+    {
+      GridIndex i(posx, posy, posz);
+      
+      for (i[dim]=low; i[dim]<=high; ++i[dim])
+      {
+        output << i[dim] << ' ' << (*field)(i[0], i[1], i[2]) << std::endl;
+      }
+      output << std::endl;      
+    }
   }
 }
 

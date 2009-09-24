@@ -122,6 +122,8 @@ class FieldLineDiag : public DiagnosticInterface
     
     int posx, posy, posz;
     std::string direction;
+    std::string format;
+    int formatID;
     
     int dim;
     int trans1, trans2;

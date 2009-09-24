@@ -15,11 +15,11 @@
 #include "pulseinit.h"
 
 #include "freqdiag.h"
+#include "followmax.h"
 
 
 
 FieldSimulation::FieldSimulation()
-  : initializer(0)
 {
   
 }
@@ -88,16 +88,21 @@ void FieldSimulation::init()
     (*xit)->init();
   }
 
-  if(!initializer)
+  if(initializers.empty())
   {
     std::cout << "  NO INITIALIZER SPECIFIED!!!" << std::endl;
     std::cout << "    Starting with zero fields" << std::endl;
   }
   else {
-    initializer->init(*this);
-    if (!Globals::instance().isRestart())
-      solver->stepSchemeInit(dt);
-    std::cerr << ">>> solver->stepSchemeInit >>>\n";
+    for (
+      FieldSimInitList::iterator iit = initializers.begin();
+      iit != initializers.end();
+      ++iit
+    )
+    {
+      (*iit)->init(*this);
+    }
+   
   }
 }
 
@@ -150,15 +155,15 @@ ParameterMap* FieldSimulation::MakeParamMap (ParameterMap* pm) {
 
 
   (*pm)["wave_init"] = WParameter(
-      new ParameterRebuild<PlaneWaveInit, FieldSimInit>(&initializer)
+      new ParameterRebuild<PlaneWaveInit, FieldSimInit>(&initializers)
   );
   
   (*pm)["gauss_init"] = WParameter(
-      new ParameterRebuild<PlaneGaussPulseInit, FieldSimInit>(&initializer)
+      new ParameterRebuild<PlaneGaussPulseInit, FieldSimInit>(&initializers)
   );
   
   (*pm)["pulse_init"] = WParameter(
-      new ParameterRebuild<GaussPulseInit, FieldSimInit>(&initializer)
+      new ParameterRebuild<GaussPulseInit, FieldSimInit>(&initializers)
   );
   
   (*pm)["fielddiag"] = WParameter(
@@ -179,6 +184,10 @@ ParameterMap* FieldSimulation::MakeParamMap (ParameterMap* pm) {
   
   (*pm)["frequency"] = WParameter(
       new ParameterRebuild<FrequencyDiag, FieldExtraDiag>(&fieldDiag.fieldextras)
+  );
+  
+  (*pm)["followmax"] = WParameter(
+      new ParameterRebuild<FollowMax, FieldExtraDiag>(&fieldDiag.fieldextras)
   );
   
   return pm;
