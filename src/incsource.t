@@ -42,8 +42,8 @@ void IncidentSourceECurrent<SourceFunc>::stepScheme(double dt)
   DataGrid &J0 = *pJ[0];
   DataGrid &J1 = *pJ[1];
 
-  GridIndex low  = J0.getLow();
-  GridIndex high = J0.getHigh();
+  GridIndex low  = J0.getLo();
+  GridIndex high = J0.getHi();
   
   GridIndex ind, indn;
   
@@ -114,8 +114,8 @@ void IncidentSourceHCurrent<SourceFunc>::stepScheme(double dt)
   DataGrid &J0 = *pJ[0];
   DataGrid &J1 = *pJ[1];
   
-  GridIndex low  = J0.getLow();
-  GridIndex high = J0.getHigh();
+  GridIndex low  = J0.getLo();
+  GridIndex high = J0.getHi();
   
   GridIndex ind, indn;
   

@@ -76,23 +76,23 @@ void CPMLBorder::initCoefficients(Storage *storage)
   pKappaHdk[1] = storage->addLine("KappaHdy", 1);
   pKappaHdk[2] = storage->addLine("KappaHdz", 2);
     
-  std::cerr << "Field Size Edx " << pKappaEdk[0]->getLow()[0] << ", "  
-                                 << pKappaEdk[0]->getHigh()[0] <<std::endl;
+  std::cerr << "Field Size Edx " << pKappaEdk[0]->getLo()[0] << ", "  
+                                 << pKappaEdk[0]->getHi()[0] <<std::endl;
   
-  std::cerr << "Field Size Edy " << pKappaEdk[1]->getLow()[0] << ", "  
-                                 << pKappaEdk[1]->getHigh()[0] <<std::endl;
+  std::cerr << "Field Size Edy " << pKappaEdk[1]->getLo()[0] << ", "  
+                                 << pKappaEdk[1]->getHi()[0] <<std::endl;
   
-  std::cerr << "Field Size Edz " << pKappaEdk[2]->getLow()[0] << ", "  
-                                 << pKappaEdk[2]->getHigh()[0] <<std::endl;
+  std::cerr << "Field Size Edz " << pKappaEdk[2]->getLo()[0] << ", "  
+                                 << pKappaEdk[2]->getHi()[0] <<std::endl;
   
-  std::cerr << "Field Size Hdx " << pKappaHdk[0]->getLow()[0] << ", "  
-                                 << pKappaHdk[0]->getHigh()[0] <<std::endl;
+  std::cerr << "Field Size Hdx " << pKappaHdk[0]->getLo()[0] << ", "  
+                                 << pKappaHdk[0]->getHi()[0] <<std::endl;
   
-  std::cerr << "Field Size Hdy " << pKappaHdk[1]->getLow()[0] << ", "  
-                                 << pKappaHdk[1]->getHigh()[0] <<std::endl;
+  std::cerr << "Field Size Hdy " << pKappaHdk[1]->getLo()[0] << ", "  
+                                 << pKappaHdk[1]->getHi()[0] <<std::endl;
   
-  std::cerr << "Field Size Hdz " << pKappaHdk[2]->getLow()[0] << ", "  
-                                 << pKappaHdk[2]->getHigh()[0] <<std::endl;
+  std::cerr << "Field Size Hdz " << pKappaHdk[2]->getLo()[0] << ", "  
+                                 << pKappaHdk[2]->getHi()[0] <<std::endl;
   
   for (int dim = 0; dim<3; ++dim)
   {
@@ -195,11 +195,11 @@ void CPMLBorderOneD::initCoefficients(Storage *storage)
   *(storage->addLine("KappaHdy", 1)) = 1;
   *(storage->addLine("KappaHdx", 0)) = 1;
     
-  std::cerr << "Field Size Edx " << pKappaEdk->getLow()[0] << ", "  
-                                 << pKappaEdk->getHigh()[0] <<std::endl;
+  std::cerr << "Field Size Edx " << pKappaEdk->getLo()[0] << ", "  
+                                 << pKappaEdk->getHi()[0] <<std::endl;
   
-  std::cerr << "Field Size Hdx " << pKappaHdk->getLow()[0] << ", "  
-                                 << pKappaHdk->getHigh()[0] <<std::endl;
+  std::cerr << "Field Size Hdx " << pKappaHdk->getLo()[0] << ", "  
+                                 << pKappaHdk->getHi()[0] <<std::endl;
   
   
     if (low[2]<glow[2]+thickness)
@@ -285,8 +285,8 @@ void CPMLBorderCurrent::makeCoeff(Storage *storage)
 {
   double dt = Globals::instance().dt();
   
-  GridIndex low  = pJx->getLow();
-  GridIndex high = pJx->getHigh();
+  GridIndex low  = pJx->getLo();
+  GridIndex high = pJx->getHi();
   
   switch (dir)
   {
@@ -394,8 +394,8 @@ void CPMLBorderECurrent::stepSchemeInit(double dt)
 
 void CPMLBorderECurrent::stepScheme(double dt)
 {
-  GridIndex low  = pPsi[0]->getLow();
-  GridIndex high = pPsi[0]->getHigh();
+  GridIndex low  = pPsi[0]->getLo();
+  GridIndex high = pPsi[0]->getHi();
     
   DataGrid &Psi0 = *pPsi[0];
   DataGrid &Psi1 = *pPsi[1];
@@ -495,8 +495,8 @@ void CPMLBorderHCurrent::stepSchemeInit(double dt)
 
 void CPMLBorderHCurrent::stepScheme(double dt)
 {
-  GridIndex low  = pPsi[0]->getLow();
-  GridIndex high = pPsi[0]->getHigh();
+  GridIndex low  = pPsi[0]->getLo();
+  GridIndex high = pPsi[0]->getHi();
     
   DataGrid &Psi0 = *pPsi[0];
   DataGrid &Psi1 = *pPsi[1];

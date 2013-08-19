@@ -34,8 +34,30 @@ class PlasmaDensity : public OptField
     void stepSchemeInit(double dt) { stepScheme(dt/2); }
     void stepScheme(double dt);
     
-    void addToResistivity(DataGrid *pSigma);
-    bool addsToResistivity() { return true; }
+    //void addToResistivity(DataGrid *pSigma);
+    //bool addsToResistivity() { return true; }
+  protected:
+    /// build parametermap
+    ParameterMap* MakeParamMap (ParameterMap* pm = NULL);
+};
+
+
+class ConstantPlasmaDensity : public OptField
+{
+  protected:    
+    double minDensity;
+    double length;
+    bool initialized;
+    
+    DataGrid *pRho;
+    Storage *storage;
+    
+  public:    
+    void initStorage(Storage *storage_);
+    
+    void stepSchemeInit(double dt) { stepScheme(dt/2); }
+    void stepScheme(double dt);
+    
   protected:
     /// build parametermap
     ParameterMap* MakeParamMap (ParameterMap* pm = NULL);

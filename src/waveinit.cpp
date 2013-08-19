@@ -11,7 +11,7 @@ void PlaneWaveInit::init(Storage &fields)
   double ey = kz*bx-kx*bz;
   double ez = kx*by-ky*bx;
   double bmag = sqrt(bx*bx + by*by + bz*bz);
-  double factor = -bmag/sqrt(ex*ex + ey*ey + ez*ez);
+  double factor = (bmag<=0.0)?0.0:(-bmag/sqrt(ex*ex + ey*ey + ez*ez));
   
   ex *= factor/sqrt(eps);
   ey *= factor/sqrt(eps);

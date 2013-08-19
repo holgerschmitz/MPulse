@@ -110,8 +110,8 @@ void MPIPeriodicSplitXBoundary::exchangeX(DataGrid3d &field)
 
 void MPIPeriodicSplitXBoundary::exchangeY(DataGrid3d &field) 
 {
-  const GridIndex3d &UBound = field.getHigh();
-  const GridIndex3d &LBound = field.getLow();
+  const GridIndex3d &UBound = field.getHi();
+  const GridIndex3d &LBound = field.getLo();
   
   int xi;
   int zi;
@@ -131,8 +131,8 @@ void MPIPeriodicSplitXBoundary::exchangeY(DataGrid3d &field)
 
 void MPIPeriodicSplitXBoundary::exchangeZ(DataGrid3d &field) 
 {
-  const GridIndex3d &UBound = field.getHigh();
-  const GridIndex3d &LBound = field.getLow();
+  const GridIndex3d &UBound = field.getHi();
+  const GridIndex3d &LBound = field.getLo();
   
   int xi;
   int yi;

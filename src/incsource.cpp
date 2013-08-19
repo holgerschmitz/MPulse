@@ -275,7 +275,7 @@ void SideInjectSourceFunc::setTime(int Time)
   
 //  std::cerr << "Adjusting Parameters\n";
   data.close();
-  Nt = F1.getHigh()[2] - F1.getLow()[2] + 1;
+  Nt = F1.getHi()[2] - F1.getLo()[2] + 1;
   blockToff = toff + blockCount*Nt;
   blockCount++;
   active = true;
@@ -288,7 +288,7 @@ Vector SideInjectSourceFunc::getField(int i, int j, int k, int time, double fact
   Vector Field(0,0,0);
   if (!active) return Field;
     
-  int t = time - blockToff - F1.getLow()[2];
+  int t = time - blockToff - F1.getLo()[2];
   
   GridIndex index(i,j,k);
     

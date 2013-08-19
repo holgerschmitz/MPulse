@@ -5,7 +5,7 @@
 
 #include <fftw3.h>
 #include <complex>
-#include <schnek/matrix.h>
+#include <schnek/grid.hpp>
 
 /** Calculates a gaussian pulse using Fourier Transform
  */
@@ -130,7 +130,7 @@ class GaussInjectSourceFunc
   private:
   
     typedef std::complex<double> Complex;
-    typedef schnek::Matrix<Complex,1> Row;
+    typedef schnek::Grid<Complex,1> Row;
 
     Row A;
     DataGrid2d tmpField_TYr, tmpField_TYi;

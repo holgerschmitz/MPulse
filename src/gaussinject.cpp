@@ -188,7 +188,7 @@ Vector GaussInjectSourceFunc::getField(int i, int j, int k, int time, double fac
   Vector Field(0,0,0);
   if (!active) return Field;
     
-  int t = time - blockToff - F1.getLow()[2];
+  int t = time - blockToff - F1.getLo()[2];
   
   GridIndex index(i,j,k);
     
@@ -205,7 +205,7 @@ Vector GaussInjectSourceFunc::getEField(int i, int j, int k, int time)
 {
   if (!active) return Vector(0,0,0);
 
-  int t = time - blockToff - F1.getLow()[2];
+  int t = time - blockToff - F1.getLo()[2];
     
   return Vector(amp*F1(i, j, t), amp*F2(i, j, t), 0);
 }
@@ -215,7 +215,7 @@ Vector GaussInjectSourceFunc::getHField(int i, int j, int k, int time)
   
   if (!active) return Vector(0,0,0);
 
-  int t = time - blockToff - F1.getLow()[2];
+  int t = time - blockToff - F1.getLo()[2];
   
   return Vector(sqrt(eps)*amp*F1(i, j, t), 0, 0);
 }

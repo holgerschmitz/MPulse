@@ -9,8 +9,8 @@
 
 void SinglePeriodicBoundary::exchangeX(DataGrid3d &field)
 {
-  const GridIndex3d &UBound = field.getHigh();
-  const GridIndex3d &LBound = field.getLow();
+  const GridIndex3d &UBound = field.getHi();
+  const GridIndex3d &LBound = field.getLo();
   
   int yi;
   int zi;
@@ -30,8 +30,8 @@ void SinglePeriodicBoundary::exchangeX(DataGrid3d &field)
 
 void SinglePeriodicBoundary::exchangeY(DataGrid3d &field) 
 {
-  const GridIndex3d &UBound = field.getHigh();
-  const GridIndex3d &LBound = field.getLow();
+  const GridIndex3d &UBound = field.getHi();
+  const GridIndex3d &LBound = field.getLo();
   
   int xi;
   int zi;
@@ -51,8 +51,8 @@ void SinglePeriodicBoundary::exchangeY(DataGrid3d &field)
 
 void SinglePeriodicBoundary::exchangeZ(DataGrid3d &field) 
 {
-  const GridIndex3d &UBound = field.getHigh();
-  const GridIndex3d &LBound = field.getLow();
+  const GridIndex3d &UBound = field.getHi();
+  const GridIndex3d &LBound = field.getLo();
   
   int xi;
   int yi;
@@ -86,8 +86,8 @@ const GridIndex &SinglePeriodicBoundary::RegionHigh() const {
 
 void SingleXYPeriodicBoundary::exchangeX(DataGrid3d &field)
 {
-  const GridIndex3d &UBound = field.getHigh();
-  const GridIndex3d &LBound = field.getLow();
+  const GridIndex3d &UBound = field.getHi();
+  const GridIndex3d &LBound = field.getLo();
   
   int yi;
   int zi;
@@ -107,8 +107,8 @@ void SingleXYPeriodicBoundary::exchangeX(DataGrid3d &field)
 
 void SingleXYPeriodicBoundary::exchangeY(DataGrid3d &field) 
 {
-  const GridIndex3d &UBound = field.getHigh();
-  const GridIndex3d &LBound = field.getLow();
+  const GridIndex3d &UBound = field.getHi();
+  const GridIndex3d &LBound = field.getLo();
   
   int xi;
   int zi;

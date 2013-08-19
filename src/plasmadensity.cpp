@@ -72,3 +72,43 @@ ParameterMap* PlasmaDensity::MakeParamMap (ParameterMap* pm)
   
   return pm;
 }
+
+void ConstantPlasmaDensity::initStorage(Storage *storage_)
+{
+  storage = storage_;
+  pRho = storage->addGrid("PlasmaDensity");
+  initialized = false;
+}
+
+void ConstantPlasmaDensity::stepScheme(double dt)
+{
+  if (initialized) return;
+  
+  DataGrid &Rho = *pRho;
+  
+  GridIndex low = storage->getLow();
+  GridIndex high = storage->getHigh();
+  
+  double dz = Globals::instance().gridDZ();
+  
+  std::cout << "Intializing: (" << low[0] << ","<< low[1] <<","<< low[2] << "), (" << high[0] << ","<< high[1] <<","<< high[2] << ")\n";
+  
+  for (int i=low[0]; i<=high[0]; ++i)
+    for (int j=low[1]; j<=high[1]; ++j)
+      for (int k=low[2]; k<=high[2]; ++k)
+  {
+    Rho(i,j,k) = minDensity*exp(k*dz/length);
+  }
+  initialized = true;
+}
+
+
+ParameterMap* ConstantPlasmaDensity::MakeParamMap (ParameterMap* pm)
+{
+  pm = OptField::MakeParamMap(pm);
+
+  (*pm)["minDensity"] = WParameter(new ParameterValue<double>(&minDensity,1.0));
+  (*pm)["length"] = WParameter(new ParameterValue<double>(&length,1.0));
+  
+  return pm;
+}

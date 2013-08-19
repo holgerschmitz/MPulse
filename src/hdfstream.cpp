@@ -227,8 +227,8 @@ const hid_t H5DataType<double>::type = H5T_NATIVE_DOUBLE;
 std::ostream &operator<<(std::ostream& out, const DataGridContainer &data)
 {
   DataGrid &grid = *(data.grid);
-  GridIndex low = grid.getLow();
-  GridIndex high = grid.getHigh();
+  GridIndex low = grid.getLo();
+  GridIndex high = grid.getHi();
   
   for (int i=low[0]; i<=high[0]; ++i)
   {

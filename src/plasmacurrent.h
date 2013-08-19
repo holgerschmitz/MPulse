@@ -52,4 +52,45 @@ class PlasmaCurrent : public Current, public Rebuildable
 };
 
 
+class MetalCurrentFactory : public CurrentFactory
+{
+  public:    
+    virtual ~MetalCurrentFactory() {}
+    virtual void initCurrents(Storage *storage_, FieldSolver *solver);
+  protected:
+    ParameterMap* MakeParamMap (ParameterMap* pm = NULL);
+    
+    /// position, in grid cells, of the metal
+    int pos;
+    double amp;
+};
+
+class MetalCurrent : public Current, public Rebuildable
+{
+  protected:
+    DataGrid *pEx;
+    DataGrid *pEy;
+    DataGrid *pEz;
+    
+    DataGrid *pBx;
+    DataGrid *pBy;
+    DataGrid *pBz;
+
+    DataGrid *pRho;
+    Storage *storage;
+    
+    /// position, in grid cells, of the metal
+    int pos;
+    double amp;
+    
+  public:
+    MetalCurrent(int pos_, double amp_);
+    
+    void initStorage(Storage *storage_);
+    
+    void stepSchemeInit(double dt) {}
+    void stepScheme(double dt);
+    
+};
+
 #endif

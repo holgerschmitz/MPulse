@@ -1,6 +1,7 @@
 #ifndef MPULSE_FIELDSOLVER_H
 #define MPULSE_FIELDSOLVER_H
 
+#include <cstdlib>
 #include "rebuild.h"
 
 class Storage;

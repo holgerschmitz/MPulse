@@ -11,7 +11,7 @@ HDFistream& HDFistream::operator>>(MatrixContainer<TYPE, RANK, Checking>& m)
 
   std::string dset_name = getNextBlockName();
 
-  typedef typename schnek::Matrix<TYPE, RANK, Checking>::IndexType IndexType;
+  typedef typename schnek::Grid<TYPE, RANK, Checking>::IndexType IndexType;
   
   IndexType mdims = m.grid->getDims();
   IndexType mlow = m.grid->getLow();
@@ -32,7 +32,7 @@ HDFistream& HDFistream::operator>>(MatrixContainer<TYPE, RANK, Checking>& m)
   TYPE *data = &(*m.grid->begin());
 
   /* open the dataset collectively */
-  hid_t dataset = H5Dopen(file_id, dset_name.c_str());
+  hid_t dataset = H5Dopen(file_id, dset_name.c_str(),H5P_DEFAULT);
   assert(dataset != -1);
   
 #ifdef USE_HDF_PARALLEL
@@ -91,11 +91,11 @@ HDFostream& HDFostream::operator<< (const MatrixContainer<TYPE, RANK, Checking>&
 
   std::string dset_name = getNextBlockName();
   
-  typedef typename schnek::Matrix<TYPE, RANK, Checking>::IndexType IndexType;
+  typedef typename schnek::Grid<TYPE, RANK, Checking>::IndexType IndexType;
   
   IndexType mdims = m.grid->getDims();
-  IndexType mlow = m.grid->getLow();
-  IndexType mhigh = m.grid->getHigh();
+  IndexType mlow = m.grid->getLo();
+  IndexType mhigh = m.grid->getHi();
   
   hsize_t dims[RANK];
   hsize_t locdims[RANK];
@@ -105,10 +105,10 @@ HDFostream& HDFostream::operator<< (const MatrixContainer<TYPE, RANK, Checking>&
   
   for (int i=0; i<RANK; ++i) 
   {
-    int gmin = m.global_min[i];
-    dims[i] = 1 + m.global_max[i] - gmin;
-    locdims[i] = mdims[i];
-    start[i] = mlow[i] - gmin;
+    int gmin = m.global_min[2-i];
+    dims[i] = 1 + m.global_max[2-i] - gmin;
+    locdims[i] = mdims[2-i];
+    start[i] = mlow[2-i] - gmin;
     
     if (locdims[i]<=0) empty = true;
     
@@ -138,6 +138,8 @@ HDFostream& HDFostream::operator<< (const MatrixContainer<TYPE, RANK, Checking>&
                             dset_name.c_str(), 
                             H5DataType<TYPE>::type, 
                             sid, 
+                            H5P_DEFAULT, 
+                            H5P_DEFAULT, 
                             H5P_DEFAULT);
 
 #ifdef USE_HDF_PARALLEL

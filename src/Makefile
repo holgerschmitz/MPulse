@@ -5,9 +5,9 @@ OFLAGS  = $(X_OFLAGS) -Wall
 #OFLAGS  = $(X_OFLAGS_BRUTE) -Wall
 #OFLAGS  = $(X_OFLAGS_DEBUG) -Wall
 INCLUDE = $(X_INC) $(X_BOOST_INC) $(X_HDF_INC) $(LX_INC) $(X_FFTW3_INC)
-CXX     = $(X_CXX)
+CXX     = $(MPICXX)
 
-CXXFLAGS = $(OFLAGS)
+CXXFLAGS = $(OFLAGS) -DUSE_HDF_PARALLEL
 
 MPULSE_SOURCES = hdfstream.cpp \
 	cpml_border.cpp \

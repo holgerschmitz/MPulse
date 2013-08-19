@@ -359,8 +359,8 @@ void FDTD_PLRCSolver<PLRCImplementation>::sumCurrents()
     const DataGrid &jy = *(*it)->getJy();
     const DataGrid &jz = *(*it)->getJz();
     
-    GridIndex low = jx.getLow();
-    GridIndex high = jx.getHigh();
+    GridIndex low = jx.getLo();
+    GridIndex high = jx.getHi();
     for (int i=low[0]; i<=high[0]; ++i)
       for (int j=low[1]; j<=high[1]; ++j)
         for (int k=low[2]; k<=high[2]; ++k)
@@ -394,8 +394,8 @@ void FDTD_PLRCSolver<PLRCImplementation>::sumMagCurrents()
     const DataGrid &jy = *(*it)->getJy();
     const DataGrid &jz = *(*it)->getJz();
     
-    GridIndex low = jx.getLow();
-    GridIndex high = jx.getHigh();
+    GridIndex low = jx.getLo();
+    GridIndex high = jx.getHi();
     for (int i=low[0]; i<=high[0]; ++i)
       for (int j=low[1]; j<=high[1]; ++j)
         for (int k=low[2]; k<=high[2]; ++k)
@@ -431,8 +431,16 @@ ParameterMap* FDTD_PLRCSolver<PLRCImplementation>::MakeParamMap (ParameterMap* p
       new ParameterRebuild<PlasmaDensity, OptField>(&this->optfields)
   );
   
+  (*pm)["constant_plasma"] = WParameter(
+      new ParameterRebuild<ConstantPlasmaDensity, OptField>(&this->optfields)
+  );
+  
   (*pm)["plasma_current"] = WParameter(
       new ParameterRebuild<PlasmaCurrentFactory, CurrentFactory>(&this->currentFactories)
+  );
+  
+  (*pm)["metal_current"] = WParameter(
+      new ParameterRebuild<MetalCurrentFactory, CurrentFactory>(&this->currentFactories)
   );
   
   (*pm)["cpml_border"] = WParameter(

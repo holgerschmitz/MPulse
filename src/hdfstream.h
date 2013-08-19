@@ -5,7 +5,7 @@
 #include <hdf5.h>
 #include <iostream>
 
-#include <schnek/matrix.h>
+#include <schnek/grid.hpp>
 #include "mpulse.h"
 
 
@@ -22,9 +22,9 @@ template<typename TYPE, int RANK, template<int> class Checking>
 struct MatrixContainer
 {
   bool active;
-  schnek::Matrix<TYPE, RANK, Checking> *grid;
-  typename schnek::Matrix<TYPE, RANK, Checking>::IndexType global_min;
-  typename schnek::Matrix<TYPE, RANK, Checking>::IndexType global_max;
+  schnek::Grid<TYPE, RANK, Checking> *grid;
+  typename schnek::Grid<TYPE, RANK, Checking>::IndexType global_min;
+  typename schnek::Grid<TYPE, RANK, Checking>::IndexType global_max;
 };
 
 typedef MatrixContainer<double, 3, MPulseGridChecker> DataGridContainer;

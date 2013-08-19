@@ -73,3 +73,97 @@ void PlasmaCurrent::stepScheme(double dt)
 
 }
 
+
+
+
+
+ParameterMap* MetalCurrentFactory::MakeParamMap (ParameterMap* pm)
+{
+  pm = CurrentFactory::MakeParamMap(pm);
+
+  (*pm)["pos"] = WParameter(new ParameterValue<int>(&pos,100));
+  (*pm)["amp"] = WParameter(new ParameterValue<double>(&amp,1.0));
+  
+  return pm;
+}
+
+
+void MetalCurrentFactory::initCurrents(Storage *storage_, FieldSolver *solver)
+{
+  solver->addCurrent(new MetalCurrent(pos, amp));
+}
+
+MetalCurrent::MetalCurrent(int pos_, double amp_) 
+  : pos(pos_), amp(amp_)
+{}
+
+void MetalCurrent::initStorage(Storage *storage_)
+{
+  storage = storage_;
+  
+  pEx = storage->addGrid("Ex");
+  pEy = storage->addGrid("Ey");
+  pEz = storage->addGrid("Ez");
+  
+  pBx = storage->addGrid("Bx");
+  pBy = storage->addGrid("By");
+  pBz = storage->addGrid("Bz");
+  
+  pJx = storage->addGrid("MetalJx");
+  pJy = storage->addGrid("MetalJy");
+  pJz = storage->addGrid("MetalJz");
+  
+  pRho = storage->addGrid("PlasmaDensity");
+  
+  GridIndex low = storage->getLow();
+  GridIndex high = storage->getHigh();
+  
+  for (int i=low[0]; i<=high[0]; ++i)
+    for (int j=low[1]; j<=high[1]; ++j)
+      for (int k=low[2]; k<=high[2]; ++k)
+  {
+    (*pRho)(i,j,k) = (k<pos)?-1.0:1.0;
+  }
+  
+}
+    
+void MetalCurrent::stepScheme(double dt)
+{
+  DataGrid &Bx = *pBx;
+  DataGrid &By = *pBy;
+  DataGrid &Bz = *pBz;
+  
+  DataGrid &Ex = *pEx;
+  DataGrid &Ey = *pEy;
+  DataGrid &Ez = *pEz;
+  
+  DataGrid &Jx = *pJx;
+  DataGrid &Jy = *pJy;
+  DataGrid &Jz = *pJz;
+  DataGrid &Rho = *pRho;
+
+  GridIndex low = storage->getLow();
+  GridIndex high = storage->getHigh();
+  
+  if ((pos<low[2]) || (pos>high[2])) return;
+  int lbound = std::max(pos, low[2]);
+  
+//   for (int i=low[0]; i<high[0]; ++i)
+//     for (int j=low[1]; j<high[1]; ++j)
+//       for (int k=lbound; k<high[2]; ++k)
+//   {
+//     Jx(i,j,k) = -amp*By(i,j,k);
+//     Jy(i,j,k) = amp*Bx(i,j,k);
+//   }
+
+  for (int i=low[0]; i<high[0]; ++i)
+     for (int j=low[1]; j<high[1]; ++j)
+     {
+       Ex(i,j,pos) = 0;
+       Ey(i,j,pos) = 0;
+       Ex(i,j,pos+1) = 0;
+       Ey(i,j,pos+1) = 0;
+       //Bx(i,j,pos-1) = Bx(i,j,pos);
+     }
+}
+
