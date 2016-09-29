@@ -24,21 +24,13 @@ void FDTD_PLRCCore::coreInitStorage(Storage *storage_)
   
   pSigma = storage->addGrid("Sigma");
   
-  pKappaEdx = storage->addLine("KappaEdx", 0);
-  pKappaEdy = storage->addLine("KappaEdy", 1);
-  pKappaEdz = storage->addLine("KappaEdz", 2);
+  pKappaEdx = storage->addLine("KappaEdx", 0, 1.0);
+  pKappaEdy = storage->addLine("KappaEdy", 1, 1.0);
+  pKappaEdz = storage->addLine("KappaEdz", 2, 1.0);
 
-  pKappaHdx = storage->addLine("KappaHdx", 0);
-  pKappaHdy = storage->addLine("KappaHdy", 1);
-  pKappaHdz = storage->addLine("KappaHdz", 2);
-
-  *pKappaEdx = 1;
-  *pKappaEdy = 1;
-  *pKappaEdz = 1;
-
-  *pKappaHdx = 1;
-  *pKappaHdy = 1;
-  *pKappaHdz = 1;
+  pKappaHdx = storage->addLine("KappaHdx", 0, 1.0);
+  pKappaHdy = storage->addLine("KappaHdy", 1, 1.0);
+  pKappaHdz = storage->addLine("KappaHdz", 2, 1.0);
 
   pPsiRx[0] = storage->addGrid("PsiR1x");
   pPsiRy[0] = storage->addGrid("PsiR1y");
@@ -97,11 +89,19 @@ void FDTD_PLRCCore::coreInitStorage(Storage *storage_)
 //==========  FDTD_PLRCLinCore
 //===============================================================
 
+#include <iostream>
+
 void FDTD_PLRCLinCore::plrcStepD(double dt, 
                                  int i, int j, int k, 
                                  double dx, double dy, double dz,
                                  double Jx, double Jy, double Jz)
 {
+  
+//  for (int l=pKappaEdx->getLow()[0]; l<=pKappaEdx->getHigh()[0]; ++l)
+//  {
+//    std::cout << l << " " << (*pKappaEdx)(l) << std::endl;
+//  }
+  
   double &ex = (*pEx)(i,j,k);
   double &ey = (*pEy)(i,j,k);
   double &ez = (*pEz)(i,j,k);
@@ -120,7 +120,9 @@ void FDTD_PLRCLinCore::plrcStepD(double dt,
   double kappaEdx = (*pKappaEdx)(i)*dx;
   double kappaEdy = (*pKappaEdy)(j)*dy;
   double kappaEdz = (*pKappaEdz)(k)*dz;
-
+  
+//  std::cerr << i << " " << j << " " << k << " " << kappaEdx << " " << kappaEdy << " " << kappaEdz << " " << std::endl;
+         
 #ifndef NDEBUG
   {
       double test = kappaEdx*kappaEdy*kappaEdz;
@@ -267,7 +269,7 @@ void FDTD_PLRCLinCore::plrcStepB(double dt,
   double kappaHdx = (*pKappaHdx)(i)*dx;
   double kappaHdy = (*pKappaHdy)(j)*dy;
   double kappaHdz = (*pKappaHdz)(k)*dz;
-
+  
   (*pBx)(i,j,k) = (*pBx)(i,j,k) 
     + dt*(
         ((*pEy)(i,j,k+1) - (*pEy)(i,j,k))/kappaHdz
@@ -279,14 +281,14 @@ void FDTD_PLRCLinCore::plrcStepB(double dt,
     + dt*(
         ((*pEz)(i+1,j,k) - (*pEz)(i,j,k))/kappaHdx
       - ((*pEx)(i,j,k+1) - (*pEx)(i,j,k))/kappaHdz
-     + Jy
+     + Jy    
     );
 
   (*pBz)(i,j,k) = (*pBz)(i,j,k) 
     + dt*( 
         ((*pEx)(i,j+1,k) - (*pEx)(i,j,k))/kappaHdy
       - ((*pEy)(i+1,j,k) - (*pEy)(i,j,k))/kappaHdx
-     + Jz
+     + Jz     
     );
 }
 

@@ -121,7 +121,10 @@ void FieldSliceDiag::write()
 
 void FieldLineDiag::open(const std::string &fname)
 {
-  if (active) output.open(fname.c_str());
+  if (active) {
+    output.open(fname.c_str());
+    output.precision(10);
+   }
 }
 
 FieldLineDiag::~FieldLineDiag()

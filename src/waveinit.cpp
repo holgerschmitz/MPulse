@@ -2,7 +2,9 @@
 #include "globals.h"
 #include "storage.h"
 
-
+//===============================================================
+//==========  PlaneWaveInit
+//===============================================================
 
 void PlaneWaveInit::init(Storage &fields)
 {
@@ -70,3 +72,4 @@ ParameterMap* PlaneWaveInit::MakeParamMap (ParameterMap* pm) {
   
   return pm;
 }
+

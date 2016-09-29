@@ -1,13 +1,13 @@
 #include <iostream>
 #include <fstream>
-#include <schnek/matrix.h>
+#include <schnek/grid.hpp>
 
-int sizex = 255;
-int sizey = 1025;
+int sizex = 4514;
+int sizey = 2030;
 
 double maxval = 1.5;
 
-typedef schnek::Matrix<double, 2> DataGrid;
+typedef schnek::Grid<double, 2, schnek::GridAssertCheck> DataGrid;
 typedef DataGrid::IndexType Index;
 
 class color
@@ -56,33 +56,39 @@ int main(int argc, char **argv)
 
     int x, y;
     double val;
-    double max = 0;
+    double max = 0.0, min=0.0;
     int cnt = 0;
 
     input >> x >> y >> val;
 
+    
     while (! input.eof())
     { 
-	field(x,y) = val; 
-	if (val>max) max=val;
-	++cnt;
+	if ((x>=0) && (y>=0) && (x<=sizex) && (y<=sizey)) 
+	{
+	  field(x,y) = val; 
+	  if (val>max) max=val;
+	  if (val<min) min=val;
+	  ++cnt;
+	}
 	input >> x >> y >> val;
+	//std::cout << x << y << val << std::endl;
     }
 
-    std::cerr << "Read " << cnt << " values. Maximum = " << max << std::endl;
+    std::cerr << "Read " << cnt << " values. Maximum = " << max  << " Minimum = " << min << std::endl;
     input.close();
 
     std::ofstream output(argv[2]);
 
     output << "P6\n" << sizey+1 << " " << sizex+1 <<"\n255\n";
   
-    double amp = 1/maxval;
-    for (int i=0; i<=sizex; ++i)
+    //double amp = 1/maxval;
+    for (int i=sizex; i>=0; --i)
     {
 	for (int j=0; j<=sizey; ++j)
 	{
 	    double val = field(i,j);
-	    color col = getColor(0.5*(amp*val+1));
+	    color col = getColor((val-min)/(max-min));
 	    output.put(col.r);
 	    output.put(col.g);
 	    output.put(col.b);

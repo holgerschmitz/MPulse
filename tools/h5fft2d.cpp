@@ -1,4 +1,4 @@
-#include <schnek/matrix.h>
+#include <schnek/grid.h>
 
 #include <boost/program_options.hpp>
 #include <boost/format.hpp>
@@ -14,7 +14,7 @@
 namespace po = boost::program_options;
 
 typedef std::complex<double> Complex;
-typedef schnek::Matrix<Complex, 2, MPulseGridChecker> CDataGrid2d;
+typedef schnek::Grid<Complex, 2, MPulseGridChecker> CDataGrid2d;
 
 
 void performFFT(const DataGrid2d &inGrid, CDataGrid2d &outGrid)
@@ -191,7 +191,7 @@ int main(int argc, char**argv) {
   std::string outfile;
   std::string operation;
   std::string filter;
-  
+  std::string blockname;
   int dimx;
   int dimy;
   
@@ -207,6 +207,8 @@ int main(int argc, char**argv) {
           "x dimension of the field")
       ("ydim,y", po::value<int>(&dimy),
           "y dimension of the field")
+      ("block,b", po::value<std::string>(&blockname),
+          "name of the data block in the hdf file")
       ("operation,p", po::value<std::string>(&operation)->default_value("abs"),
           "perform operation on complex fourier field (abs, phase, norm, real, imag, log)")
       ("filter,f", po::value<std::string>(&filter)->default_value("none"),
@@ -229,8 +231,13 @@ int main(int argc, char**argv) {
   inContainer.grid = &inGrid;
   inContainer.active = true;
 
-  std::cerr << "reading " << infile << "\n";
+  std::cerr << "opening " << infile.c_str() << "\n";
   HDFistream input(infile.c_str());
+  if (vm.count("block")>0)
+  {
+    input.setBlockName(blockname);
+  }
+  std::cerr << "reading " << infile.c_str() << "\n";
   input >> inContainer; 
   input.close();
 

@@ -1,20 +1,20 @@
 #ifndef MPULSE_MPULSE_H
 #define MPULSE_MPULSE_H
 
-#include <schnek/matrix.h>
-#include <schnek/fixedarray.h>
+#include <schnek/grid.hpp>
+#include <schnek/array.hpp>
 
 #ifdef NDEBUG
-#define MPulseGridChecker schnek::MatrixNoArgCheck
+#define MPulseGridChecker schnek::GridNoArgCheck
 #else
-#define MPulseGridChecker schnek::MatrixAssertCheck
+#define MPulseGridChecker schnek::GridAssertCheck
 #endif
 
-typedef schnek::Matrix<double, 1, MPulseGridChecker> DataGrid1d;
-typedef schnek::Matrix<double, 2, MPulseGridChecker> DataGrid2d;
-typedef schnek::Matrix<double, 3, MPulseGridChecker> DataGrid3d;
+typedef schnek::Grid<double, 1, MPulseGridChecker> DataGrid1d;
+typedef schnek::Grid<double, 2, MPulseGridChecker> DataGrid2d;
+typedef schnek::Grid<double, 3, MPulseGridChecker> DataGrid3d;
 
-typedef schnek::FixedArray<double, 3> Vector;
+typedef schnek::Array<double, 3> Vector;
 
 typedef DataGrid1d::IndexType GridIndex1d;
 typedef DataGrid2d::IndexType GridIndex2d;

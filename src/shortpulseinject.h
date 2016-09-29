@@ -5,7 +5,7 @@
 
 #include <fftw3.h>
 #include <complex>
-#include <schnek/matrix.h>
+#include <schnek/grid.h>
 
 /** Calculates a short pulse in the paraxial limit
  */

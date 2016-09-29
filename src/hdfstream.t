@@ -5,13 +5,13 @@
 #endif
 
 template<typename TYPE, int RANK, template<int> class Checking>
-HDFistream& HDFistream::operator>>(MatrixContainer<TYPE, RANK, Checking>& m)
+HDFistream& HDFistream::operator>>(GridContainer<TYPE, RANK, Checking>& m)
 {
   if (!active) return *this;
 
   std::string dset_name = getNextBlockName();
 
-  typedef typename schnek::Matrix<TYPE, RANK, Checking>::IndexType IndexType;
+  typedef typename schnek::Grid<TYPE, RANK, Checking>::IndexType IndexType;
   
   IndexType mdims = m.grid->getDims();
   IndexType mlow = m.grid->getLow();
@@ -85,13 +85,13 @@ HDFistream& HDFistream::operator>>(MatrixContainer<TYPE, RANK, Checking>& m)
 }
 
 template<typename TYPE, int RANK, template<int> class Checking>
-HDFostream& HDFostream::operator<< (const MatrixContainer<TYPE, RANK, Checking>& m)
+HDFostream& HDFostream::operator<< (const GridContainer<TYPE, RANK, Checking>& m)
 {
   if (!active) return *this;
 
   std::string dset_name = getNextBlockName();
   
-  typedef typename schnek::Matrix<TYPE, RANK, Checking>::IndexType IndexType;
+  typedef typename schnek::Grid<TYPE, RANK, Checking>::IndexType IndexType;
   
   IndexType mdims = m.grid->getDims();
   IndexType mlow = m.grid->getLow();
@@ -107,17 +107,17 @@ HDFostream& HDFostream::operator<< (const MatrixContainer<TYPE, RANK, Checking>&
   {
     int gmin = m.global_min[i];
     dims[i] = 1 + m.global_max[i] - gmin;
-    locdims[i] = mdims[i];
+    locdims[RANK-1-i] = mdims[i];
     start[i] = mlow[i] - gmin;
     
-    if (locdims[i]<=0) empty = true;
+    if (locdims[RANK-1-i]<=0) empty = true;
     
-    if (dims[i]<(start[i]+locdims[i]))
+    if (dims[i]<(start[i]+locdims[RANK-1-i]))
     {
       std::cerr << "FATAL ERROR!\n"
         << "Dimension " << i << ":\n  global size: " << dims[i]
         << "\n  local start: " << start[i]
-        << "\n  local size: " << locdims[i]
+        << "\n  local size: " << locdims[RANK-1-i]
         << "\n  global min: " << gmin << "\n";
       exit(-1);
     }

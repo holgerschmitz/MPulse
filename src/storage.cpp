@@ -152,13 +152,13 @@ bool Storage::hasLine(const std::string &lineid)
 }
 
 
-DataLine *Storage::addLine(const std::string &lineid, int orientation)
+DataLine *Storage::addLine(const std::string& lineid, int orientation, double defaultValue)
 {
   DataLine *ln = 0;
   if (lines.count(lineid) == 0)
   {
     ln = new DataLine(low[orientation], high[orientation]);
-    (*ln) = 0;
+    (*ln) = defaultValue;
     lines[lineid] = ln;
   } else
   {
