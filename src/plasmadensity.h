@@ -46,7 +46,17 @@ class ConstantPlasmaDensity : public OptField
 {
   protected:    
     double minDensity;
+    double maxDensity;
+    double pos;
     double length;
+
+    double pertKx;
+    double pertKy;
+    double pertAmp;
+    double pertPhaseX;
+    double pertPhaseY;
+
+
     bool initialized;
     
     DataGrid *pRho;

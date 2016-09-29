@@ -145,7 +145,19 @@ void MetalCurrent::stepScheme(double dt)
   GridIndex low = storage->getLow();
   GridIndex high = storage->getHigh();
   
-  if ((pos<low[2]) || (pos>high[2])) return;
+  if (pos<(low[2]+2))
+  {
+    for (int i=low[0]; i<high[0]; ++i)
+      for (int j=low[1]; j<high[1]; ++j)
+        for (int k=low[2]; k<high[2]; ++k)
+       {
+          Ex(i,j,k) = 0.0;
+          Ey(i,j,k) = 0.0;
+       }
+    return;
+  }
+  if (pos>(high[2]-1)) return;
+
   int lbound = std::max(pos, low[2]);
   
 //   for (int i=low[0]; i<high[0]; ++i)
@@ -159,11 +171,15 @@ void MetalCurrent::stepScheme(double dt)
   for (int i=low[0]; i<high[0]; ++i)
      for (int j=low[1]; j<high[1]; ++j)
      {
-       Ex(i,j,pos) = 0;
-       Ey(i,j,pos) = 0;
-       Ex(i,j,pos+1) = 0;
-       Ey(i,j,pos+1) = 0;
-       //Bx(i,j,pos-1) = Bx(i,j,pos);
+       Ex(i,j,pos)   = -Ex(i,j,pos-1);
+       Ey(i,j,pos)   = -Ey(i,j,pos-1);
+       Ex(i,j,pos+1) = -Ex(i,j,pos-2);
+       Ey(i,j,pos+1) = -Ey(i,j,pos-2);
+       for (int k=pos+2; k<high[2]; ++k)
+       {
+         Ex(i,j,k) = 0.0;
+         Ey(i,j,k) = 0.0;
+       }
      }
 }
 
