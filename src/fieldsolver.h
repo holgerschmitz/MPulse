@@ -2,6 +2,7 @@
 #define MPULSE_FIELDSOLVER_H
 
 #include "rebuild.h"
+#include <cstdlib>
 
 class Storage;
 class Current;

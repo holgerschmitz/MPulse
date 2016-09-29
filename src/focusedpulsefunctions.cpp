@@ -1,9 +1,8 @@
-#include "shortpulseinject.h"
+#include "focusedpulseinject.h"
 #include <cmath>
 #include "specfunc.h"
 
 #define Power pow
-
 
 double E = exp(1.);
 double Pi = M_PI;
@@ -40,20 +39,21 @@ FocusedPulseDataGenerator::Complex
 {
 
   double c = lightspeed;
-  double p = Phase;
+//  double p = Phase;
   
   double T = length;
+  double Tau = T;
   double T2 = T*T;
   double T4 = T2*T2;
   
-  double Factor = (Power(Pi,1.5)*Power(Sigma,2)*\[Tau])/2.;
+  double Factor = (Power(Pi,1.5)*Power(Sigma,2)*Tau)/2.;
   double kp = sqrt(kx*kx+ky*ky);
   
   Complex Kph = -Sqrt(Power(k0,2) - Power(kp,2));
 
-  Complex  Sph = -Power(sp,2) + s*spp)/Power(s,2);
+  Complex  Sph = (-Power(sp,2) + s*spp)/Power(s,2);
 
-  Complex  Tph = (-4*sp + Power(kp,2)*Power(s,2)*sp)/s + (Complex
+  Complex  Tph = ((-4*sp + Power(kp,2)*Power(s,2)*sp)/s + (Complex
 (0,2)*(c*Sqrt (Power (Kph,2))*t + k0*z))/(c*Sqrt (Power (Kph,2))))/2.;
 
   Complex  phA = Sqrt (-(Power (kp,2)*Power (sp,2)) + 4*Sph - Power
@@ -63,7 +63,7 @@ Power (Tau,2))/2.;
   Complex  phB = (Complex (0,0.5)*Tph)/phA;
 
   Complex  WA = Power (E,Power (Tau,2)*Power (Omega0,2))*Sqrt (Pi)*W
-(-phB);
+(-phB);                          
 
   Complex  WAM = Power (E,Power (Tau,2)*Power (Omega0,2))*Sqrt
 (Pi)*W (phB);
@@ -114,7 +114,7 @@ Phi) - 4*Power (Tau,2)*Power (Omega0,2))/4.;
 
   if (imag(phB)>0)
   {
-    SA = 2*Exp(Power(Tau,2)*Power(Omega0,2))*Sqrt(Pi)
+    SA = 2*Exp(Power(Tau,2)*Power(Omega0,2))*Sqrt(Pi);
     phJ -= phB*phB;
     WA = -Exp(phB*phB+Power(Tau,2)*Power(Omega0,2))*Sqrt(Pi)*Faddeeva_2(phB);
   }
@@ -126,7 +126,7 @@ Phi) - 4*Power (Tau,2)*Power (Omega0,2))/4.;
   
   if (imag(phE)<0)
   {
-    SB = 2.0*Exp(2.0*I*Phi)*Sqrt(Pi)
+    SB = 2.0*Exp(2.0*I*Phi)*Sqrt(Pi);
     phJ -= phE*phE;
     WB = -Exp(phE*phE+2*I*Phi)*Sqrt(Pi)*Faddeeva_2(-phE);
   }
@@ -144,13 +144,25 @@ Phi) - 4*Power (Tau,2)*Power (Omega0,2))/4.;
   Complex Psitz = -(Exp(phJ)*phN*(cfB4 + cfC4*(WA+SA) + cfD4*(WB+SB)))
     /(2.*Power(Dph,2));
     
-  Ex = -Factor*Psitz;
-  Ey = -Factor*YComp*Psitz;
-  Ez =  Factor*(kx+YComp*ky)*Psit;
+  Complex Ex = -Factor*Psitz;
+  Complex Ey = -Factor*YComp*Psitz;
+  Complex Ez =  Factor*(kx+YComp*ky)*Psit;
   
-  Bx = Factor*(-(kx+YComp*ky)*ky*Psi - YComp*Psizz);
-  By = Factor*( (kx+YComp*ky)*kx*Psi + Psizz);
-  Bz = Factor*  (ky+YComp*kx)*Psiz;
+  Complex Bx = Factor*(-(kx+YComp*ky)*ky*Psi - YComp*Psizz);
+  Complex By = Factor*( (kx+YComp*ky)*kx*Psi + Psizz);
+  Complex Bz = Factor*  (ky+YComp*kx)*Psiz;
+
+  switch (fieldid)
+  {
+    case 0: return Ex;
+    case 1: return Ey;
+    case 2: return Ez;
+    case 3: return Bx;
+    case 4: return By;
+    case 5: return Bz;
+    default: return 0.0;
+  }
+  
 }
 
 

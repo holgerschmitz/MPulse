@@ -6,15 +6,106 @@
 #include <fftw3.h>
 #include <complex>
 #include <list>
-#include <schnek/matrix.h>
+#include <schnek/grid.h>
 
-/** Calculates a short pulse in the paraxial limit
+
+class FocusedPulseDataGenerator
+{
+  private:
+    int currentTime;
+    bool initialized;
+
+  public:
+    FocusedPulseDataGenerator() : currentTime(-1), initialized(false) {};
+
+    void addEXData(DataGrid *g);
+    void addEYData(DataGrid *g);
+    void addEZData(DataGrid *g);
+    void addBXData(DataGrid *g);
+    void addBYData(DataGrid *g);
+    void addBZData(DataGrid *g);
+
+    void setTime(int Time);
+    void setLow(const GridIndex &low_) { low = low_; }
+    void setHigh(const GridIndex &high_) { high = high_; }
+    void setSize(int oversample_X_, int oversample_Y_);
+    void setShifts(double TShift_, double ZShift_, double Phase_);
+    typedef std::complex<double> Complex;
+  private:
+    typedef schnek::Grid<Complex, 2, MPulseGridChecker> ComplexGrid2d;
+    typedef std::list<DataGrid*> GridList;
+
+    GridList ex_grids;
+    GridList ey_grids;
+    GridList ez_grids;
+
+    GridList bx_grids;
+    GridList by_grids;
+    GridList bz_grids;
+
+    double TShift;
+    double ZShift;
+    double Phase;
+
+    int oversample_X; ///< Oversampling factor
+    int oversample_Y; ///< Oversampling factor
+    int oversample_Z; ///< Oversampling factor
+
+    /// global size of simulation domain
+    int gLowX, gLowY;
+    int gHighX, gHighY;
+
+    double centrez;
+
+    double DX;
+    double DY;
+    double DZ;
+    double DT;
+
+    /// size of the grid used in Fourier Transform
+    int sizeX;
+    int sizeY;
+
+    /// Temporal storage of complex numbers to interface with fftw
+    fftw_complex *fft_field_k;
+    fftw_complex *fft_field;
+
+    /** fftw plans are set up in the beginning and then used to calculate
+     * the Fourier transform
+     */
+    fftw_plan pfft;
+
+    /** The low index of the fields */
+    GridIndex low;
+    /** The high index of the fields */
+    GridIndex high;
+
+    void init();
+
+    // fill the working grid with data, fourier transform and copy to the
+    // respective grids in the lists
+    void calcEx();
+    void calcEy();
+    void calcEz();
+    void calcBx();
+    void calcBy();
+    void calcBz();
+
+    void calcField(GridList &grids, Complex Shift);
+
+//    Complex ExFunc(double x, double y, double z, double t);
+//    Complex Bfunc(double x, double y, double z, double t, bool bx);
+    Complex FieldFuncs(double kx, double ky, double z, double t, int fieldid);
+};
+
+
+/** Calculates a tightly focused pulse in the long pulse limit
  */
 class FocusedPulseInject : public IncidentSource
 {
   public:
     virtual ~FocusedPulseInject() {}
-    
+    void initCurrents(Storage *storage, FieldSolver *solver);
   protected:
     virtual IncidentSourceCurrent *makeECurrent(int distance_, Direction dir_);
     virtual IncidentSourceCurrent *makeHCurrent(int distance_, Direction dir_);
@@ -32,6 +123,17 @@ class FocusedPulseInject : public IncidentSource
     double Time;
     double Phase;
 
+    double lightspeed;
+
+    //Complex YComp;
+
+    double length; // corresponds to pulse duration
+    double width;
+    double om0;
+
+    int oversample_X;
+    int oversample_Y;
+    int oversample_Z;
 
     double amp;
     double eps;
@@ -48,9 +150,6 @@ class FocusedPulseInjectSourceFunc
     void setParam(double length_, 
                   double width_,
                   double om0_,
-                  double TShift_,
-                  double ZShift_,
-                  double Phase_,
                   double amp_, 
                   double eps_, 
                   int distance_,
@@ -64,23 +163,7 @@ class FocusedPulseInjectSourceFunc
     void setTime(int Time);
 
   private:
-        
-           
-    double DX;
-    double DY;
-    double DZ;
-    double DT;
 
-    double lightspeed;
-
-    Complex YComp;
-
-    double length; // corresponds to pulse duration
-    double width;
-    double om0;
-    double TShift;
-    double ZShift;
-    double Phase;
 
     double ZRl;
     
@@ -89,10 +172,6 @@ class FocusedPulseInjectSourceFunc
     int lowy;
     int highy;
     
-    double centrex;
-    double centrey;
-    double centrez;
-
     double amp;
     double eps;
     
@@ -105,65 +184,12 @@ class FocusedPulseInjectSourceFunc
     int dist;
     FocusedPulseDataGenerator *generator;
     
-    DataGrid x_grid;
-    DataGrid y_grid;
-    DataGrid z_grid;
+    DataGrid *x_grid;
+    DataGrid *y_grid;
+    DataGrid *z_grid;
     
 };
 
 
-class FocusedPulseDataGenerator 
-{
-  private:
-    int currentTime;
-    bool initialized;
-  
-  public:
-    FocusedPulseDataGenerator() : currentTime(-1), initialized(false) {};
-    
-    void addEXData(DataGrid *g);
-    void addEYData(DataGrid *g);
-    void addEZData(DataGrid *g);
-    void addBXData(DataGrid *g);
-    void addBYData(DataGrid *g);
-    void addBZData(DataGrid *g);
-    
-    void setTime(int Time);
-    void setLow(GridIndex &low_) { return low = low_; }
-    void setHigh(GridIndex &high_) { return high = high_; }
-
-    typedef std::complex<double> Complex;
-  private:
-    
-    std::list<DataGrid*> ex_grids;
-    std::list<DataGrid*> ey_grids;
-    std::list<DataGrid*> ez_grids;
-    
-    
-    std::list<DataGrid*> bx_grids;
-    std::list<DataGrid*> by_grids;
-    std::list<DataGrid*> bz_grids;
-    
-    DataGrid working_grid;
-    
-    /** The low index of the fields */
-    GridIndex low;
-    /** The high index of the fields */
-    GridIndex high;
-
-    void init();
-    
-    // fill the working grid with data, fourier transform and copy to the 
-    // respective grids in the lists
-    void calcEx();
-    void calcEy();
-    void calcEz();
-    void calcBx();
-    void calcBy();
-    void calcBz();
-    
-    Complex ExFunc(double x, double y, double z, double t);
-    Complex Bfunc(double x, double y, double z, double t, bool bx);
-};
 
 #endif

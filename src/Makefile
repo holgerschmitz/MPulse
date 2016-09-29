@@ -19,6 +19,7 @@ MPULSE_SOURCES = hdfstream.cpp \
 	fdtd_plrc.cpp \
 	fielddiag.cpp \
 	fieldsim.cpp \
+	focusedpulseinject.cpp \
 	freqdiag.cpp \
 	gaussinit.cpp \
 	gaussinject.cpp \
@@ -50,6 +51,8 @@ MPULSE_OBJECTS = hdfstream.o \
 	fdtd_plrc.o \
 	fielddiag.o \
 	fieldsim.o \
+	focusedpulseinject.o \
+	focusedpulsefunctions.o \
 	freqdiag.o \
 	gaussinit.o \
 	gaussinject.o \

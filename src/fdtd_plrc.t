@@ -5,6 +5,7 @@
 #include "sources.h"
 #include "gaussinject.h"
 #include "shortpulseinject.h"
+#include "focusedpulseinject.h"
 #include <boost/function.hpp>
 #include <boost/bind.hpp>
 
@@ -453,6 +454,10 @@ ParameterMap* FDTD_PLRCSolver<PLRCImplementation>::MakeParamMap (ParameterMap* p
 
   (*pm)["short_pulse_inject"] = WParameter(
       new ParameterRebuild<ShortPulseInject, CurrentFactory>(&this->currentFactories)
+  );
+
+  (*pm)["focused_pulse_inject"] = WParameter(
+      new ParameterRebuild<FocusedPulseInject, CurrentFactory>(&this->currentFactories)
   );
 
   (*pm)["wave_inject"] = WParameter(

@@ -11,7 +11,7 @@ HDFistream& HDFistream::operator>>(MatrixContainer<TYPE, RANK, Checking>& m)
 
   std::string dset_name = getNextBlockName();
 
-  typedef typename schnek::Matrix<TYPE, RANK, Checking>::IndexType IndexType;
+  typedef typename schnek::Grid<TYPE, RANK, Checking>::IndexType IndexType;
   
   IndexType mdims = m.grid->getDims();
   IndexType mlow = m.grid->getLow();
@@ -91,7 +91,7 @@ HDFostream& HDFostream::operator<< (const MatrixContainer<TYPE, RANK, Checking>&
 
   std::string dset_name = getNextBlockName();
   
-  typedef typename schnek::Matrix<TYPE, RANK, Checking>::IndexType IndexType;
+  typedef typename schnek::Grid<TYPE, RANK, Checking>::IndexType IndexType;
   
   IndexType mdims = m.grid->getDims();
   IndexType mlow = m.grid->getLow();
