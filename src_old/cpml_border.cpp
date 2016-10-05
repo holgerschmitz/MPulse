@@ -67,15 +67,18 @@ void CPMLBorder::initCoefficients(Storage *storage)
   
   std::vector<DataLine *> pKappaEdk(3);
   std::vector<DataLine *> pKappaHdk(3);
-  
-  pKappaEdk[0] = storage->addLine("KappaEdx", 0);
-  pKappaEdk[1] = storage->addLine("KappaEdy", 1);
-  pKappaEdk[2] = storage->addLine("KappaEdz", 2);
 
-  pKappaHdk[0] = storage->addLine("KappaHdx", 0);
-  pKappaHdk[1] = storage->addLine("KappaHdy", 1);
-  pKappaHdk[2] = storage->addLine("KappaHdz", 2);
-    
+  std::vector<DataLine *> pCpmlSigmaE(3);
+  std::vector<DataLine *> pCpmlSigmaH(3);
+
+  pKappaEdk[0] = storage->addLine("KappaEdx", 0, 1.0);
+  pKappaEdk[1] = storage->addLine("KappaEdy", 1, 1.0);
+  pKappaEdk[2] = storage->addLine("KappaEdz", 2, 1.0);
+
+  pKappaHdk[0] = storage->addLine("KappaHdx", 0, 1.0);
+  pKappaHdk[1] = storage->addLine("KappaHdy", 1, 1.0);
+  pKappaHdk[2] = storage->addLine("KappaHdz", 2, 1.0);
+  
   std::cerr << "Field Size Edx " << pKappaEdk[0]->getLow()[0] << ", "  
                                  << pKappaEdk[0]->getHigh()[0] <<std::endl;
   

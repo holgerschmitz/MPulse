@@ -23,7 +23,6 @@ class FieldDiag : public SimpleDiagnostic<DataGridContainer,HDFostream>
 };
 
 class FieldSliceDiag : public DiagnosticInterface
-// : public SimpleDiagnostic<DataGrid2dContainer,HDFostream>
 {
 // methods and properties formerly implemented in SimpleDiagnostic
 
@@ -78,8 +77,61 @@ class FieldSliceDiag : public DiagnosticInterface
   protected:
     typedef SimpleDiagnostic<DataGrid2dContainer,HDFostream> ParentType;
     ParameterMap* MakeParamMap (ParameterMap* pm = NULL);
+};
 
+class FieldLineDiag : public DiagnosticInterface
+{
+// methods and properties formerly implemented in SimpleDiagnostic
 
+  private:	  
+    /// Stream to write to
+    std::ofstream output;
+	  
+    ///"true" if diagnostic is performed globaly
+    bool single_out;
+  public:
+	  ///default constructor
+    FieldLineDiag() { single_out=false; }
+	  
+    ///destrcutor
+    ~FieldLineDiag();
+    
+  protected:
+	  ///open a file stream, 
+    void open(const std::string &);
+	  
+    ///write diagnostics
+    void write();
+	  
+    ///close the file 
+    void close();
+	  
+    ///returns the single_out member
+    bool singleOut() { return single_out; }
+  public:
+	  ///set the single_out member
+    void setSingleOut(bool single_out_) { single_out = single_out_; }
+
+// methods and properties inherently part of FieldSliceDiag
+
+  public:
+    void fetchField(Storage &storage);
+  private:
+    std::string fieldId;
+    DataGrid *field;
+    
+    int posx, posy, posz;
+    std::string direction;
+    std::string format;
+    int formatID;
+    
+    int dim;
+    int trans1, trans2;
+    int low, high;
+    
+    bool active;
+  protected:
+    ParameterMap* MakeParamMap (ParameterMap* pm = NULL);
 };
 
 
@@ -131,9 +183,11 @@ struct AllFieldDiag
   AllFieldDiag() {}
   typedef std::list<FieldDiag*> DiagList;
   typedef std::list<FieldSliceDiag*> SliceDiagList;
+  typedef std::list<FieldLineDiag*> LineDiagList;
   typedef std::list<FieldExtraDiag*> ExtraDiagList;
   DiagList fields;
   SliceDiagList slices;
+  LineDiagList lines;
   ExtraDiagList fieldextras;
 };
 

@@ -5,7 +5,7 @@
 #include <hdf5.h>
 #include <iostream>
 
-#include <schnek/grid.h>
+#include <schnek/grid.hpp>
 #include "mpulse.h"
 
 
@@ -19,7 +19,7 @@
 //HDFstream
 
 template<typename TYPE, int RANK, template<int> class Checking>
-struct MatrixContainer
+struct GridContainer
 {
   bool active;
   schnek::Grid<TYPE, RANK, Checking> *grid;
@@ -27,8 +27,8 @@ struct MatrixContainer
   typename schnek::Grid<TYPE, RANK, Checking>::IndexType global_max;
 };
 
-typedef MatrixContainer<double, 3, MPulseGridChecker> DataGridContainer;
-typedef MatrixContainer<double, 2, MPulseGridChecker> DataGrid2dContainer;
+typedef GridContainer<double, 3, MPulseGridChecker> DataGridContainer;
+typedef GridContainer<double, 2, MPulseGridChecker> DataGrid2dContainer;
 
 std::ostream &operator<<(std::ostream& out, const DataGridContainer &);
 
@@ -110,7 +110,7 @@ class HDFistream : public HDFstream {
        
     /// stream input operator for a schnek::Matrix 
     template<typename TYPE, int RANK, template<int> class Checking>
-    HDFistream& operator>>(MatrixContainer<TYPE, RANK, Checking>& m);
+    HDFistream& operator>>(GridContainer<TYPE, RANK, Checking>& m);
 };
 //HDFistream
 //-----------------------------------------------------------------------------
@@ -132,7 +132,7 @@ class HDFostream : public HDFstream {
     
     /// stream output operator for a matrix
     template<typename TYPE, int RANK, template<int> class Checking>
-    HDFostream& operator<< (const MatrixContainer<TYPE, RANK, Checking>&);    
+    HDFostream& operator<< (const GridContainer<TYPE, RANK, Checking>&);    
 };
 
 template<typename TYPE>

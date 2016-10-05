@@ -6,10 +6,10 @@
 #include <sstream>
 #include <fstream>
 #include <new>
-#include <schnek/fixedarray.h>
+#include <schnek/grid.hpp>
 
 
-typedef schnek::FixedArray<int, 3> Pos;
+typedef schnek::Array<int, 3> Pos;
 
 struct Bounds
 {
@@ -43,7 +43,7 @@ void readlimits(int numproc, std::string boundfile)
 {
   // reformat boundfile string  
   size_t ppos = boundfile.find("%p");
-  if (ppos != std::string::npos) boundfile.replace(ppos, 2, "%1%");
+  if (ppos != std::string::npos) boundfile.replace(ppos, 2, "%1$03d");
   
   for (int pr=0; pr<numproc; ++pr)
   {
@@ -94,7 +94,7 @@ hdffileinfo createhdf(std::string fname)
     = H5Screate_simple (3, dims, NULL);
     
   info.dataset 
-    = H5Dcreate(info.file_id, "data0", H5T_NATIVE_DOUBLE, info.sid, H5P_DEFAULT);
+    = H5Dcreate(info.file_id, "data", H5T_NATIVE_DOUBLE, info.sid, H5P_DEFAULT,H5P_DEFAULT,H5P_DEFAULT);
   
   return info;
 }
@@ -103,11 +103,16 @@ void writechunks(int numproc, hdffileinfo output, std::string infile)
 {
   // reformat infile string  
   size_t ppos = infile.find("%p");
-  if (ppos != std::string::npos) infile.replace(ppos, 2, "%1%");
+  if (ppos != std::string::npos) infile.replace(ppos, 2, "%1$03d");
+  //std::cout << infile << std::endl;
   
   for (int pr=0; pr<numproc; ++pr)
   {
     std::string fname = str(boost::format(infile) % pr);
+    
+//    std::cout << fname << std::endl;
+//    continue;
+  
     std::cerr << " | " << fname << "\n";
     
     hsize_t dims[3];
@@ -117,6 +122,12 @@ void writechunks(int numproc, hdffileinfo output, std::string infile)
       dims[k] = boundaries[pr].high[k]-boundaries[pr].low[k]+1;
       start[k] = boundaries[pr].low[k];
     }
+    
+    std::cerr << "Dimensions:\n";
+    std::cerr << "low:" << boundaries[pr].low[0] << " "
+      << boundaries[pr].low[1] << " "<< boundaries[pr].low[2]  << "\n";
+    std::cerr << "high:" << boundaries[pr].high[0] << " "
+      << boundaries[pr].high[1] << " "<< boundaries[pr].high[2]  << "\n";
     
     double *data = new (std::nothrow) double[dims[0]*dims[1]*dims[2]];
     
@@ -137,7 +148,7 @@ void writechunks(int numproc, hdffileinfo output, std::string infile)
     // Reading from input file
     std::cerr << " | | opening ... ";
     hid_t file_id = H5Fopen (fname.c_str(), H5F_ACC_RDONLY, H5P_DEFAULT);
-    hid_t dataset = H5Dopen(file_id, "data0");
+    hid_t dataset = H5Dopen(file_id, "data",H5P_DEFAULT);
     std::cerr << "reading ... ";
     H5Dread(dataset,H5T_NATIVE_DOUBLE,H5S_ALL,H5S_ALL,H5P_DEFAULT,data);
     std::cerr << "closing ... ";
