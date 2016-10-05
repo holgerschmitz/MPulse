@@ -1,6 +1,11 @@
+/*
+ * fdtd_plain.hpp
+ *
+ *  Created on: 5 Feb 2008
+ *      Author: Holger Schmitz
+ */
 
-#include "fdtd_plain.h"
-#include "storage.h"
+#include "fdtd_plain.hpp"
 
 void FDTD_Plain::initStorage(Storage *storage_)
 {  
