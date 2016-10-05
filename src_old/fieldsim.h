@@ -39,7 +39,8 @@ class FieldSimulation : public Storage, public Rebuildable
     
     FieldSolver *solver;
     
-    FieldSimInit *initializer;
+    typedef std::list<FieldSimInit*> FieldSimInitList;
+    FieldSimInitList initializers;
     
 };
 
