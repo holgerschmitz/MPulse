@@ -2,7 +2,9 @@
 #include "globals.h"
 #include "storage.h"
 
-
+//===============================================================
+//==========  PlaneWaveInit
+//===============================================================
 
 void PlaneWaveInit::init(Storage &fields)
 {
@@ -38,20 +40,21 @@ void PlaneWaveInit::init(Storage &fields)
     for (int j=low[1]; j<=high[1]; ++j)
       for (int k=low[2]; k<=high[2]; ++k)
       {
-        double ampex = cos((i+0.5)*nkx + j*nky + k*nkz);
-        double ampey = cos(i*nkx + (j+0.5)*nky + k*nkz);
-        double ampez = cos(i*nkx + j*nky + (k+0.5)*nkz);
-        double ampbx = cos(i*nkx + (j+0.5)*nky + (k+0.5)*nkz);
-        double ampby = cos((i+0.5)*nkx + j*nky + (k+0.5)*nkz);
-        double ampbz = cos((i+0.5)*nkx + (j+0.5)*nky + k*nkz);
+        int ii=i-1, jj=j-1, kk=k-1;
+        double ampex = cos((ii+0.5)*nkx + jj*nky + kk*nkz);
+        double ampey = cos(ii*nkx + (jj+0.5)*nky + kk*nkz);
+        double ampez = cos(ii*nkx + jj*nky + (kk+0.5)*nkz);
+        double ampbx = cos(ii*nkx + (jj+0.5)*nky + (kk+0.5)*nkz);
+        double ampby = cos((ii+0.5)*nkx + jj*nky + (kk+0.5)*nkz);
+        double ampbz = cos((ii+0.5)*nkx + (jj+0.5)*nky + kk*nkz);
         
-        Ex(i,j,k) = ex*ampex;
-        Ey(i,j,k) = ey*ampey;
-        Ez(i,j,k) = ez*ampez;
+        Ex(i,j,k) += ex*ampex;
+        Ey(i,j,k) += ey*ampey;
+        Ez(i,j,k) += ez*ampez;
         
-        Bx(i,j,k) = bx*ampbx;
-        By(i,j,k) = by*ampby;
-        Bz(i,j,k) = bz*ampbz;
+        Bx(i,j,k) += bx*ampbx;
+        By(i,j,k) += by*ampby;
+        Bz(i,j,k) += bz*ampbz;
       }
   
 }
@@ -69,3 +72,4 @@ ParameterMap* PlaneWaveInit::MakeParamMap (ParameterMap* pm) {
   
   return pm;
 }
+

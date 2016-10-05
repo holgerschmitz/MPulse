@@ -1,11 +1,12 @@
 
 include $(HOME)/src/makeinclude/include.mak
 
-OFLAGS  = $(X_OFLAGS) -Wall
+OFLAGS  = $(X_OFLAGS) -Wall -DSINGLE_PROCESSOR
 #OFLAGS  = $(X_OFLAGS_BRUTE) -Wall
 #OFLAGS  = $(X_OFLAGS_DEBUG) -Wall
 INCLUDE = $(X_INC) $(X_BOOST_INC) $(X_HDF_INC) $(LX_INC) $(X_FFTW3_INC)
-CXX     = $(X_CXX)
+#CXX     = $(X_CXX)
+CXX     = $(X_CXX_STD)
 
 CXXFLAGS = $(OFLAGS)
 
@@ -20,6 +21,7 @@ MPULSE_SOURCES = hdfstream.cpp \
 	fielddiag.cpp \
 	fieldsim.cpp \
 	focusedpulseinject.cpp \
+  followmax.cpp \
 	freqdiag.cpp \
 	gaussinit.cpp \
 	gaussinject.cpp \
@@ -53,6 +55,7 @@ MPULSE_OBJECTS = hdfstream.o \
 	fieldsim.o \
 	focusedpulseinject.o \
 	focusedpulsefunctions.o \
+  followmax.o \
 	freqdiag.o \
 	gaussinit.o \
 	gaussinject.o \
@@ -75,7 +78,7 @@ MPULSE_OBJECTS = hdfstream.o \
 
 LDFLAGS = $(X_LIB) $(LX_LIB)
 
-LOADLIBS = $(X_HDF_LIBS) $(X_FFTW3_LIB) -lm
+LOADLIBS = $(X_HDF5_LIBS) $(X_FFTW3_LIB) -lm
 
 BINARY_PREFIX = $(X_ROOT_DIR)/bin/$(X_OSTYPE)
 

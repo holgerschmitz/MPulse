@@ -17,7 +17,7 @@ void DiagnosticInterface::execute() {
   if (singleOut() && !(Globals::instance().isMaster()) ) return;
   
   //if its the first call of execute() and appending is true open the file
-  if ((0==t) && appending()) open(fname);
+  if ((0==t) && appending()) open(parsedFileName());
   
   //if timestep is a multiple of interval perform output
   if ( (t % interval) == 0 )
@@ -52,7 +52,7 @@ bool DiagnosticInterface::appending() {
 
 std::string DiagnosticInterface::parsedFileName() {
   std::string parsed=fname;
-  //look up boundary and ID of process
+  //look up ID of process
   std::ostringstream comrankstr;
   comrankstr << Globals::instance().getUniqueId();
   std::string comrank = comrankstr.str();

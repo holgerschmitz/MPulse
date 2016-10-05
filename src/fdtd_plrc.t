@@ -464,5 +464,10 @@ ParameterMap* FDTD_PLRCSolver<PLRCImplementation>::MakeParamMap (ParameterMap* p
       new ParameterRebuild<PlaneWaveSource, CurrentFactory>(&this->currentFactories)
   );
 
+  (*pm)["plane_gauss_inject"] = WParameter(
+      new ParameterRebuild<PlaneGaussSource, CurrentFactory>(&this->currentFactories)
+  );
+
+
   return pm;
 }
