@@ -1,4 +1,4 @@
-#include <schnek/matrix.h>
+#include <schnek/grid.hpp>
 
 #include "../src/hdfstream.h"
 #include "../src/mpulse.h"
@@ -28,7 +28,7 @@ int main(int argc, char**argv) {
         grid(i,j,k) = val;
       }
   
-  MatrixContainer<double, 3, schnek::MatrixAssertCheck> gridContainer;
+  GridContainer<double, 3, schnek::GridAssertCheck> gridContainer;
   
   gridContainer.active = true;
   gridContainer.grid = &grid;

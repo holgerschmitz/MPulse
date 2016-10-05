@@ -123,7 +123,7 @@ void IncidentSourceHCurrent<SourceFunc>::stepScheme(double dt)
   this->setTime(Time);
   
   int off[3] = {0,0,0};
-  off[IncidentSourceCurrent::dim] = reverse?+1:+1;
+  off[IncidentSourceCurrent::dim] = reverse?+1:0;
   
   double DX = dX[2];
   

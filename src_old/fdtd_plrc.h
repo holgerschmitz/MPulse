@@ -34,6 +34,14 @@ class FDTD_PLRCCore
     DataLine *pKappaHdx;
     DataLine *pKappaHdy;
     DataLine *pKappaHdz;
+
+    DataLine *pCpmlSigmaEx;
+    DataLine *pCpmlSigmaEy;
+    DataLine *pCpmlSigmaEz;
+
+    DataLine *pCpmlSigmaHx;
+    DataLine *pCpmlSigmaHy;
+    DataLine *pCpmlSigmaHz;
     
     // Real part of the accumulator for three poles
     DataGrid *pPsiRx[3];

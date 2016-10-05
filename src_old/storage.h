@@ -59,7 +59,7 @@ class Storage
     
     DataLine &getLine(const std::string &lineid);
     bool hasLine(const std::string &lineid);
-    DataLine *addLine(const std::string &lineid, int orientation);
+    DataLine *addLine(const std::string &lineid, int orientation, double defaultValue=0);
 
     /** Apply the boundary condition to the electric field*/
     void applyBoundary(const std::string &groupid);

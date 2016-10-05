@@ -157,9 +157,12 @@ Vector ShortPulseInjectSourceFunc::getHField(int i, int j, int k, int time)
   double posyo = (j-centrey)*DY;
   double posyh = (j+0.5-centrey)*DY;
   
+// THIS IS A HACK
+// it should be k+0.5 like in PlaneWaveSource
+// I don't know why this is needed here.
+  double poszh = (k-0.5-centrez)*DZ - ZShift;
 //  double poszh = (k+0.5-centrez)*DZ - ZShift;
-  double poszh = (k+0.5-centrez)*DZ - ZShift;
-//  double posTime = (time+0.5)*DT - TShift;
+  
   double posTime = (time-0.5)*DT - TShift;
 
   Complex Bxc = Bfunc(posxo, posyh, poszh, posTime, true);

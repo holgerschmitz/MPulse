@@ -23,6 +23,7 @@ class CPMLBorder : public CurrentFactory
     double kappaMax;
     double aMax;
     double sigmaMax;
+    double eps;
 };
 
 class CPMLBorderOneD : public CurrentFactory

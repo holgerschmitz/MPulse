@@ -16,4 +16,5 @@ class PlaneWaveInit : public FieldSimInit
     double eps;
 };
 
+
 #endif
