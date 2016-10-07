@@ -20,10 +20,13 @@ static const size_t DIMENSION = 3;
 
 typedef schnek::Array<int, DIMENSION> Index;
 typedef schnek::Array<double, DIMENSION> Vector;
-typedef schnek::Field<double, DIMENSION> Grid;
-typedef boost::shared_ptr<Grid> pGrid;
+typedef schnek::Field<double, DIMENSION> Field;
+typedef boost::shared_ptr<Field> pField;
 typedef schnek::Range<int, DIMENSION> Range;
 typedef schnek::Array<bool, DIMENSION> Stagger;
+
+static const double clight = 299792458;
+static const double clight2 = clight*clight;
 
 static const Stagger exStaggerYee(true,  false, false);
 static const Stagger eyStaggerYee(false, true,  false);
@@ -36,18 +39,22 @@ static const Stagger bzStaggerYee(true,  true,  false);
 class MPulse : public schnek::Block, schnek::BlockContainer<FieldSolver>
 {
   private:
-    static Index globalMax;
+    static MPulse *instance;
+    Index globalMax;
     Index gridSize;
     Vector size;
     Vector dx;
+
+    double cflFactor;
     double dt;
 
-    int tMax;
-    Range innerRange;
-    pGrid Ex, Ey, Ez;
-    pGrid Bx, By, Bz;
 
-    schnek::MPICartSubdivision<Grid> subdivision;
+    double tMax;
+    Range innerRange;
+    pField Ex, Ey, Ez;
+    pField Bx, By, Bz;
+
+    schnek::MPICartSubdivision<Field> subdivision;
 
     Vector x;
     schnek::Array<schnek::pParameter, DIMENSION> x_parameters;
@@ -62,11 +69,13 @@ class MPulse : public schnek::Block, schnek::BlockContainer<FieldSolver>
     void registerData();
     void fillValues();
   public:
+    MPulse();
     void init();
     void execute();
 
-    static Index getGlobalMax() { return globalMax; }
-    const schnek::DomainSubdivision<Grid> &getSubdivision() { return subdivision; };
+    static Index getGlobalMax() { return instance->globalMax; }
+    static Vector getDx() { return instance->dx; }
+    static schnek::DomainSubdivision<Field> &getSubdivision() { return instance->subdivision; };
 };
 
 #endif // MPULSE_MPULSE_H

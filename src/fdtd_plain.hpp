@@ -17,16 +17,14 @@ class Storage;
 class FDTD_Plain : public FieldSolver
 {
   private:
-    DataGrid *pEx;
-    DataGrid *pEy;
-    DataGrid *pEz;
-    DataGrid *pBx;
-    DataGrid *pBy;
-    DataGrid *pBz;
-
-    Storage *storage;
+    pField pEx;
+    pField pEy;
+    pField pEz;
+    pField pBx;
+    pField pBy;
+    pField pBz;
   public:
-    void init(Storage *storage_);
+    void init();
   
     void stepSchemeInit(double dt);
     void stepScheme(double dt);

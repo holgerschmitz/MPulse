@@ -12,18 +12,25 @@
 #include <schnek/tools/literature.hpp>
 #include <schnek/util/logger.hpp>
 
+#include <boost/foreach.hpp>
+
 #include <mpi.h>
 
 #include <fstream>
 #include <string>
 #include <unistd.h>
 
+MPulse::MPulse()
+{
+  instance = this;
+}
 
 void MPulse::initParameters(schnek::BlockParameters &parameters)
 {
-  parameters.addArrayParameter("N", gridSize);
+  parameters.addArrayParameter("N", gridSize, 100);
   parameters.addArrayParameter("L", size);
   parameters.addParameter("tMax", &tMax);
+  parameters.addParameter("cflFactor", &cflFactor, 0.99);
   x_parameters = parameters.addArrayParameter("", x, schnek::BlockParameters::readonly);
 
   E_parameters[0] = parameters.addParameter("Ex", &(initE[0]), 0.0);
@@ -73,6 +80,9 @@ void MPulse::init()
 
   subdivision.init(gridSize, 2);
 
+  dx = size / gridSize;
+  dt = cflFactor*std::min(dx[0],std::min(dx[1],dx[2]))/clight;
+
   Index low  = subdivision.getLo();
   Index high = subdivision.getHi();
 
@@ -85,15 +95,42 @@ void MPulse::init()
 
   stagger = false;
 
-  Ex = new Grid(lowIn, highIn, domainSize, exStaggerYee, 2);
-  Ey = new Grid(lowIn, highIn, domainSize, eyStaggerYee, 2);
-  Ez = new Grid(lowIn, highIn, domainSize, ezStaggerYee, 2);
+  Ex = new Field(lowIn, highIn, domainSize, exStaggerYee, 2);
+  Ey = new Field(lowIn, highIn, domainSize, eyStaggerYee, 2);
+  Ez = new Field(lowIn, highIn, domainSize, ezStaggerYee, 2);
 
-  Bx = new Grid(lowIn, highIn, domainSize, bxStaggerYee, 2);
-  By = new Grid(lowIn, highIn, domainSize, byStaggerYee, 2);
-  Bz = new Grid(lowIn, highIn, domainSize, bzStaggerYee, 2);
+  Bx = new Field(lowIn, highIn, domainSize, bxStaggerYee, 2);
+  By = new Field(lowIn, highIn, domainSize, byStaggerYee, 2);
+  Bz = new Field(lowIn, highIn, domainSize, bzStaggerYee, 2);
 
   fillValues();
+}
+
+void MPulse::execute()
+{
+  BOOST_FOREACH(FieldSolver *f, getChildren())
+  {
+    f->stepSchemeInit(dt);
+  }
+
+  int step = 0;
+  double time = 0.0;
+
+
+  while (time<=tMax)
+  {
+    DiagnosticManager::instance().execute();
+
+    if (subdivision.master())
+      schnek::Logger::instance().out() <<"Time "<< time << std::endl;
+
+      BOOST_FOREACH(FieldSolver *f, getChildren())
+      {
+        f->stepScheme(dt);
+      }
+  }
+
+  DiagnosticManager::instance().execute();
 }
 
 int main (int argc, char** argv) {
