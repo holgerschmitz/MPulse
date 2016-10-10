@@ -33,13 +33,8 @@ void MPulse::initParameters(schnek::BlockParameters &parameters)
   parameters.addParameter("cflFactor", &cflFactor, 0.99);
   x_parameters = parameters.addArrayParameter("", x, schnek::BlockParameters::readonly);
 
-  E_parameters[0] = parameters.addParameter("Ex", &(initE[0]), 0.0);
-  E_parameters[1] = parameters.addParameter("Ey", &(initE[1]), 0.0);
-  E_parameters[2] = parameters.addParameter("Ez", &(initE[2]), 0.0);
-
-  B_parameters[0] = parameters.addParameter("Bx", &(initB[0]), 0.0);
-  B_parameters[1] = parameters.addParameter("By", &(initB[1]), 0.0);
-  B_parameters[2] = parameters.addParameter("Bz", &(initB[2]), 0.0);
+  E_parameters = parameters.addArrayParameter("E", initE, 0.0);
+  B_parameters = parameters.addArrayParameter("B", initB, 0.0);
 
   spaceVars = schnek::pParametersGroup(new schnek::ParametersGroup());
   spaceVars->addArray(x_parameters);
@@ -119,7 +114,7 @@ void MPulse::execute()
 
   while (time<=tMax)
   {
-    DiagnosticManager::instance().execute();
+    schnek::DiagnosticManager::instance().execute();
 
     if (subdivision.master())
       schnek::Logger::instance().out() <<"Time "<< time << std::endl;
