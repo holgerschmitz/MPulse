@@ -85,7 +85,7 @@ void MPulse::init()
   Index highIn = subdivision.getInnerHi();
 
   innerRange = Range(lowIn, highIn);
-  schnek::Range<double, DIMENSION> domainSize(schnek::Array<double, DIMENSION>(lowIn[0],lowIn[1]), schnek::Array<double, DIMENSION>(highIn[0],highIn[1]));
+  schnek::Range<double, DIMENSION> domainSize(schnek::Array<double, DIMENSION>(0,0), size);
   schnek::Array<bool, DIMENSION> stagger;
 
   stagger = false;

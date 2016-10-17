@@ -1,5 +1,5 @@
 
-#include "fdtd_plrc.h"
+#include "fdtd_plrc.hpp"
 #include "storage.h"
 #include <cmath>
 #include <complex>
@@ -10,60 +10,73 @@
 //==========  FDTD_PLRCCore
 //===============================================================
 
-void FDTD_PLRCCore::coreInitStorage(Storage *storage_)
+
+void FDTD_PLRCCore::registerData()
+{
+}
+
+
+void FDTD_PLRCCore::init()
 {  
-  storage = storage_;
-  
-  pEx = storage->addGrid("Ex");
-  pEy = storage->addGrid("Ey");
-  pEz = storage->addGrid("Ez");
+  schnek::DomainSubdivision<Field> &subdivision = MPulse::getSubdivision();
 
-  pBx = storage->addGrid("Bx");
-  pBy = storage->addGrid("By");
-  pBz = storage->addGrid("Bz");
-  
-  pSigma = storage->addGrid("Sigma");
-  
-  pKappaEdx = storage->addLine("KappaEdx", 0, 1.0);
-  pKappaEdy = storage->addLine("KappaEdy", 1, 1.0);
-  pKappaEdz = storage->addLine("KappaEdz", 2, 1.0);
+  schnek::Range<double, DIMENSION> domainSize(schnek::Array<double, DIMENSION>(0,0,0), MPulse::getSize());
+  schnek::Array<bool, DIMENSION> stagger;
 
-  pKappaHdx = storage->addLine("KappaHdx", 0, 1.0);
-  pKappaHdy = storage->addLine("KappaHdy", 1, 1.0);
-  pKappaHdz = storage->addLine("KappaHdz", 2, 1.0);
 
-  pPsiRx[0] = storage->addGrid("PsiR1x");
-  pPsiRy[0] = storage->addGrid("PsiR1y");
-  pPsiRz[0] = storage->addGrid("PsiR1z");
-  
-  pPsiRx[1] = storage->addGrid("PsiR2x");
-  pPsiRy[1] = storage->addGrid("PsiR2y");
-  pPsiRz[1] = storage->addGrid("PsiR2z");
-  
-  pPsiRx[2] = storage->addGrid("PsiR3x");
-  pPsiRy[2] = storage->addGrid("PsiR3y");
-  pPsiRz[2] = storage->addGrid("PsiR3z");
-  
-  pPsiIx[0] = storage->addGrid("PsiI1x");
-  pPsiIy[0] = storage->addGrid("PsiI1y");
-  pPsiIz[0] = storage->addGrid("PsiI1z");
-  
-  pPsiIx[1] = storage->addGrid("PsiI2x");
-  pPsiIy[1] = storage->addGrid("PsiI2y");
-  pPsiIz[1] = storage->addGrid("PsiI2z");
-  
-  pPsiIx[2] = storage->addGrid("PsiI3x");
-  pPsiIy[2] = storage->addGrid("PsiI3y");
-  pPsiIz[2] = storage->addGrid("PsiI3z"); 
-  
-  storage->addToGroup("E", "Ex");
-  storage->addToGroup("E", "Ey");
-  storage->addToGroup("E", "Ez");
+  schnek::Range<double, 1> domainSizeX(schnek::Array<double, 1>(0), schnek::Array<double, 1>(MPulse::getSize()[0]));
+  schnek::Range<double, 1> domainSizeY(schnek::Array<double, 1>(0), schnek::Array<double, 1>(MPulse::getSize()[1]));
+  schnek::Range<double, 1> domainSizeZ(schnek::Array<double, 1>(0), schnek::Array<double, 1>(MPulse::getSize()[2]));
 
-  storage->addToGroup("B", "Bx");
-  storage->addToGroup("B", "By");
-  storage->addToGroup("B", "Bz");
+  schnek::Array<bool, 1> stagger1d;
+  stagger = false;
+
+  Index lowIn  = subdivision.getInnerLo();
+  Index highIn = subdivision.getInnerHi();
+
+  retrieveData("Ex", pEx);
+  retrieveData("Ey", pEy);
+  retrieveData("Ez", pEz);
+
+  retrieveData("Bx", pBx);
+  retrieveData("By", pBy);
+  retrieveData("Bz", pBz);
   
+  pSigma = new Field(lowIn, highIn, domainSize, stagger, 2);
+  
+  pKappaEdx = new DataLine(schnek::Array<double, 1>(lowIn[0]), schnek::Array<double, 1>(highIn[0]), domainSizeX, stagger1d, 2);
+  pKappaEdy = new DataLine(schnek::Array<double, 1>(lowIn[1]), schnek::Array<double, 1>(highIn[1]), domainSizeY, stagger1d, 2);
+  pKappaEdz = new DataLine(schnek::Array<double, 1>(lowIn[2]), schnek::Array<double, 1>(highIn[2]), domainSizeZ, stagger1d, 2);
+
+  pKappaHdx = new DataLine(schnek::Array<double, 1>(lowIn[0]), schnek::Array<double, 1>(highIn[0]), domainSizeX, stagger1d, 2);
+  pKappaHdy = new DataLine(schnek::Array<double, 1>(lowIn[1]), schnek::Array<double, 1>(highIn[1]), domainSizeY, stagger1d, 2);
+  pKappaHdz = new DataLine(schnek::Array<double, 1>(lowIn[2]), schnek::Array<double, 1>(highIn[2]), domainSizeZ, stagger1d, 2);
+
+  pPsiRx[0] = new Field(lowIn, highIn, domainSize, stagger, 2);
+  pPsiRy[0] = new Field(lowIn, highIn, domainSize, stagger, 2);
+  pPsiRz[0] = new Field(lowIn, highIn, domainSize, stagger, 2);
+  
+  pPsiRx[1] = new Field(lowIn, highIn, domainSize, stagger, 2);
+  pPsiRy[1] = new Field(lowIn, highIn, domainSize, stagger, 2);
+  pPsiRz[1] = new Field(lowIn, highIn, domainSize, stagger, 2);
+  
+  pPsiRx[2] = new Field(lowIn, highIn, domainSize, stagger, 2);
+  pPsiRy[2] = new Field(lowIn, highIn, domainSize, stagger, 2);
+  pPsiRz[2] = new Field(lowIn, highIn, domainSize, stagger, 2);
+  
+  pPsiIx[0] = new Field(lowIn, highIn, domainSize, stagger, 2);
+  pPsiIy[0] = new Field(lowIn, highIn, domainSize, stagger, 2);
+  pPsiIz[0] = new Field(lowIn, highIn, domainSize, stagger, 2);
+  
+  pPsiIx[1] = new Field(lowIn, highIn, domainSize, stagger, 2);
+  pPsiIy[1] = new Field(lowIn, highIn, domainSize, stagger, 2);
+  pPsiIz[1] = new Field(lowIn, highIn, domainSize, stagger, 2);
+  
+  pPsiIx[2] = new Field(lowIn, highIn, domainSize, stagger, 2);
+  pPsiIy[2] = new Field(lowIn, highIn, domainSize, stagger, 2);
+  pPsiIz[2] = new Field(lowIn, highIn, domainSize, stagger, 2);
+  
+
   std::for_each(currents.begin(), currents.end(),  InitStorageFunctor<Current>(storage));
   currents.erase(
     std::remove_if(currents.begin(), currents.end(), Current::CurrentInvalidPredicate()),
