@@ -1,59 +1,54 @@
 #ifndef MPULSE_FDTD_PLRC_H
 #define MPULSE_FDTD_PLRC_H
 
-#include "fieldsolver.h"
-#include "fielddiag.h"
-#include "mpulse.h"
-#include "currents.h"
-#include "currentfactory.h"
-#include "optfield.h"
+#include "fieldsolver.hpp"
+#include "mpulse.hpp"
 
 #include <complex>
 
 class Storage;
 
-class FDTD_PLRCCore
+class FDTD_PLRCCore : public FieldSolver, public schnek::BlockContainer<Current>
 {
   public:
-    void coreInitStorage(Storage *storage_);
+    void registerData();
+    void init();
   protected:
-    DataGrid *pEx;
-    DataGrid *pEy;
-    DataGrid *pEz;
-    DataGrid *pBx;
-    DataGrid *pBy;
-    DataGrid *pBz;
+    pField pEx;
+    pField pEy;
+    pField pEz;
+    pField pBx;
+    pField pBy;
+    pField pBz;
     
     // electrical conductivity of the medium
-    DataGrid *pSigma;
+    pField pSigma;
 
-    DataLine *pKappaEdx;
-    DataLine *pKappaEdy;
-    DataLine *pKappaEdz;
+    pDataLine pKappaEdx;
+    pDataLine pKappaEdy;
+    pDataLine pKappaEdz;
 
-    DataLine *pKappaHdx;
-    DataLine *pKappaHdy;
-    DataLine *pKappaHdz;
+    pDataLine pKappaHdx;
+    pDataLine pKappaHdy;
+    pDataLine pKappaHdz;
 
-    DataLine *pCpmlSigmaEx;
-    DataLine *pCpmlSigmaEy;
-    DataLine *pCpmlSigmaEz;
+    pDataLine pCpmlSigmaEx;
+    pDataLine pCpmlSigmaEy;
+    pDataLine pCpmlSigmaEz;
 
-    DataLine *pCpmlSigmaHx;
-    DataLine *pCpmlSigmaHy;
-    DataLine *pCpmlSigmaHz;
+    pDataLine pCpmlSigmaHx;
+    pDataLine pCpmlSigmaHy;
+    pDataLine pCpmlSigmaHz;
     
     // Real part of the accumulator for three poles
-    DataGrid *pPsiRx[3];
-    DataGrid *pPsiRy[3];
-    DataGrid *pPsiRz[3];
+    pField pPsiRx[3];
+    pField pPsiRy[3];
+    pField pPsiRz[3];
     
     // Imaginary part of the accumulator for three poles
-    DataGrid *pPsiIx[3];
-    DataGrid *pPsiIy[3];
-    DataGrid *pPsiIz[3];
-    
-    Storage *storage;
+    pField pPsiIx[3];
+    pField pPsiIy[3];
+    pField pPsiIz[3];
     
     typedef std::list<Current*> CurrentList;
     CurrentList currents;
@@ -139,7 +134,7 @@ class FDTD_PLRCNonlinCore : public FDTD_PLRCCore
 };
 
 template<class PLRCImplementation>
-class FDTD_PLRCSolver : public FieldSolver, public PLRCImplementation
+class FDTD_PLRCSolver : public PLRCImplementation
 {
   public:
     void initStorage(Storage *storage_);
@@ -154,13 +149,13 @@ class FDTD_PLRCSolver : public FieldSolver, public PLRCImplementation
     ParameterMap* MakeParamMap (ParameterMap* pm = NULL);
 
   private:
-    DataGrid *pJx;
-    DataGrid *pJy;
-    DataGrid *pJz;
+    pField pJx;
+    pField pJy;
+    pField pJz;
     
-    DataGrid *pMx;
-    DataGrid *pMy;
-    DataGrid *pMz;
+    pField pMx;
+    pField pMy;
+    pField pMz;
 
     void stepD(double dt);
     void stepB(double dt);

@@ -20,8 +20,13 @@ static const size_t DIMENSION = 3;
 
 typedef schnek::Array<int, DIMENSION> Index;
 typedef schnek::Array<double, DIMENSION> Vector;
+
 typedef schnek::Field<double, DIMENSION> Field;
 typedef boost::shared_ptr<Field> pField;
+
+typedef schnek::Field<double, 1> DataLine;
+typedef boost::shared_ptr<DataLine> pDataLine;
+
 typedef schnek::Range<int, DIMENSION> Range;
 typedef schnek::Array<bool, DIMENSION> Stagger;
 
@@ -36,7 +41,7 @@ static const Stagger bxStaggerYee(false, true,  true );
 static const Stagger byStaggerYee(true,  false, true );
 static const Stagger bzStaggerYee(true,  true,  false);
 
-class MPulse : public schnek::Block, schnek::BlockContainer<FieldSolver>
+class MPulse : public schnek::Block, public schnek::BlockContainer<FieldSolver>
 {
   private:
     static MPulse *instance;
@@ -75,6 +80,7 @@ class MPulse : public schnek::Block, schnek::BlockContainer<FieldSolver>
 
     static Index getGlobalMax() { return instance->globalMax; }
     static Vector getDx() { return instance->dx; }
+    static Vector getSize() { return instance->size; }
     static schnek::DomainSubdivision<Field> &getSubdivision() { return instance->subdivision; };
 };
 
