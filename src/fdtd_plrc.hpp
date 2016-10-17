@@ -9,7 +9,7 @@
 
 class Storage;
 
-class FDTD_PLRCCore : public FieldSolver, public schnek::BlockContainer<Current>
+class FDTD_PLRCCore : public FieldSolver, public schnek::BlockContainer<CurrentBlock>
 {
   public:
     void registerData();

@@ -1,11 +1,16 @@
-#ifndef MPULSE_CURRENTS_H
-#define MPULSE_CURRENTS_H
+#ifndef MPULSE_CURRENT_H
+#define MPULSE_CURRENT_H
 
 #include "mpulse.hpp"
 
-class Storage;
+class CurrentBlock : public schnek::ChildBlock<CurrentBlock>
+{
+  public:
+    virtual ~CurrentBlock() {}
+    virtual void initCurrents(FieldSolver *solver) = 0;
+};
 
-class Current : public schnek::ChildBlock<Current>
+class Current
 {
   protected:
     pField pJx;
@@ -19,8 +24,6 @@ class Current : public schnek::ChildBlock<Current>
 
     bool isValid() const { return (pJx) && (pJy) && (pJz); }
     
-    bool isMagneticCurrent() { return false; }
-
     const pField getJx() { return pJx; }
     const pField getJy() { return pJy; }
     const pField getJz() { return pJz; }
