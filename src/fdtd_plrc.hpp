@@ -2,6 +2,7 @@
 #define MPULSE_FDTD_PLRC_H
 
 #include "fieldsolver.hpp"
+#include "current.hpp"
 #include "mpulse.hpp"
 
 #include <complex>
@@ -50,7 +51,8 @@ class FDTD_PLRCCore : public FieldSolver, public schnek::BlockContainer<Current>
     pField pPsiIy[3];
     pField pPsiIz[3];
     
-    typedef std::list<Current*> CurrentList;
+    typedef std::list<pCurrent> CurrentList;
+
     CurrentList currents;
     CurrentList magCurrents;
 
@@ -59,9 +61,6 @@ class FDTD_PLRCCore : public FieldSolver, public schnek::BlockContainer<Current>
     OptFieldList optfieldsH;
     
     OptFieldList optfieldsRes;
-    
-    typedef std::list<CurrentFactory*> CurrentFactoryList;
-    CurrentFactoryList currentFactories;
     
     struct PLRCData
     {
@@ -109,8 +108,6 @@ class FDTD_PLRCLinCore : public FDTD_PLRCCore
                    int i, int j, int k, 
                    double dx, double dy, double dz,
                    double Jx, double Jy, double Jz);
-                   
-    ParameterMap* CustomParamMap (ParameterMap* pm = NULL);
 };
 
 class FDTD_PLRCNonlinCore : public FDTD_PLRCCore
@@ -126,7 +123,7 @@ class FDTD_PLRCNonlinCore : public FDTD_PLRCCore
                    double dx, double dy, double dz,
                    double Jx, double Jy, double Jz);
                    
-    ParameterMap* CustomParamMap (ParameterMap* pm = NULL);
+    void initParameters(schnek::BlockParameters &blockPars);
       
     /// value of chi^(3)
     double chi;

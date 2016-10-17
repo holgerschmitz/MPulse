@@ -76,26 +76,16 @@ void FDTD_PLRCCore::init()
   pPsiIy[2] = new Field(lowIn, highIn, domainSize, stagger, 2);
   pPsiIz[2] = new Field(lowIn, highIn, domainSize, stagger, 2);
   
-
-  std::for_each(currents.begin(), currents.end(),  InitStorageFunctor<Current>(storage));
-  currents.erase(
-    std::remove_if(currents.begin(), currents.end(), Current::CurrentInvalidPredicate()),
-    currents.end()
-  );
-
-  for (CurrentList::iterator it = currents.begin(); it !=currents.end(); ++it)
+  BOOST_FOREACH(pCurrent current, schnek::BlockContainer<Current>::childBlocks())
   {
-    if ((*it)->getJx() == 0) {
-	std::cerr << "Invalid Current\n";
+    if (current->isValid())
+    {
+      if (current->isMagneticCurrent())
+        magCurrents.push_back(current);
+      else
+        currents.push_back(current);
     }
   }
-  
-  std::for_each(magCurrents.begin(), magCurrents.end(),  InitStorageFunctor<Current>(storage));
-  magCurrents.erase(
-    std::remove_if(magCurrents.begin(), magCurrents.end(), Current::CurrentInvalidPredicate()),
-     magCurrents.end()
-  );
-  
 }
 
 //===============================================================
@@ -305,10 +295,6 @@ void FDTD_PLRCLinCore::plrcStepB(double dt,
     );
 }
 
-ParameterMap* FDTD_PLRCLinCore::CustomParamMap (ParameterMap* pm)
-{
-  return pm;
-}
 
 //===============================================================
 //==========  FDTD_PLRCNonlinCore
@@ -471,9 +457,8 @@ void FDTD_PLRCNonlinCore::plrcStepB(double dt,
     );
 }
 
-ParameterMap* FDTD_PLRCNonlinCore::CustomParamMap (ParameterMap* pm)
+void FDTD_PLRCNonlinCore::initParameters(schnek::BlockParameters &blockPars)
 {
-  (*pm)["chi"] = WParameter(new ParameterValue<double>(&chi,0.1));
-  return pm;
+  blockPars.addParameter("chi", &chi,0.1);
 }
 

@@ -1,34 +1,31 @@
 #ifndef MPULSE_CURRENTS_H
 #define MPULSE_CURRENTS_H
 
-#include "mpulse.h"
-#include "rebuild.h"
+#include "mpulse.hpp"
 
 class Storage;
 
-class Current
+class Current : public schnek::ChildBlock<Current>
 {
   protected:
-    DataGrid *pJx;
-    DataGrid *pJy;
-    DataGrid *pJz;
+    pField pJx;
+    pField pJy;
+    pField pJz;
   public:
     virtual ~Current() {}
-    virtual void initStorage(Storage *storage_) = 0;
     
     virtual void stepSchemeInit(double dt) = 0;
     virtual void stepScheme(double dt) = 0;
 
-    bool isValid() const { return (pJx!=0) && (pJy!=0) && (pJz!=0); }
+    bool isValid() const { return (pJx) && (pJy) && (pJz); }
     
-    const DataGrid *getJx() { return pJx; }
-    const DataGrid *getJy() { return pJy; }
-    const DataGrid *getJz() { return pJz; }
-    
-    struct CurrentInvalidPredicate
-    {
-      bool operator()(const Current *bc) { return !(bc->isValid()); }
-    };
+    bool isMagneticCurrent() { return false; }
+
+    const pField getJx() { return pJx; }
+    const pField getJy() { return pJy; }
+    const pField getJz() { return pJz; }
 };
+
+typedef boost::shared_ptr<Current> pCurrent;
 
 #endif
