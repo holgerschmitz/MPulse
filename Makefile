@@ -10,7 +10,8 @@ CXX     = mpic++
 
 CXXFLAGS = $(OFLAGS)
 
-SOURCES = src/diagnostic.cpp \
+SOURCES = src/current.cpp \
+  src/diagnostic.cpp \
   src/fdtd_plain.cpp \
   src/fdtd_plrc.cpp \
   src/mpulse.cpp

@@ -1,13 +1,6 @@
-#include "plasmadensity.h"
-#include "plasmacurrent.h"
-#include "cpml_border.h"
-#include "incsource.h"
-#include "sources.h"
-#include "gaussinject.h"
-#include "shortpulseinject.h"
-#include "focusedpulseinject.h"
-#include <boost/function.hpp>
-#include <boost/bind.hpp>
+
+
+#include <boost/make_shared.hpp>
 
 //===============================================================
 //==========  FDTD_PLRCSolver
@@ -15,77 +8,33 @@
 
 
 template<class PLRCImplementation>
-void FDTD_PLRCSolver<PLRCImplementation>::initStorage(Storage *storage_)
+void FDTD_PLRCSolver<PLRCImplementation>::init()
 {
+  PLRCImplementation::init();
+
+  schnek::DomainSubdivision<Field> &subdivision = MPulse::getSubdivision();
+  Index lowIn = subdivision.getInnerLo();
+  Index highIn = subdivision.getInnerHi();
+
+  schnek::Range<double, DIMENSION> domainSize(schnek::Array<double, DIMENSION>(0,0,0), MPulse::getSize());
+  schnek::Array<bool, DIMENSION> stagger;
+  stagger = false;
+
   if ((this->LOm2[0] == 0) || (this->LOm2[1] == 0) || (this->LOm2[2] == 0))
   {
     std::cerr << "FDTD_PLRCSolver: Omega should not be zero!\n";
     exit(-1);
   }
   
-  for (typename OptFieldList::iterator it=this->optfields.begin();
-        it != this->optfields.end();
-        ++it
-      )
-  {
-    OptField *field = (*it);
-    field->initStorage(storage_);
-    if (field->isH())
-      this->optfieldsH.push_back(field);
-    else
-      this->optfieldsE.push_back(field);
-  }
+  pJx = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
+  pJy = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
+  pJz = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
   
-  for (typename CurrentFactoryList::iterator it=this->currentFactories.begin();
-        it != this->currentFactories.end();
-        ++it
-      )
-  {
-    (*it)->initCurrents(storage_, this);
-  }
-  
-  this->coreInitStorage(storage_); 
-  
-  if (!(this->currents.empty()))
-  {
-    pJx = this->storage->addGrid("JxTotal");
-    pJy = this->storage->addGrid("JyTotal");
-    pJz = this->storage->addGrid("JzTotal");
-    std::cerr << "Added Currents\n";
-  }
-  else
-  {
-    pJx = 0;
-    pJy = 0;
-    pJz = 0;
-  }
-  
-  if (!(this->magCurrents.empty()))
-  {
-    pMx = this->storage->addGrid("MxTotal");
-    pMy = this->storage->addGrid("MyTotal");
-    pMz = this->storage->addGrid("MzTotal");
-    std::cerr << "Added Magnetic Currents\n";
-  }
-  else
-  {
-    pMx = 0;
-    pMy = 0;
-    pMz = 0;
-  }
+  pMx = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
+  pMy = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
+  pMz = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
 }
 
-template<class PLRCImplementation>
-void FDTD_PLRCSolver<PLRCImplementation>::addCurrent(Current *current)
-{
-  this->currents.push_back(current);
-}
-
-template<class PLRCImplementation>
-void FDTD_PLRCSolver<PLRCImplementation>::addMagCurrent(Current *current)
-{
-  this->magCurrents.push_back(current);
-}
 
 template<class PLRCImplementation>
 void FDTD_PLRCSolver<PLRCImplementation>::stepSchemeInit(double dt)
@@ -93,33 +42,15 @@ void FDTD_PLRCSolver<PLRCImplementation>::stepSchemeInit(double dt)
   initAccumulator(dt);
 
   stepB(0.5*dt);
-  
-  for ( typename OptFieldList::iterator it=this->optfieldsE.begin();
-        it != this->optfieldsE.end();
-        ++it )
+
+  BOOST_FOREACH(pCurrent current, this->currents)
   {
-    (*it)->stepSchemeInit(dt);
+    current->stepSchemeInit(dt);
   }
 
-  for ( typename CurrentList::iterator it = this->currents.begin(); 
-        it != this->currents.end(); 
-        ++it )
+  BOOST_FOREACH(pCurrent current, this->magCurrents)
   {
-    (*it)->stepSchemeInit(dt);
-  }
-
-  for ( typename OptFieldList::iterator it=this->optfieldsH.begin();
-        it != this->optfieldsH.end();
-        ++it )
-  {
-    (*it)->stepSchemeInit(dt);
-  }
-
-  for ( typename CurrentList::iterator it = this->magCurrents.begin(); 
-        it != this->magCurrents.end(); 
-        ++it )
-  {
-    (*it)->stepSchemeInit(dt);
+    current->stepSchemeInit(dt);
   }
 }
 
@@ -127,56 +58,33 @@ template<class PLRCImplementation>
 void FDTD_PLRCSolver<PLRCImplementation>::stepScheme(double dt)
 {
   (*this->pSigma) = 0;
-  for ( typename OptFieldList::iterator it=this->optfieldsE.begin();
-        it != this->optfieldsE.end();
-        ++it )
+
+
+  BOOST_FOREACH(pCurrent current, this->currents)
   {
-    (*it)->stepScheme(dt);
+    current->stepScheme(dt);
   }
 
-  for 
-  (
-    typename CurrentList::iterator it = this->currents.begin(); 
-    it != this->currents.end(); 
-    ++it
-  )
-  {
-    (*it)->stepScheme(dt);
-  }
   stepD(dt);
   
-  for 
-  ( 
-    typename OptFieldList::iterator it=this->optfieldsH.begin();
-    it != this->optfieldsH.end();
-    ++it
-  )
+
+  BOOST_FOREACH(pCurrent current, this->magCurrents)
   {
-    (*it)->stepScheme(dt);
+    current->stepScheme(dt);
   }
 
-  for 
-  (
-    typename CurrentList::iterator it = this->magCurrents.begin(); 
-    it != this->magCurrents.end(); 
-    ++it
-  )
-  {
-    (*it)->stepScheme(dt);
-  }
   stepB(dt);
 }
 
 template<class PLRCImplementation>
 void FDTD_PLRCSolver<PLRCImplementation>::stepD(double dt)
 {
-  GridIndex low = this->storage->getLow();
-  GridIndex high = this->storage->getHigh();
+  Index low = this->pEx->getInnerLo();
+  Index high = this->pEx->getInnerHi();
 
-  double dx = this->storage->getDx();
-  double dy = this->storage->getDy();
-  double dz = this->storage->getDz();
-
+  double dx = MPulse::getDx()[0];
+  double dy = MPulse::getDx()[1];
+  double dz = MPulse::getDx()[2];
   
   /// value of beta_p for the three Lorentz poles
   double beta[3];
@@ -215,37 +123,35 @@ void FDTD_PLRCSolver<PLRCImplementation>::stepD(double dt)
   this->plrcData.sumChi0 = std::real(sumChi);
   this->plrcData.sumXi0  = std::real(sumXi);
 
-  double jx(0), jy(0), jz(0);
-  if (this->pJx != 0) sumCurrents();
+  double jx, jy, jz;
+  sumCurrents();
 
-  for (int i=low[0]+1; i<high[0]; ++i)
-    for (int j=low[1]+1; j<high[1]; ++j)
-      for (int k=low[2]+1; k<high[2]; ++k)
+  for (int i=low[0]; i<=high[0]; ++i)
+    for (int j=low[1]; j<=high[1]; ++j)
+      for (int k=low[2]; k<=high[2]; ++k)
       {
-        if (this->pJx != 0)
-        {
-          jx = (*this->pJx)(i,j,k);
-          jy = (*this->pJy)(i,j,k);
-          jz = (*this->pJz)(i,j,k);
-        }
+        jx = (*this->pJx)(i,j,k);
+        jy = (*this->pJy)(i,j,k);
+        jz = (*this->pJz)(i,j,k);
         
         this->plrcStepD(dt, i, j, k, dx, dy, dz, jx, jy, jz);
       }
         
-        
-  this->storage->applyBoundary("E");
+  MPulse::getSubdivision().exchange(*this->pEx);
+  MPulse::getSubdivision().exchange(*this->pEy);
+  MPulse::getSubdivision().exchange(*this->pEz);
 }
 
 
 template<class PLRCImplementation>
 void FDTD_PLRCSolver<PLRCImplementation>::initAccumulator(double dt)
 {
-  DataGrid &Ex = *this->pEx;
-  DataGrid &Ey = *this->pEy;
-  DataGrid &Ez = *this->pEz;
+  Field &Ex = *this->pEx;
+  Field &Ey = *this->pEy;
+  Field &Ez = *this->pEz;
 
-  GridIndex low = this->storage->getLow();
-  GridIndex high = this->storage->getHigh();
+  Index low = Ex.getInnerLo();
+  Index high = Ex.getInnerHi();
   
   /// value of beta_p for the three Lorentz poles
   double beta[3];
@@ -270,9 +176,9 @@ void FDTD_PLRCSolver<PLRCImplementation>::initAccumulator(double dt)
     
   }
 
-  for (int i=low[0]+1; i<high[0]; ++i)
-    for (int j=low[1]+1; j<high[1]; ++j)
-      for (int k=low[2]+1; k<high[2]; ++k)
+  for (int i=low[0]; i<=high[0]; ++i)
+    for (int j=low[1]; j<=high[1]; ++j)
+      for (int k=low[2]; k<=high[2]; ++k)
   {
     double ex = Ex(i,j,k);
     double ey = Ey(i,j,k);
@@ -311,57 +217,52 @@ void FDTD_PLRCSolver<PLRCImplementation>::initAccumulator(double dt)
 template<class PLRCImplementation>
 void FDTD_PLRCSolver<PLRCImplementation>::stepB(double dt)
 {
-  GridIndex low = this->storage->getLow();
-  GridIndex high = this->storage->getHigh();
+  Index low = this->pBx->getInnerLo();
+  Index high = this->pBx->getInnerHi();
 
-  double dx = this->storage->getDx();
-  double dy = this->storage->getDy();
-  double dz = this->storage->getDz();
+  double dx = MPulse::getDx()[0];
+  double dy = MPulse::getDx()[1];
+  double dz = MPulse::getDx()[2];
 
-  double jx(0), jy(0), jz(0);
-  if (this->pMx != 0) sumMagCurrents();
+  double jx, jy, jz;
+  sumMagCurrents();
 
-  for (int i=low[0]; i<high[0]; ++i)
-    for (int j=low[1]; j<high[1]; ++j)
-      for (int k=low[2]; k<high[2]; ++k)
+  for (int i=low[0]; i<=high[0]; ++i)
+    for (int j=low[1]; j<=high[1]; ++j)
+      for (int k=low[2]; k<=high[2]; ++k)
       {
-        if (this->pMx != 0)
-        {
-          jx = (*this->pMx)(i,j,k);
-          jy = (*this->pMy)(i,j,k);
-          jz = (*this->pMz)(i,j,k);
-        }
-        
+        jx = (*this->pMx)(i,j,k);
+        jy = (*this->pMy)(i,j,k);
+        jz = (*this->pMz)(i,j,k);
+
         this->plrcStepB(dt, i, j, k, dx, dy, dz, jx, jy, jz);
       }
-        
-  this->storage->applyBoundary("B");
+
+  MPulse::getSubdivision().exchange(*this->pBx);
+  MPulse::getSubdivision().exchange(*this->pBy);
+  MPulse::getSubdivision().exchange(*this->pBz);
 }
 
 template<class PLRCImplementation>
 void FDTD_PLRCSolver<PLRCImplementation>::sumCurrents()
 {
-  DataGrid &jxT = *this->pJx;
-  DataGrid &jyT = *this->pJy;
-  DataGrid &jzT = *this->pJz;
+  Field &jxT = *this->pJx;
+  Field &jyT = *this->pJy;
+  Field &jzT = *this->pJz;
   
   jxT = 0;
   jyT = 0;
   jzT = 0;
   
-  for 
-  (
-    typename CurrentList::iterator it = this->currents.begin(); 
-    it != this->currents.end(); 
-    ++it
-  )
+
+  BOOST_FOREACH(pCurrent current, this->currents)
   {
-    const DataGrid &jx = *(*it)->getJx();
-    const DataGrid &jy = *(*it)->getJy();
-    const DataGrid &jz = *(*it)->getJz();
+    Field &jx = *current->getJx();
+    Field &jy = *current->getJy();
+    Field &jz = *current->getJz();
     
-    GridIndex low = jx.getLow();
-    GridIndex high = jx.getHigh();
+    Index low = jx.getInnerLo();
+    Index high = jx.getInnerHi();
     for (int i=low[0]; i<=high[0]; ++i)
       for (int j=low[1]; j<=high[1]; ++j)
         for (int k=low[2]; k<=high[2]; ++k)
@@ -376,27 +277,23 @@ void FDTD_PLRCSolver<PLRCImplementation>::sumCurrents()
 template<class PLRCImplementation>
 void FDTD_PLRCSolver<PLRCImplementation>::sumMagCurrents()
 {
-  DataGrid &jxT = *this->pMx;
-  DataGrid &jyT = *this->pMy;
-  DataGrid &jzT = *this->pMz;
+  Field &jxT = *this->pMx;
+  Field &jyT = *this->pMy;
+  Field &jzT = *this->pMz;
   
   jxT = 0;
   jyT = 0;
   jzT = 0;
   
-  for 
-  (
-    typename CurrentList::iterator it = this->magCurrents.begin(); 
-    it != this->magCurrents.end(); 
-    ++it
-  )
+
+  BOOST_FOREACH(pCurrent current, this->magCurrents)
   {
-    const DataGrid &jx = *(*it)->getJx();
-    const DataGrid &jy = *(*it)->getJy();
-    const DataGrid &jz = *(*it)->getJz();
+    Field &jx = *current->getJx();
+    Field &jy = *current->getJy();
+    Field &jz = *current->getJz();
     
-    GridIndex low = jx.getLow();
-    GridIndex high = jx.getHigh();
+    Index low = jx.getInnerLo();
+    Index high = jx.getInnerHi();
     for (int i=low[0]; i<=high[0]; ++i)
       for (int j=low[1]; j<=high[1]; ++j)
         for (int k=low[2]; k<=high[2]; ++k)
@@ -409,65 +306,62 @@ void FDTD_PLRCSolver<PLRCImplementation>::sumMagCurrents()
 }
 
 template<class PLRCImplementation>
-ParameterMap* FDTD_PLRCSolver<PLRCImplementation>::MakeParamMap (ParameterMap* pm)
+void FDTD_PLRCSolver<PLRCImplementation>::initParameters(schnek::BlockParameters &blockPars)
 {
-  pm = FieldSolver::MakeParamMap(pm);
-  pm = Implementation::CustomParamMap(pm);
+  PLRCImplementation::initParameters(blockPars);
 
-  (*pm)["eps"] = WParameter(new ParameterValue<double>(&this->eps,1.0));
+  blockPars.addParameter("eps", &this->eps, 1.0);
 
-  (*pm)["L1eps"] = WParameter(new ParameterValue<double>(&this->LEps[0],0.0));
-  (*pm)["L2eps"] = WParameter(new ParameterValue<double>(&this->LEps[1],0.0));
-  (*pm)["L3eps"] = WParameter(new ParameterValue<double>(&this->LEps[2],0.0));
+  blockPars.addParameter("L1eps", &this->LEps[0], 0.0);
+  blockPars.addParameter("L2eps", &this->LEps[1], 0.0);
+  blockPars.addParameter("L3eps", &this->LEps[2], 0.0);
+
+  blockPars.addParameter("L1delta", &this->LDelta[0], 0.0);
+  blockPars.addParameter("L2delta", &this->LDelta[1], 0.0);
+  blockPars.addParameter("L3delta", &this->LDelta[2], 0.0);
+
+  blockPars.addParameter("L1Om2", &this->LOm2[0], 1.0);
+  blockPars.addParameter("L2Om2", &this->LOm2[1], 1.0);
+  blockPars.addParameter("L3Om2", &this->LOm2[2], 1.0);
   
-  (*pm)["L1delta"] = WParameter(new ParameterValue<double>(&this->LDelta[0],0.0));
-  (*pm)["L2delta"] = WParameter(new ParameterValue<double>(&this->LDelta[1],0.0));
-  (*pm)["L3delta"] = WParameter(new ParameterValue<double>(&this->LDelta[2],0.0));
-  
-  (*pm)["L1Om2"] = WParameter(new ParameterValue<double>(&this->LOm2[0],1.0));
-  (*pm)["L2Om2"] = WParameter(new ParameterValue<double>(&this->LOm2[1],1.0));
-  (*pm)["L3Om2"] = WParameter(new ParameterValue<double>(&this->LOm2[2],1.0));
-  
-  (*pm)["plasma"] = WParameter(
-      new ParameterRebuild<PlasmaDensity, OptField>(&this->optfields)
-  );
-  
-  (*pm)["plasma_current"] = WParameter(
-      new ParameterRebuild<PlasmaCurrentFactory, CurrentFactory>(&this->currentFactories)
-  );
-  
-  (*pm)["cpml_border"] = WParameter(
-      new ParameterRebuild<CPMLBorder, CurrentFactory>(&this->currentFactories)
-  );
+//  (*pm)["plasma"] = WParameter(
+//      new ParameterRebuild<PlasmaDensity, OptField>(&this->optfields)
+//  );
+//
+//  (*pm)["plasma_current"] = WParameter(
+//      new ParameterRebuild<PlasmaCurrentFactory, CurrentFactory>(&this->currentFactories)
+//  );
+//
+//  (*pm)["cpml_border"] = WParameter(
+//      new ParameterRebuild<CPMLBorder, CurrentFactory>(&this->currentFactories)
+//  );
+//
+//  (*pm)["cpml_border_1d"] = WParameter(
+//      new ParameterRebuild<CPMLBorderOneD, CurrentFactory>(&this->currentFactories)
+//  );
+//
+//  (*pm)["side_inject"] = WParameter(
+//      new ParameterRebuild<SideInject, CurrentFactory>(&this->currentFactories)
+//  );
+//
+//  (*pm)["gauss_inject"] = WParameter(
+//      new ParameterRebuild<GaussInject, CurrentFactory>(&this->currentFactories)
+//  );
+//
+//  (*pm)["short_pulse_inject"] = WParameter(
+//      new ParameterRebuild<ShortPulseInject, CurrentFactory>(&this->currentFactories)
+//  );
+//
+//  (*pm)["focused_pulse_inject"] = WParameter(
+//      new ParameterRebuild<FocusedPulseInject, CurrentFactory>(&this->currentFactories)
+//  );
+//
+//  (*pm)["wave_inject"] = WParameter(
+//      new ParameterRebuild<PlaneWaveSource, CurrentFactory>(&this->currentFactories)
+//  );
+//
+//  (*pm)["plane_gauss_inject"] = WParameter(
+//      new ParameterRebuild<PlaneGaussSource, CurrentFactory>(&this->currentFactories)
+//  );
 
-  (*pm)["cpml_border_1d"] = WParameter(
-      new ParameterRebuild<CPMLBorderOneD, CurrentFactory>(&this->currentFactories)
-  );
-  
-  (*pm)["side_inject"] = WParameter(
-      new ParameterRebuild<SideInject, CurrentFactory>(&this->currentFactories)
-  );
-
-  (*pm)["gauss_inject"] = WParameter(
-      new ParameterRebuild<GaussInject, CurrentFactory>(&this->currentFactories)
-  );
-
-  (*pm)["short_pulse_inject"] = WParameter(
-      new ParameterRebuild<ShortPulseInject, CurrentFactory>(&this->currentFactories)
-  );
-
-  (*pm)["focused_pulse_inject"] = WParameter(
-      new ParameterRebuild<FocusedPulseInject, CurrentFactory>(&this->currentFactories)
-  );
-
-  (*pm)["wave_inject"] = WParameter(
-      new ParameterRebuild<PlaneWaveSource, CurrentFactory>(&this->currentFactories)
-  );
-
-  (*pm)["plane_gauss_inject"] = WParameter(
-      new ParameterRebuild<PlaneGaussSource, CurrentFactory>(&this->currentFactories)
-  );
-
-
-  return pm;
 }

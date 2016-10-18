@@ -9,7 +9,7 @@
 
 class Storage;
 
-class FDTD_PLRCCore : public FieldSolver, public schnek::BlockContainer<CurrentBlock>
+class FDTD_PLRCCore : public FieldSolver, public CurrentContainer, public schnek::BlockContainer<CurrentBlock>
 {
   public:
     void registerData();
@@ -51,17 +51,6 @@ class FDTD_PLRCCore : public FieldSolver, public schnek::BlockContainer<CurrentB
     pField pPsiIy[3];
     pField pPsiIz[3];
     
-    typedef std::list<pCurrent> CurrentList;
-
-    CurrentList currents;
-    CurrentList magCurrents;
-
-    OptFieldList optfields;
-    OptFieldList optfieldsE;
-    OptFieldList optfieldsH;
-    
-    OptFieldList optfieldsRes;
-    
     struct PLRCData
     {
       std::complex<double> dchi0[3];
@@ -82,18 +71,6 @@ class FDTD_PLRCCore : public FieldSolver, public schnek::BlockContainer<CurrentB
     double LDelta[3];
     /// value of omega_p^2 for the three Lorentz poles
     double LOm2[3];
-  private:
-  
-    template<class StorageHolder>
-    struct InitStorageFunctor
-    {
-      Storage *storage;
-      InitStorageFunctor(Storage *storage_) : storage(storage_) {}
-      void operator()(StorageHolder *holder) { holder->initStorage(storage); }
-    };
-
-    
-    
 };
 
 class FDTD_PLRCLinCore : public FDTD_PLRCCore
@@ -134,16 +111,13 @@ template<class PLRCImplementation>
 class FDTD_PLRCSolver : public PLRCImplementation
 {
   public:
-    void initStorage(Storage *storage_);
-    void addSigma(Current *current);
-    void addCurrent(Current *current);
-    void addMagCurrent(Current *current);
+    void init();
     void stepSchemeInit(double dt);
     void stepScheme(double dt);
   protected:
     typedef PLRCImplementation Implementation;
-    /// build parametermap
-    ParameterMap* MakeParamMap (ParameterMap* pm = NULL);
+
+    void initParameters(schnek::BlockParameters &blockPars);
 
   private:
     pField pJx;
@@ -160,10 +134,6 @@ class FDTD_PLRCSolver : public PLRCImplementation
     void initAccumulator(double dt);
     void sumCurrents();
     void sumMagCurrents();
-    
-    typedef typename Implementation::CurrentList CurrentList;
-    typedef typename Implementation::CurrentFactoryList CurrentFactoryList;
-    
 };
 
 typedef FDTD_PLRCSolver<FDTD_PLRCLinCore> FDTD_PLRCLin;

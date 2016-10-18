@@ -9,6 +9,7 @@
 #define MPULSE_MPULSE_H
 
 #include <schnek/grid.hpp>
+#include <schnek/variables.hpp>
 
 #ifdef NDEBUG
 #define MPulseGridChecker schnek::GridNoArgCheck
@@ -40,6 +41,8 @@ static const Stagger ezStaggerYee(false, false, true );
 static const Stagger bxStaggerYee(false, true,  true );
 static const Stagger byStaggerYee(true,  false, true );
 static const Stagger bzStaggerYee(true,  true,  false);
+
+class FieldSolver;
 
 class MPulse : public schnek::Block, public schnek::BlockContainer<FieldSolver>
 {
