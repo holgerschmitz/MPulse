@@ -10,7 +10,8 @@ CXX     = mpic++
 
 CXXFLAGS = $(OFLAGS)
 
-SOURCES = src/current.cpp \
+SOURCES = src/cpml_border.cpp \
+  src/current.cpp \
   src/diagnostic.cpp \
   src/fdtd_plain.cpp \
   src/fdtd_plrc.cpp \

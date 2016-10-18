@@ -257,12 +257,12 @@ void FDTD_PLRCSolver<PLRCImplementation>::sumCurrents()
 
   BOOST_FOREACH(pCurrent current, this->currents)
   {
-    Field &jx = *current->getJx();
-    Field &jy = *current->getJy();
-    Field &jz = *current->getJz();
+    Grid &jx = *current->getJx();
+    Grid &jy = *current->getJy();
+    Grid &jz = *current->getJz();
     
-    Index low = jx.getInnerLo();
-    Index high = jx.getInnerHi();
+    Index low = jx.getLo();
+    Index high = jx.getHi();
     for (int i=low[0]; i<=high[0]; ++i)
       for (int j=low[1]; j<=high[1]; ++j)
         for (int k=low[2]; k<=high[2]; ++k)
@@ -288,12 +288,12 @@ void FDTD_PLRCSolver<PLRCImplementation>::sumMagCurrents()
 
   BOOST_FOREACH(pCurrent current, this->magCurrents)
   {
-    Field &jx = *current->getJx();
-    Field &jy = *current->getJy();
-    Field &jz = *current->getJz();
+    Grid &jx = *current->getJx();
+    Grid &jy = *current->getJy();
+    Grid &jz = *current->getJz();
     
-    Index low = jx.getInnerLo();
-    Index high = jx.getInnerHi();
+    Index low = jx.getLo();
+    Index high = jx.getHi();
     for (int i=low[0]; i<=high[0]; ++i)
       for (int j=low[1]; j<=high[1]; ++j)
         for (int k=low[2]; k<=high[2]; ++k)

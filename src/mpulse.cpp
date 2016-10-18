@@ -147,8 +147,8 @@ int main (int argc, char** argv) {
 
     blocks.registerBlock("mpulse").setClass<MPulse>();
     blocks("FDTD_Plain").setClass<FDTD_Plain>();
-    blocks("FDTD_PLRC").setClass<FDTD_PLRCSolver<FDTD_PLRCLinCore> >();
-    blocks("FDTD_PLRC_Nonlinear").setClass<FDTD_PLRCSolver<FDTD_PLRCNonlinCore> >();
+    blocks("FDTD_PLRC").setClass<FDTD_PLRCLin>();
+    blocks("FDTD_PLRC_Nonlinear").setClass<FDTD_PLRCNonlin>();
     blocks("FieldDiag").setClass<FieldDiagnostic>();
 
     blocks("mpulse").addChildren("FieldDiag")("FDTD_Plain")("FDTD_PLRC")("FDTD_PLRC_Nonlinear");

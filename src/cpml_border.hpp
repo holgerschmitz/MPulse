@@ -1,23 +1,19 @@
 #ifndef MPULSE_CPML_BORDER_H
 #define MPULSE_CPML_BORDER_H
 
-#include "mpulse.h"
-#include "rebuild.h"
-#include "currentfactory.h"
-#include "currents.h"
+#include "mpulse.hpp"
+#include "current.hpp"
 
-class Storage;
 
-class CPMLBorder : public CurrentFactory
+class CPMLBorder : public CurrentBlock
 {
   public:
-    virtual ~CPMLBorder() {}
-    void initCurrents(Storage *storage, FieldSolver *solver);
+    void initCurrents(CurrentContainer &container);
   protected:
-    ParameterMap* MakeParamMap (ParameterMap* pm = NULL);
+    void initParameters(schnek::BlockParameters &blockPars);
   private:
     
-    void initCoefficients(Storage *storage);
+    void initCoefficients();
     
     int thickness;
     double kappaMax;
@@ -26,16 +22,15 @@ class CPMLBorder : public CurrentFactory
     double eps;
 };
 
-class CPMLBorderOneD : public CurrentFactory
+class CPMLBorderOneD : public CurrentBlock
 {
   public:
-    virtual ~CPMLBorderOneD() {}
-    void initCurrents(Storage *storage, FieldSolver *solver);
+    void initCurrents(CurrentContainer &container);
   protected:
-    ParameterMap* MakeParamMap (ParameterMap* pm = NULL);
+    void initParameters(schnek::BlockParameters &blockPars);
   private:
     
-    void initCoefficients(Storage *storage);
+    void initCoefficients();
     
     int thickness;
     double kappaMax;
@@ -47,9 +42,8 @@ class CPMLBorderCurrent : public Current
 {
   public:
     CPMLBorderCurrent( int thickness_, Direction dir_, bool isH_,
-                       double kappaMax_, double aMax_, double sigmaMax_, double eps_);                       
-
-    virtual ~CPMLBorderCurrent() {}
+                       double kappaMax_, double aMax_, double sigmaMax_, double eps_,
+                       CurrentBlock &borderBlock_);
   protected:
     bool reverse;
     int thickness;
@@ -72,26 +66,26 @@ class CPMLBorderCurrent : public Current
     DataLine bCoeff;
     DataLine cCoeff;
 
+    CurrentBlock &borderBlock;
 
-    void makeCoeff(Storage *storage);
+    void makeCoeff();
 };
 
 class CPMLBorderECurrent : public CPMLBorderCurrent
 {
   public:
     CPMLBorderECurrent( int thickness_, Direction dir_, 
-                        double kappaMax_, double aMax_, double sigmaMax_, double eps_);
+                        double kappaMax_, double aMax_, double sigmaMax_, double eps_,
+                        CurrentBlock &borderBlock_);
                        
-    virtual ~CPMLBorderECurrent() {}
-
-    void initStorage(Storage *storage);
+    void init();
     
     void stepSchemeInit(double dt);
     void stepScheme(double dt);
   protected:
     
-    DataGrid *pB[3];
-    DataGrid *pPsi[2];
+    pField pB[3];
+    pGrid pPsi[2];
     double dx;
 };
 
@@ -99,17 +93,16 @@ class CPMLBorderHCurrent : public CPMLBorderCurrent
 {
   public:
     CPMLBorderHCurrent( int thickness_, Direction dir_,
-                        double kappaMax_, double aMax_, double sigmaMax_, double eps_);
+                        double kappaMax_, double aMax_, double sigmaMax_, double eps_,
+                        CurrentBlock &borderBlock_);
                        
-    virtual ~CPMLBorderHCurrent() {}
-
-    void initStorage(Storage *storage);
+    void init();
     
     void stepSchemeInit(double dt);
     void stepScheme(double dt);
   protected:
-    DataGrid *pE[3];
-    DataGrid *pPsi[2];
+    pField pE[3];
+    pGrid pPsi[2];
     double dx;
 };
 
