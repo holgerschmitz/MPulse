@@ -17,6 +17,9 @@ SOURCES = src/border.cpp \
   src/fdtd_plain.cpp \
   src/fdtd_plrc.cpp \
   src/incsource.cpp \
+  src/shortpulsefunctions.cpp \
+  src/shortpulseinject.cpp \
+  src/specfunc.cpp \
   src/mpulse.cpp
 
 

@@ -22,7 +22,8 @@
 |                                                                               |
 \*-----------------------------------------------------------------------------*/
 
-#include "specfunc.h"
+#include "specfunc.hpp"
+
 #include <cmath>
 
 using namespace std;

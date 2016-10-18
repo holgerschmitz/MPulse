@@ -1,5 +1,7 @@
 #include "border.hpp"
 
+#include <boost/make_shared.hpp>
+
 //===============================================================
 //==========  IncidentSourceECurrent
 //===============================================================
@@ -107,7 +109,7 @@ void IncidentSourceHCurrent<SourceFunc>::init()
   pJ[0] = allJ[IncidentSourceCurrent::transverse1];
   pJ[1] = allJ[IncidentSourceCurrent::transverse2];
 
-  this->initSourceFunc(storage, pJx, pJy, pJz);
+  this->initSourceFunc(pJx, pJy, pJz);
 }
 
 template<class SourceFunc>

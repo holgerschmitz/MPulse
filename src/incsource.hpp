@@ -14,8 +14,7 @@ class IncidentSourceCurrent;
 class IncidentSource : public CurrentBlock
 {
   public:
-    virtual ~IncidentSource() {}
-    void void initCurrents(CurrentContainer &container);
+    void initCurrents(CurrentContainer &container);
     
   protected:
     virtual pCurrent makeECurrent(int distance_, Direction dir_) = 0;
@@ -33,7 +32,6 @@ class IncidentSourceCurrent : public Current
   public:
     IncidentSourceCurrent(int distance_, Direction dir_, bool isH_);                       
 
-    virtual ~IncidentSourceCurrent() {}
   protected:
     bool reverse;
     int distance;
@@ -59,8 +57,6 @@ class IncidentSourceECurrent : public IncidentSourceCurrent, public SourceFunc
   public:
     IncidentSourceECurrent(int distance_, Direction dir_);
                        
-    virtual ~IncidentSourceECurrent() {}
-
     void init();
 
     void stepSchemeInit(double dt);
@@ -75,8 +71,6 @@ class IncidentSourceHCurrent : public IncidentSourceCurrent, public SourceFunc
   public:
     IncidentSourceHCurrent(int distance_, Direction dir_);
                        
-    virtual ~IncidentSourceHCurrent() {}
-
     void init();
 
     void stepSchemeInit(double dt);

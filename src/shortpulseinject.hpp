@@ -1,25 +1,22 @@
 #ifndef MPULSE_SHORTPULSEINJECT_H
 #define MPULSE_SHORTPULSEINJECT_H
 
-#include "incsource.h"
+#include "incsource.hpp"
+#include "mpulse.hpp"
 
 #include <fftw3.h>
 #include <complex>
-#include <schnek/grid.h>
 
 /** Calculates a short pulse in the paraxial limit
  */
 class ShortPulseInject : public IncidentSource
 {
-  public:
-    virtual ~ShortPulseInject() {}
-    
   protected:
-    virtual IncidentSourceCurrent *makeECurrent(int distance_, Direction dir_);
-    virtual IncidentSourceCurrent *makeHCurrent(int distance_, Direction dir_);
-    virtual bool needCurrent(Direction dir_);
+    pCurrent makeECurrent(int distance_, Direction dir_);
+    pCurrent makeHCurrent(int distance_, Direction dir_);
+    bool needCurrent(Direction dir_);
     
-    ParameterMap* MakeParamMap (ParameterMap* pm = NULL);
+    void initParameters(schnek::BlockParameters &blockPars);
   private:
     double lightspeed;
 
@@ -40,7 +37,6 @@ class ShortPulseInjectSourceFunc
 {
   public:
     ShortPulseInjectSourceFunc(Direction dir_, bool isH_) : dir(dir_), isH(isH_) {};
-    ~ShortPulseInjectSourceFunc() { }
     
     void setParam(double length_, 
                   double width_,
@@ -52,12 +48,12 @@ class ShortPulseInjectSourceFunc
                   double eps_, 
                   int distance_);
 
-    void initSourceFunc(Storage *storage, DataGrid *pJx, DataGrid *pJy, DataGrid *pJz);
+    void initSourceFunc(pGrid pJx, pGrid pJy, pGrid pJz);
 
-    Vector getEField(int i, int j, int k, int time);
-    Vector getHField(int i, int j, int k, int time);
+    Vector getEField(int i, int j, int k, double time);
+    Vector getHField(int i, int j, int k, double time);
 
-    void setTime(int Time);
+    void setTime(double Time);
 
     typedef std::complex<double> Complex;
   private:
