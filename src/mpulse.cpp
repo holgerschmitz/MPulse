@@ -117,7 +117,7 @@ void MPulse::execute()
     f->stepSchemeInit(dt);
   }
 
-  double time = 0.0;
+  time = 0.0;
   schnek::DiagnosticManager::instance().setPhysicalTime(&time);
 
   while (time<=tMax)

@@ -63,6 +63,7 @@ class MPulse : public schnek::Block, public schnek::BlockContainer<FieldSolver>
 
 
     double tMax;
+    double time;
     Range innerRange;
     pField Ex, Ey, Ez;
     pField Bx, By, Bz;
@@ -90,6 +91,7 @@ class MPulse : public schnek::Block, public schnek::BlockContainer<FieldSolver>
     static Vector getDx() { return instance->dx; }
     static double getDt() { return instance->dt; }
     static Vector getSize() { return instance->size; }
+    static double getTime() { return instance->time; }
     static schnek::DomainSubdivision<Field> &getSubdivision() { return instance->subdivision; };
 };
 

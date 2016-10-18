@@ -1,9 +1,8 @@
+#include "border.hpp"
+
 //===============================================================
 //==========  IncidentSourceECurrent
 //===============================================================
-
-#include "storage.h"
-#include "process.h"
 
 template<class SourceFunc>
 IncidentSourceECurrent<SourceFunc>::IncidentSourceECurrent(int distance_, Direction dir_)
@@ -12,13 +11,17 @@ IncidentSourceECurrent<SourceFunc>::IncidentSourceECurrent(int distance_, Direct
 {}
 
 template<class SourceFunc>
-void IncidentSourceECurrent<SourceFunc>::initStorage(Storage *storage)
+void IncidentSourceECurrent<SourceFunc>::init()
 {
-  pJx = storage->addBorderLayer("IncidentEJx", IncidentSourceCurrent::dir, 1, distance);
-  pJy = storage->addBorderLayer("IncidentEJy", IncidentSourceCurrent::dir, 1, distance);
-  pJz = storage->addBorderLayer("IncidentEJz", IncidentSourceCurrent::dir, 1, distance);
+  Index blow, bhigh;
+
+  if (!getBorderExtent(IncidentSourceCurrent::dir, 1, distance, blow, bhigh)) return;
+
+  pJx = boost::make_shared<Grid>(blow, bhigh);
+  pJy = boost::make_shared<Grid>(blow, bhigh);
+  pJz = boost::make_shared<Grid>(blow, bhigh);
   
-  DataGrid *allJ[3];
+  pGrid allJ[3];
   allJ[0] = pJx;
   allJ[1] = pJy;
   allJ[2] = pJz;
@@ -27,7 +30,7 @@ void IncidentSourceECurrent<SourceFunc>::initStorage(Storage *storage)
   pJ[1] = allJ[IncidentSourceCurrent::transverse2];
   
   if ((pJx!=0) && (pJy!=0) && (pJz!=0))
-     this->initSourceFunc(storage, pJx, pJy, pJz);
+     this->initSourceFunc(pJx, pJy, pJz);
 }
 
 template<class SourceFunc>
@@ -39,15 +42,15 @@ void IncidentSourceECurrent<SourceFunc>::stepSchemeInit(double dt)
 template<class SourceFunc>
 void IncidentSourceECurrent<SourceFunc>::stepScheme(double dt)
 {
-  DataGrid &J0 = *pJ[0];
-  DataGrid &J1 = *pJ[1];
+  Grid &J0 = *pJ[0];
+  Grid &J1 = *pJ[1];
 
-  GridIndex low  = J0.getLow();
-  GridIndex high = J0.getHigh();
+  Index low  = J0.getLo();
+  Index high = J0.getHi();
   
-  GridIndex ind, indn;
+  Index ind, indn;
   
-  int Time = Process::instance().getTime();
+  double Time = MPulse::getTime();
   this->setTime(Time);
   
   int off[3] = {0,0,0};
@@ -84,14 +87,19 @@ IncidentSourceHCurrent<SourceFunc>::IncidentSourceHCurrent(int distance_, Direct
 {}
 
 template<class SourceFunc>
-void IncidentSourceHCurrent<SourceFunc>::initStorage(Storage *storage)
+void IncidentSourceHCurrent<SourceFunc>::init()
 {
   if (!reverse) distance = distance-1;
-  pJx = storage->addBorderLayer("IncidentHJx", IncidentSourceCurrent::dir, 1, distance);
-  pJy = storage->addBorderLayer("IncidentHJy", IncidentSourceCurrent::dir, 1, distance);
-  pJz = storage->addBorderLayer("IncidentHJz", IncidentSourceCurrent::dir, 1, distance);
 
-  DataGrid *allJ[3];
+  Index blow, bhigh;
+
+  if (!getBorderExtent(IncidentSourceCurrent::dir, 1, distance, blow, bhigh)) return;
+
+  pJx = boost::make_shared<Grid>(blow, bhigh);
+  pJy = boost::make_shared<Grid>(blow, bhigh);
+  pJz = boost::make_shared<Grid>(blow, bhigh);
+
+  pGrid allJ[3];
   allJ[0] = pJx;
   allJ[1] = pJy;
   allJ[2] = pJz;
@@ -111,15 +119,15 @@ void IncidentSourceHCurrent<SourceFunc>::stepSchemeInit(double dt)
 template<class SourceFunc>
 void IncidentSourceHCurrent<SourceFunc>::stepScheme(double dt)
 {
-  DataGrid &J0 = *pJ[0];
-  DataGrid &J1 = *pJ[1];
+  Grid &J0 = *pJ[0];
+  Grid &J1 = *pJ[1];
   
-  GridIndex low  = J0.getLow();
-  GridIndex high = J0.getHigh();
+  Index low  = J0.getLo();
+  Index high = J0.getHi();
   
-  GridIndex ind, indn;
+  Index ind, indn;
   
-  int Time = Process::instance().getTime();
+  double Time = MPulse::getTime();
   this->setTime(Time);
   
   int off[3] = {0,0,0};
