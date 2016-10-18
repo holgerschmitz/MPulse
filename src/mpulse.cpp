@@ -9,6 +9,7 @@
 #include "fieldsolver.hpp"
 #include "fdtd_plain.hpp"
 #include "fdtd_plrc.hpp"
+#include "cpml_border.hpp"
 
 #include <schnek/parser.hpp>
 #include <schnek/diagnostic/diagnostic.hpp>
@@ -150,8 +151,12 @@ int main (int argc, char** argv) {
     blocks("FDTD_PLRC").setClass<FDTD_PLRCLin>();
     blocks("FDTD_PLRC_Nonlinear").setClass<FDTD_PLRCNonlin>();
     blocks("FieldDiag").setClass<FieldDiagnostic>();
+    blocks("CPMLBorder").setClass<CPMLBorder>();
 
     blocks("mpulse").addChildren("FieldDiag")("FDTD_Plain")("FDTD_PLRC")("FDTD_PLRC_Nonlinear");
+
+    blocks("FDTD_PLRC").addChildren("CPMLBorder");
+    blocks("FDTD_PLRC_Nonlinear").addChildren("CPMLBorder");
 
     std::ifstream in("mpulse.setup");
     if (!in) throw std::string("Could not open file 'mpulse.setup'");
