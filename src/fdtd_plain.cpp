@@ -87,14 +87,14 @@ void FDTD_Plain::stepB(double dt)
   Field &By = *pBy;
   Field &Bz = *pBz;
 
-  Index low = storage->getLow();
-  Index high = storage->getHigh();
+  Index low = Ex.getInnerLo();
+  Index high = Ex.getInnerHi();
 
-  Vector dx = storage->getDx();
+  Vector dx = MPulse::getDx();
 
-  for (int i=low[0]; i<high[0]; ++i)
-    for (int j=low[1]; j<high[1]; ++j)
-      for (int k=low[2]; k<high[2]; ++k)
+  for (int i=low[0]; i<=high[0]; ++i)
+    for (int j=low[1]; j<=high[1]; ++j)
+      for (int k=low[2]; k<=high[2]; ++k)
   {
     Bx(i,j,k) = Bx(i,j,k) 
       + dt*(

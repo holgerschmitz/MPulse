@@ -1,14 +1,39 @@
+/*
+ * current.hpp
+ *
+ *  Created on: 18 Oct 2016
+ *      Author: holger
+ */
+
+
 #ifndef MPULSE_CURRENT_H
 #define MPULSE_CURRENT_H
 
 #include "mpulse.hpp"
 
+class Current;
+typedef boost::shared_ptr<Current> pCurrent;
+
+class CurrentContainer
+{
+  protected:
+    typedef std::list<pCurrent> CurrentList;
+
+    CurrentList currents;
+    CurrentList magCurrents;
+  public:
+    void addCurrent(pCurrent current);
+    void addMagCurrent(pCurrent current);
+};
+
 class CurrentBlock : public schnek::ChildBlock<CurrentBlock>
 {
   public:
     virtual ~CurrentBlock() {}
-    virtual void initCurrents(FieldSolver *solver) = 0;
+    virtual void initCurrents(CurrentContainer &container) = 0;
 };
+
+typedef boost::shared_ptr<CurrentBlock> pCurrentBlock;
 
 class Current
 {
@@ -29,6 +54,5 @@ class Current
     const pField getJz() { return pJz; }
 };
 
-typedef boost::shared_ptr<Current> pCurrent;
 
 #endif

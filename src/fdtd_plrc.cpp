@@ -1,6 +1,8 @@
 
 #include "fdtd_plrc.hpp"
-#include "storage.h"
+
+#include <boost/make_shared.hpp>
+
 #include <cmath>
 #include <complex>
 #include <algorithm>
@@ -13,15 +15,11 @@
 
 void FDTD_PLRCCore::registerData()
 {
-}
-
-
-void FDTD_PLRCCore::init()
-{  
   schnek::DomainSubdivision<Field> &subdivision = MPulse::getSubdivision();
 
   schnek::Range<double, DIMENSION> domainSize(schnek::Array<double, DIMENSION>(0,0,0), MPulse::getSize());
   schnek::Array<bool, DIMENSION> stagger;
+  stagger = false;
 
 
   schnek::Range<double, 1> domainSizeX(schnek::Array<double, 1>(0), schnek::Array<double, 1>(MPulse::getSize()[0]));
@@ -29,10 +27,57 @@ void FDTD_PLRCCore::init()
   schnek::Range<double, 1> domainSizeZ(schnek::Array<double, 1>(0), schnek::Array<double, 1>(MPulse::getSize()[2]));
 
   schnek::Array<bool, 1> stagger1d;
-  stagger = false;
+  stagger1d = false;
 
   Index lowIn  = subdivision.getInnerLo();
   Index highIn = subdivision.getInnerHi();
+
+  pSigma = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
+  
+  pKappaEdx = boost::make_shared<DataLine>(schnek::Array<int, 1>(lowIn[0]), schnek::Array<int, 1>(highIn[0]), domainSizeX, stagger1d, 2);
+  pKappaEdy = boost::make_shared<DataLine>(schnek::Array<int, 1>(lowIn[1]), schnek::Array<int, 1>(highIn[1]), domainSizeY, stagger1d, 2);
+  pKappaEdz = boost::make_shared<DataLine>(schnek::Array<int, 1>(lowIn[2]), schnek::Array<int, 1>(highIn[2]), domainSizeZ, stagger1d, 2);
+
+  pKappaHdx = boost::make_shared<DataLine>(schnek::Array<int, 1>(lowIn[0]), schnek::Array<int, 1>(highIn[0]), domainSizeX, stagger1d, 2);
+  pKappaHdy = boost::make_shared<DataLine>(schnek::Array<int, 1>(lowIn[1]), schnek::Array<int, 1>(highIn[1]), domainSizeY, stagger1d, 2);
+  pKappaHdz = boost::make_shared<DataLine>(schnek::Array<int, 1>(lowIn[2]), schnek::Array<int, 1>(highIn[2]), domainSizeZ, stagger1d, 2);
+
+  pPsiRx[0] = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
+  pPsiRy[0] = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
+  pPsiRz[0] = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
+  
+  pPsiRx[1] = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
+  pPsiRy[1] = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
+  pPsiRz[1] = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
+  
+  pPsiRx[2] = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
+  pPsiRy[2] = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
+  pPsiRz[2] = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
+
+  pPsiIx[0] = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
+  pPsiIy[0] = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
+  pPsiIz[0] = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
+  
+  pPsiIx[1] = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
+  pPsiIy[1] = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
+  pPsiIz[1] = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
+
+  pPsiIx[2] = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
+  pPsiIy[2] = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
+  pPsiIz[2] = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
+
+  addData("KappaEdx", pKappaEdx);
+  addData("KappaEdy", pKappaEdy);
+  addData("KappaEdz", pKappaEdz);
+
+  addData("KappaHdx", pKappaHdx);
+  addData("KappaHdy", pKappaHdy);
+  addData("KappaHdz", pKappaHdz);
+}
+
+
+void FDTD_PLRCCore::init()
+{
 
   retrieveData("Ex", pEx);
   retrieveData("Ey", pEy);
@@ -41,50 +86,11 @@ void FDTD_PLRCCore::init()
   retrieveData("Bx", pBx);
   retrieveData("By", pBy);
   retrieveData("Bz", pBz);
-  
-  pSigma = new Field(lowIn, highIn, domainSize, stagger, 2);
-  
-  pKappaEdx = new DataLine(schnek::Array<double, 1>(lowIn[0]), schnek::Array<double, 1>(highIn[0]), domainSizeX, stagger1d, 2);
-  pKappaEdy = new DataLine(schnek::Array<double, 1>(lowIn[1]), schnek::Array<double, 1>(highIn[1]), domainSizeY, stagger1d, 2);
-  pKappaEdz = new DataLine(schnek::Array<double, 1>(lowIn[2]), schnek::Array<double, 1>(highIn[2]), domainSizeZ, stagger1d, 2);
 
-  pKappaHdx = new DataLine(schnek::Array<double, 1>(lowIn[0]), schnek::Array<double, 1>(highIn[0]), domainSizeX, stagger1d, 2);
-  pKappaHdy = new DataLine(schnek::Array<double, 1>(lowIn[1]), schnek::Array<double, 1>(highIn[1]), domainSizeY, stagger1d, 2);
-  pKappaHdz = new DataLine(schnek::Array<double, 1>(lowIn[2]), schnek::Array<double, 1>(highIn[2]), domainSizeZ, stagger1d, 2);
-
-  pPsiRx[0] = new Field(lowIn, highIn, domainSize, stagger, 2);
-  pPsiRy[0] = new Field(lowIn, highIn, domainSize, stagger, 2);
-  pPsiRz[0] = new Field(lowIn, highIn, domainSize, stagger, 2);
   
-  pPsiRx[1] = new Field(lowIn, highIn, domainSize, stagger, 2);
-  pPsiRy[1] = new Field(lowIn, highIn, domainSize, stagger, 2);
-  pPsiRz[1] = new Field(lowIn, highIn, domainSize, stagger, 2);
-  
-  pPsiRx[2] = new Field(lowIn, highIn, domainSize, stagger, 2);
-  pPsiRy[2] = new Field(lowIn, highIn, domainSize, stagger, 2);
-  pPsiRz[2] = new Field(lowIn, highIn, domainSize, stagger, 2);
-  
-  pPsiIx[0] = new Field(lowIn, highIn, domainSize, stagger, 2);
-  pPsiIy[0] = new Field(lowIn, highIn, domainSize, stagger, 2);
-  pPsiIz[0] = new Field(lowIn, highIn, domainSize, stagger, 2);
-  
-  pPsiIx[1] = new Field(lowIn, highIn, domainSize, stagger, 2);
-  pPsiIy[1] = new Field(lowIn, highIn, domainSize, stagger, 2);
-  pPsiIz[1] = new Field(lowIn, highIn, domainSize, stagger, 2);
-  
-  pPsiIx[2] = new Field(lowIn, highIn, domainSize, stagger, 2);
-  pPsiIy[2] = new Field(lowIn, highIn, domainSize, stagger, 2);
-  pPsiIz[2] = new Field(lowIn, highIn, domainSize, stagger, 2);
-  
-  BOOST_FOREACH(pCurrent current, schnek::BlockContainer<Current>::childBlocks())
+  BOOST_FOREACH(CurrentBlock *current, schnek::BlockContainer<CurrentBlock>::childBlocks())
   {
-    if (current->isValid())
-    {
-      if (current->isMagneticCurrent())
-        magCurrents.push_back(current);
-      else
-        currents.push_back(current);
-    }
+    current->initCurrents(*this);
   }
 }
 
@@ -430,7 +436,6 @@ void FDTD_PLRCNonlinCore::plrcStepB(double dt,
                                     double dx, double dy, double dz,
                                     double Jx, double Jy, double Jz)
 {
-  
   double kappaHdx = (*pKappaHdx)(i)*dx;
   double kappaHdy = (*pKappaHdy)(j)*dy;
   double kappaHdz = (*pKappaHdz)(k)*dz;
@@ -459,6 +464,7 @@ void FDTD_PLRCNonlinCore::plrcStepB(double dt,
 
 void FDTD_PLRCNonlinCore::initParameters(schnek::BlockParameters &blockPars)
 {
+  FDTD_PLRCCore::initParameters(blockPars);
   blockPars.addParameter("chi", &chi,0.1);
 }
 

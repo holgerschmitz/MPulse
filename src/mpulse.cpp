@@ -6,12 +6,17 @@
  */
 
 #include "diagnostic.hpp"
+#include "fieldsolver.hpp"
+#include "fdtd_plain.hpp"
+#include "fdtd_plrc.hpp"
 
 #include <schnek/parser.hpp>
+#include <schnek/diagnostic/diagnostic.hpp>
 #include <schnek/tools/fieldtools.hpp>
 #include <schnek/tools/literature.hpp>
 #include <schnek/util/logger.hpp>
 
+#include <boost/make_shared.hpp>
 #include <boost/foreach.hpp>
 
 #include <mpi.h>
@@ -19,6 +24,9 @@
 #include <fstream>
 #include <string>
 #include <unistd.h>
+
+
+MPulse *MPulse::instance;
 
 MPulse::MPulse()
 {
@@ -42,6 +50,26 @@ void MPulse::initParameters(schnek::BlockParameters &parameters)
 
 void MPulse::registerData()
 {
+  Index low  = subdivision.getLo();
+  Index high = subdivision.getHi();
+
+  Index lowIn  = subdivision.getInnerLo();
+  Index highIn = subdivision.getInnerHi();
+
+  innerRange = Range(lowIn, highIn);
+  schnek::Range<double, DIMENSION> domainSize(schnek::Array<double, DIMENSION>(0,0,0), size);
+  schnek::Array<bool, DIMENSION> stagger;
+
+  stagger = false;
+
+  Ex = boost::make_shared<Field>(lowIn, highIn, domainSize, exStaggerYee, 2);
+  Ey = boost::make_shared<Field>(lowIn, highIn, domainSize, eyStaggerYee, 2);
+  Ez = boost::make_shared<Field>(lowIn, highIn, domainSize, ezStaggerYee, 2);
+
+  Bx = boost::make_shared<Field>(lowIn, highIn, domainSize, bxStaggerYee, 2);
+  By = boost::make_shared<Field>(lowIn, highIn, domainSize, byStaggerYee, 2);
+  Bz = boost::make_shared<Field>(lowIn, highIn, domainSize, bzStaggerYee, 2);
+
   addData("Ex", Ex);
   addData("Ey", Ey);
   addData("Ez", Ez);
@@ -75,42 +103,21 @@ void MPulse::init()
 
   subdivision.init(gridSize, 2);
 
-  dx = size / gridSize;
+  for (size_t i=0; i<DIMENSION; ++i) dx[i] = size[i] / gridSize[i];
   dt = cflFactor*std::min(dx[0],std::min(dx[1],dx[2]))/clight;
-
-  Index low  = subdivision.getLo();
-  Index high = subdivision.getHi();
-
-  Index lowIn  = subdivision.getInnerLo();
-  Index highIn = subdivision.getInnerHi();
-
-  innerRange = Range(lowIn, highIn);
-  schnek::Range<double, DIMENSION> domainSize(schnek::Array<double, DIMENSION>(0,0), size);
-  schnek::Array<bool, DIMENSION> stagger;
-
-  stagger = false;
-
-  Ex = new Field(lowIn, highIn, domainSize, exStaggerYee, 2);
-  Ey = new Field(lowIn, highIn, domainSize, eyStaggerYee, 2);
-  Ez = new Field(lowIn, highIn, domainSize, ezStaggerYee, 2);
-
-  Bx = new Field(lowIn, highIn, domainSize, bxStaggerYee, 2);
-  By = new Field(lowIn, highIn, domainSize, byStaggerYee, 2);
-  Bz = new Field(lowIn, highIn, domainSize, bzStaggerYee, 2);
 
   fillValues();
 }
 
 void MPulse::execute()
 {
-  BOOST_FOREACH(FieldSolver *f, getChildren())
+  BOOST_FOREACH(FieldSolver *f, schnek::BlockContainer<FieldSolver>::childBlocks())
   {
     f->stepSchemeInit(dt);
   }
 
-  int step = 0;
   double time = 0.0;
-
+  schnek::DiagnosticManager::instance().setPhysicalTime(&time);
 
   while (time<=tMax)
   {
@@ -119,13 +126,15 @@ void MPulse::execute()
     if (subdivision.master())
       schnek::Logger::instance().out() <<"Time "<< time << std::endl;
 
-      BOOST_FOREACH(FieldSolver *f, getChildren())
+      BOOST_FOREACH(FieldSolver *f, schnek::BlockContainer<FieldSolver>::childBlocks())
       {
         f->stepScheme(dt);
       }
+
+    time += dt;
   }
 
-  DiagnosticManager::instance().execute();
+  schnek::DiagnosticManager::instance().execute();
 }
 
 int main (int argc, char** argv) {
@@ -137,9 +146,12 @@ int main (int argc, char** argv) {
     schnek::BlockClasses blocks;
 
     blocks.registerBlock("mpulse").setClass<MPulse>();
+    blocks("FDTD_Plain").setClass<FDTD_Plain>();
+    blocks("FDTD_PLRC").setClass<FDTD_PLRCSolver<FDTD_PLRCLinCore> >();
+    blocks("FDTD_PLRC_Nonlinear").setClass<FDTD_PLRCSolver<FDTD_PLRCNonlinCore> >();
     blocks("FieldDiag").setClass<FieldDiagnostic>();
 
-    blocks("mpulse").addChildren("FieldDiag");
+    blocks("mpulse").addChildren("FieldDiag")("FDTD_Plain")("FDTD_PLRC")("FDTD_PLRC_Nonlinear");
 
     std::ifstream in("mpulse.setup");
     if (!in) throw std::string("Could not open file 'mpulse.setup'");

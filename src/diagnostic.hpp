@@ -8,13 +8,15 @@
 #ifndef MPULSE_DIAGNOSTIC_HPP_
 #define MPULSE_DIAGNOSTIC_HPP_
 
+#include "mpulse.hpp"
+
 #include <schnek/diagnostic/diagnostic.hpp>
 #include <schnek/diagnostic/hdfdiagnostic.hpp>
 
-class FieldDiagnostic : public schnek::HDFGridDiagnostic<Field, Field* >
+class FieldDiagnostic : public schnek::HDFGridDiagnostic<Field, pField, schnek::DeltaTimeDiagnostic>
 {
   protected:
-    typedef HDFGridDiagnostic<Field, Field* >::IndexType IndexType;
+    typedef HDFGridDiagnostic<Field, pField, schnek::DeltaTimeDiagnostic>::IndexType IndexType;
     IndexType getGlobalMin();
     IndexType getGlobalMax();
 };
