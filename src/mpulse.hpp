@@ -22,6 +22,9 @@ static const size_t DIMENSION = 3;
 typedef schnek::Array<int, DIMENSION> Index;
 typedef schnek::Array<double, DIMENSION> Vector;
 
+typedef schnek::Grid<double, DIMENSION> Grid;
+typedef boost::shared_ptr<Grid> pGrid;
+
 typedef schnek::Field<double, DIMENSION> Field;
 typedef boost::shared_ptr<Field> pField;
 
@@ -41,6 +44,8 @@ static const Stagger ezStaggerYee(false, false, true );
 static const Stagger bxStaggerYee(false, true,  true );
 static const Stagger byStaggerYee(true,  false, true );
 static const Stagger bzStaggerYee(true,  true,  false);
+
+enum Direction {north, south, west, east, up, down};
 
 class FieldSolver;
 
@@ -83,6 +88,7 @@ class MPulse : public schnek::Block, public schnek::BlockContainer<FieldSolver>
 
     static Index getGlobalMax() { return instance->globalMax; }
     static Vector getDx() { return instance->dx; }
+    static double getDt() { return instance->dt; }
     static Vector getSize() { return instance->size; }
     static schnek::DomainSubdivision<Field> &getSubdivision() { return instance->subdivision; };
 };

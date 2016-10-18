@@ -38,20 +38,21 @@ typedef boost::shared_ptr<CurrentBlock> pCurrentBlock;
 class Current
 {
   protected:
-    pField pJx;
-    pField pJy;
-    pField pJz;
+    pGrid pJx;
+    pGrid pJy;
+    pGrid pJz;
   public:
     virtual ~Current() {}
     
+    virtual void init() = 0;
     virtual void stepSchemeInit(double dt) = 0;
     virtual void stepScheme(double dt) = 0;
 
     bool isValid() const { return (pJx) && (pJy) && (pJz); }
     
-    const pField getJx() { return pJx; }
-    const pField getJy() { return pJy; }
-    const pField getJz() { return pJz; }
+    const pGrid getJx() { return pJx; }
+    const pGrid getJy() { return pJy; }
+    const pGrid getJz() { return pJz; }
 };
 
 

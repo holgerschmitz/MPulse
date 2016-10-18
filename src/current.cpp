@@ -9,11 +9,15 @@
 
 void CurrentContainer::addCurrent(pCurrent current)
 {
-  this->currents.push_back(current);
+  current->init();
+  if (current->isValid())
+    this->currents.push_back(current);
 }
 
 void CurrentContainer::addMagCurrent(pCurrent current)
 {
-  this->magCurrents.push_back(current);
+  current->init();
+  if (current->isValid())
+    this->magCurrents.push_back(current);
 }
 
