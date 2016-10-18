@@ -1,28 +1,29 @@
-#include "shortpulseinject.h"
+#include "shortpulseinject.hpp"
+#include "specfunc.hpp"
+
 #include <cmath>
-#include "specfunc.h"
 
 //===============================================================
 //==========  ShortPulseInject
 //===============================================================
 
-IncidentSourceCurrent *ShortPulseInject::makeECurrent(int distance_, Direction dir_)
+pCurrent ShortPulseInject::makeECurrent(int distance_, Direction dir_)
 {
   std::cerr << "ShortPulseInjectSourceFunc::makeECurrent\n";
   typedef IncidentSourceECurrent<ShortPulseInjectSourceFunc> CurrentType;
   CurrentType *cur = new CurrentType(distance_,dir_);
   
   cur->setParam(length, width, om0, TShift, ZShift, Phase, amp, eps, distance_);
-  return cur;
+  return pCurrent(cur);
 }
 
-IncidentSourceCurrent *ShortPulseInject::makeHCurrent(int distance_, Direction dir_)
+pCurrent ShortPulseInject::makeHCurrent(int distance_, Direction dir_)
 {
   std::cerr << "ShortPulseInjectSourceFunc::makeHCurrent\n";
   typedef IncidentSourceHCurrent<ShortPulseInjectSourceFunc> CurrentType;
   CurrentType *cur = new CurrentType(distance_,dir_);
   cur->setParam(length, width, om0, TShift, ZShift, Phase, amp, eps, distance_);
-  return cur;
+  return pCurrent(cur);
 }
 
 bool ShortPulseInject::needCurrent(Direction dir_)
@@ -30,22 +31,19 @@ bool ShortPulseInject::needCurrent(Direction dir_)
   return (dir_ == down);
 }
     
-ParameterMap* ShortPulseInject::MakeParamMap (ParameterMap* pm)
+void ShortPulseInject::initParameters(schnek::BlockParameters &blockPars)
 {
-  std::cerr << "ShortPulseInjectSourceFunc::MakeParamMap\n";
-  pm = IncidentSource::MakeParamMap(pm);
-  
-  (*pm)["length"] = WParameter(new ParameterValue<double>(&this->length,1.));
-  (*pm)["width"] = WParameter(new ParameterValue<double>(&this->width,1.));
-  (*pm)["om0"] = WParameter(new ParameterValue<double>(&this->om0,2*M_PI));
-  (*pm)["TShift"] = WParameter(new ParameterValue<double>(&this->TShift,0));
-  (*pm)["ZShift"] = WParameter(new ParameterValue<double>(&this->ZShift,0));
-  (*pm)["Phase"] = WParameter(new ParameterValue<double>(&this->Phase,0));
+  IncidentSource::initParameters(blockPars);
 
-  (*pm)["amp"] = WParameter(new ParameterValue<double>(&this->amp,1));
-  (*pm)["eps"] = WParameter(new ParameterValue<double>(&this->eps,1));
-  
-  return pm;
+  blockPars.addParameter("length", &this->length, 1.0);
+  blockPars.addParameter("width", &this->width, 1.0);
+  blockPars.addParameter("om0", &this->om0, 2*M_PI);
+  blockPars.addParameter("TShift", &this->TShift, 0.0);
+  blockPars.addParameter("ZShift", &this->ZShift, 0.0);
+  blockPars.addParameter("Phase", &this->Phase, 0.0);
+
+  blockPars.addParameter("amp", &this->amp, 1.0);
+  blockPars.addParameter("eps", &this->eps, 1.0);
 }
 
 
@@ -68,14 +66,14 @@ void ShortPulseInjectSourceFunc::setParam(double length_,
   
   // Grid Spacing and position
   
-  DX = Globals::instance().gridDX();
-  DY = Globals::instance().gridDY();
-  DZ = Globals::instance().gridDZ();
-  DT = Globals::instance().dt();
+  DX = MPulse::getDx()[0];
+  DY = MPulse::getDx()[1];
+  DZ = MPulse::getDx()[2];
+  DT = MPulse::getDt();
 
 
-  GridIndex gridLow = Globals::instance().gridLow();
-  GridIndex gridHigh = Globals::instance().gridHigh();
+  Index gridLow  = Index(0);
+  Index gridHigh = MPulse::getGlobalMax();
     
   centrex = 0.5*double(gridHigh[0] + gridLow[0]);
   centrey = 0.5*double(gridHigh[1] + gridLow[1]);
@@ -113,17 +111,17 @@ void ShortPulseInjectSourceFunc::setParam(double length_,
 }
 
 void ShortPulseInjectSourceFunc
-    ::initSourceFunc(Storage *storage, DataGrid *pJx, DataGrid *pJy, DataGrid *pJz)
+    ::initSourceFunc(pGrid pJx, pGrid pJy, pGrid pJz)
 {
 }
 
-void ShortPulseInjectSourceFunc::setTime(int time)
+void ShortPulseInjectSourceFunc::setTime(double time)
 {
   // Now calculating on the fly!
   return;
 }
 
-Vector ShortPulseInjectSourceFunc::getEField(int i, int j, int k, int time)
+Vector ShortPulseInjectSourceFunc::getEField(int i, int j, int k, double time)
 {
 
 
@@ -133,7 +131,7 @@ Vector ShortPulseInjectSourceFunc::getEField(int i, int j, int k, int time)
   double posyo = (j-centrey)*DY;
   double posyh = (j+0.5-centrey)*DY;
   double poszo = (k-centrez)*DZ - ZShift;
-  double posTime = time*DT - TShift;
+  double posTime = time - TShift;
 
   Complex Exc = Efunc(posxh, posyo, poszo, posTime);
   ex = amp*Exc.real();
@@ -148,7 +146,7 @@ Vector ShortPulseInjectSourceFunc::getEField(int i, int j, int k, int time)
 
 }
 
-Vector ShortPulseInjectSourceFunc::getHField(int i, int j, int k, int time)
+Vector ShortPulseInjectSourceFunc::getHField(int i, int j, int k, double time)
 {
 
   double bx=0, by=0;
@@ -163,7 +161,7 @@ Vector ShortPulseInjectSourceFunc::getHField(int i, int j, int k, int time)
   double poszh = (k-0.5-centrez)*DZ - ZShift;
 //  double poszh = (k+0.5-centrez)*DZ - ZShift;
   
-  double posTime = (time-0.5)*DT - TShift;
+  double posTime = time-0.5*DT - TShift;
 
   Complex Bxc = Bfunc(posxo, posyh, poszh, posTime, true);
 //  Complex Bxc = Bfunc(posxh, posyo, poszh, posTime, true);

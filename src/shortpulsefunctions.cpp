@@ -1,6 +1,7 @@
-#include "shortpulseinject.h"
+#include "shortpulseinject.hpp"
+#include "specfunc.hpp"
+
 #include <cmath>
-#include "specfunc.h"
 
 #define Power pow
 #define Sqrt sqrt
