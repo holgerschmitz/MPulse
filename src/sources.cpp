@@ -1,5 +1,6 @@
-#include "sources.h"
-#include "util.h"
+#include "sources.hpp"
+
+#include <cmath>
 
 //===============================================================
 //==========  Plane Wave
@@ -11,7 +12,7 @@ bool PlaneWaveSource::needCurrent(Direction dir_)
 }
 
 
-IncidentSourceCurrent *PlaneWaveSource::makeECurrent(int distance_, Direction dir_)
+pCurrent PlaneWaveSource::makeECurrent(int distance_, Direction dir_)
 {
   Vector k(kx,ky,kz);
   Vector H(Hx,Hy,Hz);
@@ -30,10 +31,10 @@ IncidentSourceCurrent *PlaneWaveSource::makeECurrent(int distance_, Direction di
   typedef IncidentSourceECurrent<PlaneWaveSourceEFunc> CurrentType;
   CurrentType *cur = new CurrentType(distance_,dir_);
   cur->setParam(k, E, H, E_bg, H_bg, ramp, eps);
-  return cur;
+  return pCurrent(cur);
 }
 
-IncidentSourceCurrent *PlaneWaveSource::makeHCurrent(int distance_, Direction dir_)
+pCurrent PlaneWaveSource::makeHCurrent(int distance_, Direction dir_)
 {
   Vector k(kx,ky,kz);
   Vector H(Hx,Hy,Hz);
@@ -52,33 +53,31 @@ IncidentSourceCurrent *PlaneWaveSource::makeHCurrent(int distance_, Direction di
   typedef IncidentSourceHCurrent<PlaneWaveSourceHFunc> CurrentType;
   CurrentType *cur = new CurrentType(distance_,dir_);
   cur->setParam(k, E, H, E_bg, H_bg, ramp, eps);
-  return cur;
+  return pCurrent(cur);
 }
 
-ParameterMap* PlaneWaveSource::MakeParamMap (ParameterMap* pm)
+void PlaneWaveSource::initParameters(schnek::BlockParameters &blockPars)
 {
-  pm = IncidentSource::MakeParamMap(pm);
-  
-  (*pm)["kx"] = WParameter(new ParameterValue<double>(&this->kx,0));
-  (*pm)["ky"] = WParameter(new ParameterValue<double>(&this->ky,0));
-  (*pm)["kz"] = WParameter(new ParameterValue<double>(&this->kz,1));
-  
-  (*pm)["Hx"] = WParameter(new ParameterValue<double>(&this->Hx,0));
-  (*pm)["Hy"] = WParameter(new ParameterValue<double>(&this->Hy,0));
-  (*pm)["Hz"] = WParameter(new ParameterValue<double>(&this->Hz,0));
-  
-  (*pm)["Hx_bg"] = WParameter(new ParameterValue<double>(&this->Hx_bg,0));
-  (*pm)["Hy_bg"] = WParameter(new ParameterValue<double>(&this->Hy_bg,0));
-  (*pm)["Hz_bg"] = WParameter(new ParameterValue<double>(&this->Hz_bg,0));
-  
-  (*pm)["Ex_bg"] = WParameter(new ParameterValue<double>(&this->Ex_bg,0));
-  (*pm)["Ey_bg"] = WParameter(new ParameterValue<double>(&this->Ey_bg,0));
-  (*pm)["Ez_bg"] = WParameter(new ParameterValue<double>(&this->Ez_bg,0));
-  
-  (*pm)["ramp"] = WParameter(new ParameterValue<double>(&this->ramp,0.5));
-  (*pm)["eps"] = WParameter(new ParameterValue<double>(&this->eps,1));
-  
-  return pm;
+  IncidentSource::initParameters(blockPars);
+
+  blockPars.addParameter("kx", &this->kx, 0.0);
+  blockPars.addParameter("ky", &this->ky, 0.0);
+  blockPars.addParameter("kz", &this->kz, 1.0);
+
+  blockPars.addParameter("Hx", &this->Hx, 0.0);
+  blockPars.addParameter("Hy", &this->Hy, 0.0);
+  blockPars.addParameter("Hz", &this->Hz, 0.0);
+
+  blockPars.addParameter("Hx_bg", &this->Hx_bg, 0.0);
+  blockPars.addParameter("Hy_bg", &this->Hy_bg, 0.0);
+  blockPars.addParameter("Hz_bg", &this->Hz_bg, 0.0);
+
+  blockPars.addParameter("Ex_bg", &this->Ex_bg, 0.0);
+  blockPars.addParameter("Ey_bg", &this->Ey_bg, 0.0);
+  blockPars.addParameter("Ez_bg", &this->Ez_bg, 0.0);
+
+  blockPars.addParameter("ramp", &this->ramp, 0.5);
+  blockPars.addParameter("eps", &this->eps, 1.0);
 }
 
 
@@ -95,19 +94,18 @@ void PlaneWaveSourceEFunc::setParam(Vector k_, Vector E_, Vector H_, Vector E_bg
   H_bg = H_bg_;
   ramp = ramp_;
   eps = eps_;
-  dt = Globals::instance().dt();
+  dt = MPulse::getDt();
   om = sqrt(k[0]*k[0] + k[1]*k[1] + k[2]*k[2])/sqrt(eps);
 
-  dx = Globals::instance().gridDX();
-  dy = Globals::instance().gridDY();
-  dz = Globals::instance().gridDZ();
+  dx = MPulse::getDx()[0];
+  dy = MPulse::getDx()[1];
+  dz = MPulse::getDx()[2];
 }
 
 
-Vector PlaneWaveSourceEFunc
-    ::getHField(int i, int j, int l, int time)
+Vector PlaneWaveSourceEFunc::getHField(int i, int j, int l, double time)
 {
-  double realtime = dt*(time-0.5);
+  double realtime = time - 0.5*dt;
 
   double posx = k[0]*i*dx + k[1]*(j+0.5)*dy + k[2]*(l+0.5)*dz + om*realtime;
   double posy = k[0]*(i+0.5)*dx + k[1]*j*dy + k[2]*(l+0.5)*dz + om*realtime;
@@ -138,24 +136,23 @@ void PlaneWaveSourceHFunc::setParam(Vector k_, Vector E_, Vector H_, Vector E_bg
   H_bg = H_bg_;
   ramp = ramp_;
   eps = eps_;
-  dt = Globals::instance().dt();
+  dt = MPulse::getDt();
   om = sqrt(k[0]*k[0] + k[1]*k[1] + k[2]*k[2])/sqrt(eps);
 
-  dx = Globals::instance().gridDX();
-  dy = Globals::instance().gridDY();
-  dz = Globals::instance().gridDZ();
+  dx = MPulse::getDx()[0];
+  dy = MPulse::getDx()[1];
+  dz = MPulse::getDx()[2];
 }
 
 
-Vector PlaneWaveSourceHFunc
-    ::getEField(int i, int j, int l, int time)
+Vector PlaneWaveSourceHFunc::getEField(int i, int j, int l, double time)
 {
 //  double realtime = dt*time;
 //  double posx = k[0]*i*dx + k[1]*(j+0.5)*dy + k[2]*(l+0.5)*dz + om*realtime;
 //  double posy = k[0]*(i+0.5)*dx + k[1]*j*dy + k[2]*(l+0.5)*dz + om*realtime;
 //  double posz = k[0]*(i+0.5)*dx + k[1]*(j+0.5)*dy + k[2]*l*dz + om*realtime;
 
-  double realtime = dt*time;
+  double realtime = time;
 
   double posx = k[0]*(i+0.5)*dx + k[1]*j*dy + k[2]*l*dz + om*realtime;
   double posy = k[0]*i*dx + k[1]*(j+0.5)*dy + k[2]*l*dz + om*realtime;
@@ -182,7 +179,7 @@ bool PlaneGaussSource::needCurrent(Direction dir_)
 }
 
 
-IncidentSourceCurrent *PlaneGaussSource::makeECurrent(int distance_, Direction dir_)
+pCurrent PlaneGaussSource::makeECurrent(int distance_, Direction dir_)
 {
   Vector k(kx,ky,kz);
   Vector H(Hx,Hy,Hz);
@@ -199,10 +196,10 @@ IncidentSourceCurrent *PlaneGaussSource::makeECurrent(int distance_, Direction d
   typedef IncidentSourceECurrent<PlaneGaussSourceEFunc> CurrentType;
   CurrentType *cur = new CurrentType(distance_,dir_);
   cur->setParam(k, E, H, width, offset, eps);
-  return cur;
+  return pCurrent(cur);
 }
 
-IncidentSourceCurrent *PlaneGaussSource::makeHCurrent(int distance_, Direction dir_)
+pCurrent PlaneGaussSource::makeHCurrent(int distance_, Direction dir_)
 {
   Vector k(kx,ky,kz);
   Vector H(Hx,Hy,Hz);
@@ -219,26 +216,25 @@ IncidentSourceCurrent *PlaneGaussSource::makeHCurrent(int distance_, Direction d
   typedef IncidentSourceHCurrent<PlaneGaussSourceHFunc> CurrentType;
   CurrentType *cur = new CurrentType(distance_,dir_);
   cur->setParam(k, E, H, width, offset, eps);
-  return cur;
+  return pCurrent(cur);
 }
 
-ParameterMap* PlaneGaussSource::MakeParamMap (ParameterMap* pm)
+void PlaneGaussSource::initParameters(schnek::BlockParameters &blockPars)
 {
-  pm = IncidentSource::MakeParamMap(pm);
-  
-  (*pm)["kx"] = WParameter(new ParameterValue<double>(&this->kx,0));
-  (*pm)["ky"] = WParameter(new ParameterValue<double>(&this->ky,0));
-  (*pm)["kz"] = WParameter(new ParameterValue<double>(&this->kz,1));
-  
-  (*pm)["Hx"] = WParameter(new ParameterValue<double>(&this->Hx,0));
-  (*pm)["Hy"] = WParameter(new ParameterValue<double>(&this->Hy,0));
-  (*pm)["Hz"] = WParameter(new ParameterValue<double>(&this->Hz,0));
-  
-  (*pm)["width"] = WParameter(new ParameterValue<double>(&this->width,10));
-  (*pm)["offset"] = WParameter(new ParameterValue<double>(&this->offset,40));
-  (*pm)["eps"] = WParameter(new ParameterValue<double>(&this->eps,1));
-  
-  return pm;
+
+  IncidentSource::initParameters(blockPars);
+
+  blockPars.addParameter("kx", &this->kx, 0.0);
+  blockPars.addParameter("ky", &this->ky, 0.0);
+  blockPars.addParameter("kz", &this->kz, 1.0);
+
+  blockPars.addParameter("Hx", &this->Hx, 0.0);
+  blockPars.addParameter("Hy", &this->Hy, 0.0);
+  blockPars.addParameter("Hz", &this->Hz, 0.0);
+
+  blockPars.addParameter("width", &this->width, 10.0);
+  blockPars.addParameter("offset", &this->offset, 40.0);
+  blockPars.addParameter("eps", &this->eps, 1.0);
 }
 
 
@@ -254,27 +250,26 @@ void PlaneGaussSourceEFunc::setParam(Vector k_, Vector E_, Vector H_, double wid
   width = width_;
   offset = offset_;
   eps = eps_;
-  dt = Globals::instance().dt();
+  dt = MPulse::getDt();
   om = sqrt(k[0]*k[0] + k[1]*k[1] + k[2]*k[2])/sqrt(eps);
 
-  dx = Globals::instance().gridDX();
-  dy = Globals::instance().gridDY();
-  dz = Globals::instance().gridDZ();
+  dx = MPulse::getDx()[0];
+  dy = MPulse::getDx()[1];
+  dz = MPulse::getDx()[2];
 }
 
 
-Vector PlaneGaussSourceEFunc
-    ::getHField(int i, int j, int l, int time)
+Vector PlaneGaussSourceEFunc::getHField(int i, int j, int l, double time)
 {
-  double realtime = dt*(time-0.5);
+  double realtime = time-0.5*dt;
 
   double posx = k[0]*i*dx + k[1]*(j+0.5)*dy + k[2]*(l+0.5)*dz + om*realtime;
   double posy = k[0]*(i+0.5)*dx + k[1]*j*dy + k[2]*(l+0.5)*dz + om*realtime;
   double posz = k[0]*(i+0.5)*dx + k[1]*(j+0.5)*dy + k[2]*l*dz + om*realtime;
   
-  double ampx = H[0]*exp(-sqr( (posx-offset)/width ));
-  double ampy = H[1]*exp(-sqr( (posy-offset)/width ));
-  double ampz = H[2]*exp(-sqr( (posz-offset)/width ));
+  double ampx = H[0]*exp(-std::pow( (posx-offset)/width, 2) );
+  double ampy = H[1]*exp(-std::pow( (posy-offset)/width, 2));
+  double ampz = H[2]*exp(-std::pow( (posz-offset)/width, 2));
   
   double hx = ampx*sin(posx);
   double hy = ampy*sin(posy);
@@ -296,32 +291,31 @@ void PlaneGaussSourceHFunc::setParam(Vector k_, Vector E_, Vector H_, double wid
   width = width_;
   offset = offset_;
   eps = eps_;
-  dt = Globals::instance().dt();
+  dt = MPulse::getDt();
   om = sqrt(k[0]*k[0] + k[1]*k[1] + k[2]*k[2])/sqrt(eps);
 
-  dx = Globals::instance().gridDX();
-  dy = Globals::instance().gridDY();
-  dz = Globals::instance().gridDZ();
+  dx = MPulse::getDx()[0];
+  dy = MPulse::getDx()[1];
+  dz = MPulse::getDx()[2];
 }
 
 
-Vector PlaneGaussSourceHFunc
-    ::getEField(int i, int j, int l, int time)
+Vector PlaneGaussSourceHFunc::getEField(int i, int j, int l, double time)
 {
 //  double realtime = dt*time;
 //  double posx = k[0]*i*dx + k[1]*(j+0.5)*dy + k[2]*(l+0.5)*dz + om*realtime;
 //  double posy = k[0]*(i+0.5)*dx + k[1]*j*dy + k[2]*(l+0.5)*dz + om*realtime;
 //  double posz = k[0]*(i+0.5)*dx + k[1]*(j+0.5)*dy + k[2]*l*dz + om*realtime;
 
-  double realtime = dt*time;
+  double realtime = time;
 
   double posx = k[0]*(i+0.5)*dx + k[1]*j*dy + k[2]*l*dz + om*realtime;
   double posy = k[0]*i*dx + k[1]*(j+0.5)*dy + k[2]*l*dz + om*realtime;
   double posz = k[0]*i*dx + k[1]*j*dy + k[2]*(l+0.5)*dz + om*realtime;
   
-  double ampx = E[0]*exp(-sqr( (posx-offset)/width ));
-  double ampy = E[1]*exp(-sqr( (posy-offset)/width ));
-  double ampz = E[2]*exp(-sqr( (posz-offset)/width ));
+  double ampx = E[0]*exp(-std::pow( (posx-offset)/width, 2));
+  double ampy = E[1]*exp(-std::pow( (posy-offset)/width, 2));
+  double ampz = E[2]*exp(-std::pow( (posz-offset)/width, 2));
 
   double ex = ampx*sin(posx);
   double ey = ampy*sin(posy);
