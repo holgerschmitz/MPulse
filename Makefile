@@ -19,6 +19,7 @@ SOURCES = src/border.cpp \
   src/incsource.cpp \
   src/shortpulsefunctions.cpp \
   src/shortpulseinject.cpp \
+  src/sources.cpp \
   src/specfunc.cpp \
   src/mpulse.cpp
 
