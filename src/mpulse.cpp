@@ -12,6 +12,7 @@
 #include "cpml_border.hpp"
 #include "sources.hpp"
 #include "shortpulseinject.hpp"
+#include "plasmacurrent.hpp"
 
 #include <schnek/parser.hpp>
 #include <schnek/diagnostic/diagnostic.hpp>
@@ -158,13 +159,17 @@ int main (int argc, char** argv) {
     blocks("PlaneWaveSource").setClass<PlaneWaveSource>();
     blocks("PlaneGaussSource").setClass<PlaneGaussSource>();
 
+    blocks("PlasmaCurrent").setClass<PlasmaCurrentBlock>();
+
     blocks("mpulse").addChildren("FieldDiag")
         ("FDTD_Plain")("FDTD_PLRC")("FDTD_PLRC_Nonlinear");
 
     blocks("FDTD_PLRC").addChildren("CPMLBorder")
-        ("ShortPulseInject")("PlaneWaveSource")("PlaneGaussSource");
+        ("ShortPulseInject")("PlaneWaveSource")("PlaneGaussSource")
+        ("PlasmaCurrent");
     blocks("FDTD_PLRC_Nonlinear").addChildren("CPMLBorder")
-        ("ShortPulseInject")("PlaneWaveSource")("PlaneGaussSource");
+        ("ShortPulseInject")("PlaneWaveSource")("PlaneGaussSource")
+        ("PlasmaCurrent");
 
     std::ifstream in("mpulse.setup");
     if (!in) throw std::string("Could not open file 'mpulse.setup'");
