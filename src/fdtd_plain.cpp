@@ -8,6 +8,7 @@
 #include "fdtd_plain.hpp"
 
 #include <schnek/grid.hpp>
+#include <schnek/tools/literature.hpp>
 
 void FDTD_Plain::init()
 {
@@ -18,6 +19,14 @@ void FDTD_Plain::init()
   retrieveData("Bx", pBx);
   retrieveData("By", pBy);
   retrieveData("Bz", pBz);
+
+  schnek::LiteratureArticle Yee1966("Yee1966", "Yee, K",
+      "Numerical solution of initial boundary value problems involving Maxwell's equations in isotropic media.",
+      "IEEE Transactions on Antennas and Propagation", "1966", "AP-14", "302--307");
+
+  schnek::LiteratureManager::instance().addReference(
+      "Integration of electrodynamic fields uses the Finite Difference Time Domain method.",
+      Yee1966);
 }
 
 void FDTD_Plain::stepSchemeInit(double dt)

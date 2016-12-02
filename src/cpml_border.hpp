@@ -11,6 +11,7 @@ class CPMLBorder : public CurrentBlock
     void initCurrents(CurrentContainer &container);
   protected:
     void initParameters(schnek::BlockParameters &blockPars);
+    void init();
   private:
     
     void initCoefficients();
