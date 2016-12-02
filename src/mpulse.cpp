@@ -83,11 +83,11 @@ void MPulse::init()
   dx = size / gridSize;
   dt = cflFactor*std::min(dx[0],std::min(dx[1],dx[2]))/clight;
 
-  Index low  = subdivision.getLo();
-  Index high = subdivision.getHi();
+  IndexType low  = subdivision.getLo();
+  IndexType high = subdivision.getHi();
 
-  Index lowIn  = subdivision.getInnerLo();
-  Index highIn = subdivision.getInnerHi();
+  IndexType lowIn  = subdivision.getInnerLo();
+  IndexType highIn = subdivision.getInnerHi();
 
   innerRange = Range(lowIn, highIn);
   schnek::Range<double, DIMENSION> domainSize(schnek::Array<double, DIMENSION>(lowIn[0],lowIn[1]), schnek::Array<double, DIMENSION>(highIn[0],highIn[1]));

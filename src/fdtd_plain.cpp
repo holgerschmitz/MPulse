@@ -41,8 +41,8 @@ void FDTD_Plain::stepD(double dt)
   Field &By = *pBy;
   Field &Bz = *pBz;
   
-  Index low = Ex.getInnerLo();
-  Index high = Ex.getInnerHi();
+  IndexType low = Ex.getInnerLo();
+  IndexType high = Ex.getInnerHi();
 
   Vector dx = MPulse::getDx();
 
@@ -50,23 +50,9 @@ void FDTD_Plain::stepD(double dt)
     for (int j=low[1]+1; j<=high[1]; ++j)
       for (int k=low[2]+1; k<=high[2]; ++k)
   {
-    Ex(i,j,k) = Ex(i,j,k) 
-      + dt*clight2*(
-          (Bz(i,j,k) - Bz(i,j-1,k))/dx[1]
-        - (By(i,j,k) - By(i,j,k-1))/dx[2]
-      );
-      
-    Ey(i,j,k) = Ey(i,j,k) 
-      + dt*clight2*(
-          (Bx(i,j,k) - Bx(i,j,k-1))/dx[2]
-        - (Bz(i,j,k) - Bz(i-1,j,k))/dx[0]
-      );
- 
-    Ez(i,j,k) = Ez(i,j,k) 
-      + dt*clight2*(
-          (By(i,j,k) - By(i-1,j,k))/dx[0]
-        - (Bx(i,j,k) - Bx(i,j-1,k))/dx[1]
-      );
+    Ex(i,j,k) = Ex(i,j,k) + dt*clight2*( (Bz(i,j,k) - Bz(i,j-1,k))/dx[1] - (By(i,j,k) - By(i,j,k-1))/dx[2] );
+    Ey(i,j,k) = Ey(i,j,k) + dt*clight2*( (Bx(i,j,k) - Bx(i,j,k-1))/dx[2] - (Bz(i,j,k) - Bz(i-1,j,k))/dx[0] );
+    Ez(i,j,k) = Ez(i,j,k) + dt*clight2*( (By(i,j,k) - By(i-1,j,k))/dx[0] - (Bx(i,j,k) - Bx(i,j-1,k))/dx[1] );
   }
 
   schnek::DomainSubdivision<Field> &sub = MPulse::getSubdivision();
@@ -87,8 +73,8 @@ void FDTD_Plain::stepB(double dt)
   Field &By = *pBy;
   Field &Bz = *pBz;
 
-  Index low = storage->getLow();
-  Index high = storage->getHigh();
+  IndexType low = storage->getLow();
+  IndexType high = storage->getHigh();
 
   Vector dx = storage->getDx();
 

@@ -18,7 +18,7 @@
 
 static const size_t DIMENSION = 3;
 
-typedef schnek::Array<int, DIMENSION> Index;
+typedef schnek::Array<int, DIMENSION> IndexType;
 typedef schnek::Array<double, DIMENSION> Vector;
 typedef schnek::Field<double, DIMENSION> Field;
 typedef boost::shared_ptr<Field> pField;
@@ -40,8 +40,8 @@ class MPulse : public schnek::Block, schnek::BlockContainer<FieldSolver>
 {
   private:
     static MPulse *instance;
-    Index globalMax;
-    Index gridSize;
+    IndexType globalMax;
+    IndexType gridSize;
     Vector size;
     Vector dx;
 
@@ -73,7 +73,7 @@ class MPulse : public schnek::Block, schnek::BlockContainer<FieldSolver>
     void init();
     void execute();
 
-    static Index getGlobalMax() { return instance->globalMax; }
+    static IndexType getGlobalMax() { return instance->globalMax; }
     static Vector getDx() { return instance->dx; }
     static schnek::DomainSubdivision<Field> &getSubdivision() { return instance->subdivision; };
 };
