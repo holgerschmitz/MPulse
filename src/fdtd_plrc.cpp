@@ -1,6 +1,8 @@
 
 #include "fdtd_plrc.hpp"
 
+#include <schnek/tools/literature.hpp>
+
 #include <boost/make_shared.hpp>
 
 #include <cmath>
@@ -88,10 +90,19 @@ void FDTD_PLRCCore::init()
   retrieveData("Bz", pBz);
 
   
-  BOOST_FOREACH(CurrentBlock *current, schnek::BlockContainer<CurrentBlock>::childBlocks())
+  BOOST_FOREACH(pCurrentBlock current, schnek::BlockContainer<CurrentBlock>::childBlocks())
   {
     current->initCurrents(*this);
   }
+
+  schnek::LiteratureArticle Kelley1996("Kelley1996", "D. F. Kelley and R. J. Luebbers",
+      "Piecewise linear recursive convolution for dispersive media using FDTD",
+      "IEEE Transactions on Antennas and Propagation", "1996", "44", "792--797");
+
+  schnek::LiteratureManager::instance().addReference(
+      "Piecewise Linear Recursive Convolution for dispersive media",
+      Kelley1996);
+
 }
 
 //===============================================================

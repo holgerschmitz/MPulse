@@ -4,6 +4,8 @@
 #include "border.hpp"
 #include "fieldsolver.hpp"
 
+#include <schnek/tools/literature.hpp>
+
 #include <boost/make_shared.hpp>
 
 #include <vector>
@@ -12,6 +14,15 @@
 //==========  CPMLBorder
 //===============================================================
 
+void CPMLBorder::init()
+{
+  schnek::LiteratureArticle Roden2000("Roden2000", "Roden, J. A. and Gedney, S. D.",
+      "An efficient fdtd implementation of the cfs-pml for arbitrary media",
+      "Microwave and Optical Technology Letters", "2000", "27", "334--339");
+
+  schnek::LiteratureManager::instance().addReference(
+      "Implementation of the Convolution Perfectly Matched Layer (CPML) boundary condition", Roden2000);
+}
 
 void CPMLBorder::initCurrents(CurrentContainer &container)
 { 

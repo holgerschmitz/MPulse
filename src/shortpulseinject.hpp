@@ -17,6 +17,7 @@ class ShortPulseInject : public IncidentSource
     bool needCurrent(Direction dir_);
     
     void initParameters(schnek::BlockParameters &blockPars);
+    void init();
   private:
     double lightspeed;
 

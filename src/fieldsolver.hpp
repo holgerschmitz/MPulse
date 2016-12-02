@@ -20,4 +20,6 @@ class FieldSolver : public schnek::ChildBlock<FieldSolver>
     virtual void stepScheme(double dt) = 0;    
 };
 
+typedef boost::shared_ptr<FieldSolver> pFieldSolver;
+
 #endif

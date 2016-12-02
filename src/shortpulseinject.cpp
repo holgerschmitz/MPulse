@@ -1,11 +1,25 @@
 #include "shortpulseinject.hpp"
 #include "specfunc.hpp"
 
+#include <schnek/tools/literature.hpp>
+
 #include <cmath>
 
 //===============================================================
 //==========  ShortPulseInject
 //===============================================================
+
+void ShortPulseInject::init()
+{
+
+  schnek::LiteratureArticle anderBrugge2009("anderBrugge2009", "D. an der Br{\\\"a}ugge and A. Pukhov",
+      "Ultrashort focused electromagnetic pulses.",
+      "Physical Review E", "2009", "E 79", "016603");
+
+  schnek::LiteratureManager::instance().addReference(
+      "Source conditions for ultrashort focused EM pulses",
+      anderBrugge2009);
+}
 
 pCurrent ShortPulseInject::makeECurrent(int distance_, Direction dir_)
 {

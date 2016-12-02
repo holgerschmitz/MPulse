@@ -115,7 +115,7 @@ void MPulse::init()
 
 void MPulse::execute()
 {
-  BOOST_FOREACH(FieldSolver *f, schnek::BlockContainer<FieldSolver>::childBlocks())
+  BOOST_FOREACH(pFieldSolver f, schnek::BlockContainer<FieldSolver>::childBlocks())
   {
     f->stepSchemeInit(dt);
   }
@@ -130,7 +130,7 @@ void MPulse::execute()
     if (subdivision.master())
       schnek::Logger::instance().out() <<"Time "<< time << std::endl;
 
-      BOOST_FOREACH(FieldSolver *f, schnek::BlockContainer<FieldSolver>::childBlocks())
+      BOOST_FOREACH(pFieldSolver f, schnek::BlockContainer<FieldSolver>::childBlocks())
       {
         f->stepScheme(dt);
       }
