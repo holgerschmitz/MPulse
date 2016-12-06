@@ -51,8 +51,8 @@ class MPulse : public schnek::Block, schnek::BlockContainer<FieldSolver>
 
     double tMax;
     Range innerRange;
-    pField Ex, Ey, Ez;
-    pField Bx, By, Bz;
+    Field *Ex, *Ey, *Ez;
+    Field *Bx, *By, *Bz;
 
     schnek::MPICartSubdivision<Field> subdivision;
 

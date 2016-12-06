@@ -17,12 +17,8 @@ class Storage;
 class FDTD_Plain : public FieldSolver
 {
   private:
-    pField pEx;
-    pField pEy;
-    pField pEz;
-    pField pBx;
-    pField pBy;
-    pField pBz;
+    Field Ex, Ey, Ez;
+    Field Bx, By, Bz;
   public:
     void init();
   
