@@ -9,23 +9,20 @@
 #define MPULSE_MPULSE_H
 
 #include <schnek/grid.hpp>
+#include <schnek/variables/block.hpp>
+#include <schnek/variables/blockcontainer.hpp>
 
-#ifdef NDEBUG
-#define MPulseGridChecker schnek::GridNoArgCheck
-#else
-#define MPulseGridChecker schnek::GridAssertCheck
-#endif
+#define GridChecker schnek::GridAssertCheck
+#define ArrayChecker schnek::ArrayAssertArgCheck
 
-static const size_t DIMENSION = 3;
-
-typedef schnek::Array<int, DIMENSION> IndexType;
-typedef schnek::Array<double, DIMENSION> Vector;
-typedef schnek::Field<double, DIMENSION> Field;
+typedef schnek::Array<int, 3, ArrayChecker> IndexType;
+typedef schnek::Array<double, 3, ArrayChecker> Vector;
+typedef schnek::Field<double, 3, GridChecker> Field;
 typedef boost::shared_ptr<Field> pField;
-typedef schnek::Range<int, DIMENSION> Range;
-typedef schnek::Array<bool, DIMENSION> Stagger;
+typedef schnek::Range<int, 3, ArrayChecker> Range;
+typedef schnek::Array<bool, 3, ArrayChecker> Stagger;
 
-static const double clight = 299792458;
+static const double clight = 299792458.0;
 static const double clight2 = clight*clight;
 
 static const Stagger exStaggerYee(true,  false, false);
@@ -36,10 +33,11 @@ static const Stagger bxStaggerYee(false, true,  true );
 static const Stagger byStaggerYee(true,  false, true );
 static const Stagger bzStaggerYee(true,  true,  false);
 
-class MPulse : public schnek::Block, schnek::BlockContainer<FieldSolver>
-{
+class FDTDSolver;
+
+class Simulation : public schnek::Block, public schnek::BlockContainer<FDTDSolver> {
   private:
-    static MPulse *instance;
+    static Simulation *instance;
     IndexType globalMax;
     IndexType gridSize;
     Vector size;
@@ -48,28 +46,28 @@ class MPulse : public schnek::Block, schnek::BlockContainer<FieldSolver>
     double cflFactor;
     double dt;
 
-
     double tMax;
-    Range innerRange;
-    Field *Ex, *Ey, *Ez;
-    Field *Bx, *By, *Bz;
 
     schnek::MPICartSubdivision<Field> subdivision;
 
     Vector x;
-    schnek::Array<schnek::pParameter, DIMENSION> x_parameters;
-    schnek::Array<schnek::pParameter, DIMENSION> E_parameters;
-    schnek::Array<schnek::pParameter, DIMENSION> B_parameters;
+    schnek::Array<schnek::pParameter, 3> x_parameters;
+    schnek::Array<schnek::pParameter, 3> E_parameters;
+    schnek::Array<schnek::pParameter, 3> B_parameters;
     schnek::pParametersGroup spaceVars;
 
     Vector initE;
     Vector initB;
+
+    Range innerRange;
+    pField Ex, Ey, Ez;
+    pField Bx, By, Bz;
+    void fillValues();
   protected:
     void initParameters(schnek::BlockParameters &blockPars);
     void registerData();
-    void fillValues();
   public:
-    MPulse();
+    Simulation();
     void init();
     void execute();
 

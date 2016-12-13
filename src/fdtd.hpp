@@ -6,29 +6,28 @@
  */
 
 
-#ifndef MPULSE_FDTD_PLAIN_H
-#define MPULSE_FDTD_PLAIN_H
+#ifndef MPULSE_FDTD_H
+#define MPULSE_FDTD_H
 
-#include "fieldsolver.hpp"
 #include "mpulse.hpp"
 
-class Storage;
-
-class FDTD_Plain : public FieldSolver
+class FDTDSolver : public schnek::ChildBlock<FDTDSolver>
 {
   private:
-    Field Ex, Ey, Ez;
-    Field Bx, By, Bz;
-  public:
+    pField pEx, pEy, pEz;
+    pField pBx, pBy, pBz;
+  protected:
+    void registerData();
     void init();
-  
-    void stepSchemeInit(double dt);
+
+  public:
     void stepScheme(double dt);
     
   private:
-    void stepD(double dt);
+    void stepE(double dt);
     void stepB(double dt);
-    
 };
+
+typedef boost::shared_ptr<FDTDSolver> pFDTDSolver;
 
 #endif
