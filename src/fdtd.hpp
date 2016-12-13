@@ -1,33 +1,30 @@
 /*
- * fdtd_plain.hpp
+ * fdtd.hpp
  *
- *  Created on: 5 Feb 2008
+ *  Created on: 5 Oct 2016
  *      Author: Holger Schmitz
  */
 
-
-#ifndef MPULSE_FDTD_H
-#define MPULSE_FDTD_H
+#ifndef FDTD_HPP_
+#define FDTD_HPP_
 
 #include "mpulse.hpp"
 
-class FDTDSolver : public schnek::ChildBlock<FDTDSolver>
-{
+class FieldSolver : public schnek::ChildBlock<FieldSolver> {
   private:
-    pField pEx, pEy, pEz;
-    pField pBx, pBy, pBz;
+    Field Ex, Ey, Ez;
+    Field Bx, By, Bz;
+
+    void stepD(double dt);
+    void stepB(double dt);
   protected:
     void registerData();
-    void init();
-
   public:
+    void stepSchemeInit(double dt);
     void stepScheme(double dt);
-    
-  private:
-    void stepE(double dt);
-    void stepB(double dt);
+
 };
 
-typedef boost::shared_ptr<FDTDSolver> pFDTDSolver;
+typedef boost::shared_ptr<FieldSolver> pFieldSolver;
 
-#endif
+#endif // FDTD_HPP_

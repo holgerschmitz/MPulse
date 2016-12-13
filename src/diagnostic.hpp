@@ -5,22 +5,19 @@
  *      Author: Holger Schmitz
  */
 
-#ifndef MPULSE_DIAGNOSTIC_HPP_
-#define MPULSE_DIAGNOSTIC_HPP_
+#ifndef DIAGNOSTIC_HPP_
+#define DIAGNOSTIC_HPP_
 
 #include "mpulse.hpp"
 
 #include <schnek/diagnostic/diagnostic.hpp>
 #include <schnek/diagnostic/hdfdiagnostic.hpp>
 
-class FieldDiagnostic : public schnek::HDFGridDiagnostic<Field, pField, schnek::DeltaTimeDiagnostic>
-{
+class FieldDiagnostic : public schnek::HDFGridDiagnostic<Field, Field*, schnek::DeltaTimeDiagnostic> {
   protected:
-    typedef HDFGridDiagnostic<Field, pField, schnek::DeltaTimeDiagnostic >::IndexType IndexType;
+    typedef schnek::HDFGridDiagnostic<Field, Field*, schnek::DeltaTimeDiagnostic>::IndexType IndexType;
     IndexType getGlobalMin() { return IndexType(0); }
     IndexType getGlobalMax() { return Simulation::getGlobalMax(); }
 };
 
-
-
-#endif /* SRC_DIAGNOSTIC_HPP_ */
+#endif /* DIAGNOSTIC_HPP_ */
