@@ -13,11 +13,10 @@
 #include <schnek/diagnostic/diagnostic.hpp>
 #include <schnek/diagnostic/hdfdiagnostic.hpp>
 
-class FieldDiagnostic : public schnek::HDFGridDiagnostic<Field, Field*, schnek::DeltaTimeDiagnostic> {
+class FieldDiagnostic : public HDFGridDiagnostic<Field<double, 3>, Field<double, 3>*, DeltaTimeDiagnostic> {
   protected:
-    typedef schnek::HDFGridDiagnostic<Field, Field*, schnek::DeltaTimeDiagnostic>::IndexType IndexType;
     IndexType getGlobalMin() { return IndexType(0); }
-    IndexType getGlobalMax() { return Simulation::getGlobalMax(); }
+    IndexType getGlobalMax() { return globalMax; }
 };
 
 #endif /* DIAGNOSTIC_HPP_ */

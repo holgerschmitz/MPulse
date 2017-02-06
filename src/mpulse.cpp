@@ -22,44 +22,45 @@
 #include <string>
 #include <unistd.h>
 
-Simulation *Simulation::instance = 0;
+IndexType globalMax;
+MPICartSubdivision<Field<double, 3> > *subdivision;
+Array<double, 3> dx;
 
-Simulation::Simulation() {
-  instance = this;
-}
-
-void Simulation::initParameters(schnek::BlockParameters &parameters) {
+void SimulationBlock::initParameters(BlockParameters &parameters) {
   parameters.addArrayParameter("N", gridSize, 100);
   parameters.addArrayParameter("L", size);
   parameters.addParameter("tMax", &tMax);
   parameters.addParameter("cflFactor", &cflFactor, 0.5);
 
-  x_par = parameters.addArrayParameter("", x, schnek::BlockParameters::readonly);
-  E_par = parameters.addArrayParameter("E", initE, 0.0);
-  B_par = parameters.addArrayParameter("B", initB, 0.0);
-
-  spaceVars = schnek::pParametersGroup(new schnek::ParametersGroup());
-  spaceVars->addArray(x_par);
-
   parameters.addConstant("pi", PI);
   parameters.addConstant("clight", clight);
   parameters.addConstant("mu0", mu_0);
   parameters.addConstant("eps0", eps_0);
+
 }
 
-void Simulation::init() {
+void SimulationBlock::preInit() {
   globalMax = gridSize-1;
   for (int i=0; i<3; ++i) dx[i] = size[i] / gridSize[i];
 
-  subdivision.init(gridSize, 2);
+  subdivision.init(gridSize, ghostCells);
+  ::subdivision = &subdivision;
 
-  IndexType lowIn  = subdivision.getInnerLo();
-  IndexType highIn = subdivision.getInnerHi();
+  Array<int, 3> lo  = subdivision.getInnerLo();
+  Array<int, 3> hi = subdivision.getInnerHi();
 
-  schnek::Range<double, 3> domainSize = subdivision.getInnerExtent(size);
+  Range<double, 3> physRange = subdivision.getInnerExtent(size);
 
-  Field *Ex, *Ey, *Ez;
-  Field *Bx, *By, *Bz;
+  Field<double, 3> *Ex, *Ey, *Ez;
+  Field<double, 3> *Bx, *By, *Bz;
+
+  Array<bool, 3> exStaggerYee(true,  false, false);
+  Array<bool, 3> eyStaggerYee(false, true,  false);
+  Array<bool, 3> ezStaggerYee(false, false, true);
+
+  Array<bool, 3> bxStaggerYee(false, true,  true);
+  Array<bool, 3> byStaggerYee(true,  false, true);
+  Array<bool, 3> bzStaggerYee(true,  true,  false);
 
   retrieveData("Ex", Ex);
   retrieveData("Ey", Ey);
@@ -69,57 +70,40 @@ void Simulation::init() {
   retrieveData("By", By);
   retrieveData("Bz", Bz);
 
-  Ex->resize(lowIn, highIn, domainSize, exStaggerYee, 2);
-  Ey->resize(lowIn, highIn, domainSize, eyStaggerYee, 2);
-  Ez->resize(lowIn, highIn, domainSize, ezStaggerYee, 2);
+  Ex->resize(lo, hi, physRange, exStaggerYee, ghostCells);
+  Ey->resize(lo, hi, physRange, eyStaggerYee, ghostCells);
+  Ez->resize(lo, hi, physRange, ezStaggerYee, ghostCells);
 
-  Bx->resize(lowIn, highIn, domainSize, bxStaggerYee, 2);
-  By->resize(lowIn, highIn, domainSize, byStaggerYee, 2);
-  Bz->resize(lowIn, highIn, domainSize, bzStaggerYee, 2);
+  Bx->resize(lo, hi, physRange, bxStaggerYee, ghostCells);
+  By->resize(lo, hi, physRange, byStaggerYee, ghostCells);
+  Bz->resize(lo, hi, physRange, bzStaggerYee, ghostCells);
 
-  schnek::pBlockVariables blockVars = getVariables();
-  schnek::pDependencyMap depMap(new schnek::DependencyMap(blockVars));
-  schnek::DependencyUpdater updater(depMap);
-
-  updater.addIndependentArray(x_par);
-
-  schnek::fill_field(*Ex, x, initE[0], updater, E_par[0]);
-  schnek::fill_field(*Ey, x, initE[1], updater, E_par[1]);
-  schnek::fill_field(*Ez, x, initE[2], updater, E_par[2]);
-
-  schnek::fill_field(*Bx, x, initB[0], updater, B_par[0]);
-  schnek::fill_field(*By, x, initB[1], updater, B_par[1]);
-  schnek::fill_field(*Bz, x, initB[2], updater, B_par[2]);
 }
 
-void Simulation::execute() {
+void SimulationBlock::execute() {
   time = 0.0;
 
-  schnek::DiagnosticManager::instance().setPhysicalTime(&time);
-  schnek::DiagnosticManager::instance().execute();
+  DiagnosticManager::instance().setPhysicalTime(&time);
+  DiagnosticManager::instance().execute();
 
-  double minDx = std::min(dx[0], dx[1]);
-  double dtBase = cflFactor*minDx/clight;
+  double minDx = std::min(std::min(dx[0], dx[1]), dx[2]);
+  dt = cflFactor*minDx/clight;
 
-  dt = schnek::DiagnosticManager::instance().adjustDeltaT(dtBase);
-  BOOST_FOREACH(pFieldSolver f, schnek::BlockContainer<FieldSolver>::childBlocks()) {
+  BOOST_FOREACH(boost::shared_ptr<FieldSolver> f, childBlocks()) {
     f->stepSchemeInit(dt);
   }
 
   while (time<=tMax) {
-    dt = schnek::DiagnosticManager::instance().adjustDeltaT(dtBase);
-
     if (subdivision.master())
-      schnek::Logger::instance().out() <<"Time "<< time << std::endl;
+      std::cout <<"Time "<< time << std::endl;
 
-    BOOST_FOREACH(pFieldSolver f, schnek::BlockContainer<FieldSolver>::childBlocks()) {
+    BOOST_FOREACH(boost::shared_ptr<FieldSolver> f, childBlocks()) {
       f->stepScheme(dt);
     }
 
     time += dt;
-    schnek::DiagnosticManager::instance().execute();
+    DiagnosticManager::instance().execute();
   }
-
 }
 
 int main (int argc, char** argv) {
@@ -127,51 +111,51 @@ int main (int argc, char** argv) {
   MPI_Init(&argc, &argv);
 
   try {
-    schnek::BlockClasses blocks;
+    BlockClasses blocks;
 
-    blocks.registerBlock("simulation").setClass<Simulation>();
-    blocks("FieldDiag").setClass<FieldDiagnostic>();
+    blocks("simulation").setClass<SimulationBlock>();
+    blocks("Diagnostic").setClass<FieldDiagnostic>();
     blocks("FDTD").setClass<FieldSolver>();
 
-    blocks("simulation").addChildren("FieldDiag")("FDTD");
+    blocks("simulation").addChildren("Diagnostic")("FDTD");
 
     std::ifstream in("simulation.setup");
     if (!in) throw std::string("Could not open file 'simulation.setup'");
 
-    schnek::Parser P("simulation", "simulation", blocks);
+    Parser P("simulation", "simulation", blocks);
     registerCMath(P.getFunctionRegistry());
 
-    schnek::pBlock application = P.parse(in);
+    pBlock application = P.parse(in);
 
-    Simulation &simulation = dynamic_cast<Simulation&>(*application);
+    SimulationBlock &simulation = dynamic_cast<SimulationBlock&>(*application);
     simulation.initAll();
 
-    if (simulation.getSubdivision().master()) {
+    if (subdivision->master()) {
       std::ofstream referencesText("information.tex");
       std::ofstream referencesBib("references.bib");
 
-      schnek::LiteratureManager::instance().writeInformation(referencesText,"references.bib");
-      schnek::LiteratureManager::instance().writeBibTex(referencesBib);
+      LiteratureManager::instance().writeInformation(referencesText,"references.bib");
+      LiteratureManager::instance().writeBibTex(referencesBib);
       referencesText.close();
       referencesBib.close();
     }
 
     simulation.execute();
   }
-  catch (schnek::ParserError &e) {
+  catch (ParserError &e) {
     std::cerr << "Parse error in " << e.getFilename() << " at line "
         << e.getLine() << ": " << e.message << std::endl;
     return -1;
   }
-  catch (schnek::VariableNotInitialisedException &e) {
+  catch (VariableNotInitialisedException &e) {
     std::cerr << "Variable was not initialised: " << e.getVarName() << std::endl;
     return -1;
   }
-  catch (schnek::EvaluationException &e) {
+  catch (EvaluationException &e) {
     std::cerr << "Error in evaluation: " << e.getMessage() << std::endl;
     return -1;
   }
-  catch (schnek::VariableNotFoundException &e) {
+  catch (VariableNotFoundException &e) {
     std::cerr << "Error: " << e.getMessage() << std::endl;
     return -1;
   }

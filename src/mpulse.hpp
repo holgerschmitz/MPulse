@@ -8,7 +8,6 @@
 #ifndef MPULSE_HPP_
 #define MPULSE_HPP_
 
-
 #include <schnek/grid.hpp>
 #include <schnek/variables.hpp>
 #include <schnek/diagnostic/diagnostic.hpp>
@@ -18,24 +17,7 @@
 
 #include <set>
 
-#define GridChecker schnek::GridAssertCheck
-
-typedef schnek::Array<int, 3> IndexType;
-typedef schnek::Array<double, 3> Vector;
-
-typedef schnek::Field<double, 3, GridChecker> Field;
-typedef boost::shared_ptr<Field> pField;
-
-typedef schnek::Range<int, 3> Range;
-typedef schnek::Array<bool, 3> Stagger;
-
-static const Stagger exStaggerYee(true,  false, false);
-static const Stagger eyStaggerYee(false, true,  false);
-static const Stagger ezStaggerYee(false, false, true);
-
-static const Stagger bxStaggerYee(false, true,  true);
-static const Stagger byStaggerYee(true,  false, true);
-static const Stagger bzStaggerYee(true,  true,  false);
+using namespace schnek;
 
 static const double PI     = 3.141592653589793238462643383279502884L;
 static const double clight = 299792458;
@@ -43,39 +25,31 @@ static const double clight2 = clight*clight;
 static const double mu_0 = 4e-7*PI;
 static const double eps_0 = 1/(mu_0*clight2);
 
+static const int ghostCells = 2;
+
+typedef Array<int, 3> IndexType;
+
+extern Array<int, 3> globalMax;
+extern MPICartSubdivision<Field<double, 3> > *subdivision;
+extern Array<double, 3> dx;
 
 class FieldSolver;
 
-class Simulation : public schnek::Block, public schnek::BlockContainer<FieldSolver> {
+class SimulationBlock : public Block, public BlockContainer<FieldSolver> {
   private:
-    static Simulation *instance;
-    IndexType globalMax;
+    MPICartSubdivision<Field<double, 3> > subdivision;
     IndexType gridSize;
-    Vector size;
-    Vector dx;
+    Array<double, 3> size;
 
     double cflFactor;
     double dt;
     double tMax;
-
-    schnek::MPICartSubdivision<Field> subdivision;
-
-    Vector x;
-    schnek::Array<schnek::pParameter, 3> x_par, E_par, B_par;
-    schnek::pParametersGroup spaceVars;
-    schnek::Array<double, 3> initE, initB;
-
     double time;
   protected:
-    void initParameters(schnek::BlockParameters &blockPars);
+    void initParameters(BlockParameters &parameters);
   public:
-    Simulation();
-    void init();
+    void preInit();
     void execute();
-
-    static IndexType getGlobalMax() { return instance->globalMax; }
-    static Vector getDx() { return instance->dx; }
-    static schnek::DomainSubdivision<Field> &getSubdivision() { return instance->subdivision; };
 };
 
 #endif /* MPULSE_HPP_ */
