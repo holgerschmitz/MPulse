@@ -12,12 +12,13 @@
 
 class FieldSolver : public ChildBlock<FieldSolver> {
   private:
-    Field<double, 3> Ex, Ey, Ez;
-    Field<double, 3> Bx, By, Bz;
+    Field<double, 2> Ex, Ey, Ez;
+    Field<double, 2> Bx, By, Bz;
     double eps_rel;
 
-    Array<double, 3> x;
-    Array<pParameter, 3> x_par, E_par, B_par;
+    Array<double, 2> x;
+    Array<pParameter, 2> x_par;
+    Array<pParameter, 3>  E_par, B_par;
     Array<double, 3> initE, initB;
 
     void stepD(double dt);

@@ -23,8 +23,8 @@
 #include <unistd.h>
 
 IndexType globalMax;
-MPICartSubdivision<Field<double, 3> > *subdivision;
-Array<double, 3> dx;
+MPICartSubdivision<Field<double, 2> > *subdivision;
+Array<double, 2> dx;
 
 void SimulationBlock::initParameters(BlockParameters &parameters) {
   parameters.addArrayParameter("N", gridSize, 100);
@@ -41,26 +41,26 @@ void SimulationBlock::initParameters(BlockParameters &parameters) {
 
 void SimulationBlock::preInit() {
   globalMax = gridSize-1;
-  for (int i=0; i<3; ++i) dx[i] = size[i] / gridSize[i];
+  for (int i=0; i<2; ++i) dx[i] = size[i] / gridSize[i];
 
   subdivision.init(gridSize, ghostCells);
   ::subdivision = &subdivision;
 
-  Array<int, 3> lo  = subdivision.getInnerLo();
-  Array<int, 3> hi = subdivision.getInnerHi();
+  Array<int, 2> lo  = subdivision.getInnerLo();
+  Array<int, 2> hi = subdivision.getInnerHi();
 
-  Range<double, 3> physRange = subdivision.getInnerExtent(size);
+  Range<double, 2> physRange = subdivision.getInnerExtent(size);
 
-  Field<double, 3> *Ex, *Ey, *Ez;
-  Field<double, 3> *Bx, *By, *Bz;
+  Field<double, 2> *Ex, *Ey, *Ez;
+  Field<double, 2> *Bx, *By, *Bz;
 
-  Array<bool, 3> exStaggerYee(true,  false, false);
-  Array<bool, 3> eyStaggerYee(false, true,  false);
-  Array<bool, 3> ezStaggerYee(false, false, true);
+  Array<bool, 2> exStaggerYee(true,  false);
+  Array<bool, 2> eyStaggerYee(false, true);
+  Array<bool, 2> ezStaggerYee(false, false);
 
-  Array<bool, 3> bxStaggerYee(false, true,  true);
-  Array<bool, 3> byStaggerYee(true,  false, true);
-  Array<bool, 3> bzStaggerYee(true,  true,  false);
+  Array<bool, 2> bxStaggerYee(false, true);
+  Array<bool, 2> byStaggerYee(true,  false);
+  Array<bool, 2> bzStaggerYee(true,  true);
 
   retrieveData("Ex", Ex);
   retrieveData("Ey", Ey);
@@ -86,7 +86,7 @@ void SimulationBlock::execute() {
   DiagnosticManager::instance().setPhysicalTime(&time);
   DiagnosticManager::instance().execute();
 
-  double minDx = std::min(std::min(dx[0], dx[1]), dx[2]);
+  double minDx = std::min(dx[0], dx[1]);
   dt = cflFactor*minDx/clight;
 
   BOOST_FOREACH(boost::shared_ptr<FieldSolver> f, childBlocks()) {
