@@ -23,8 +23,8 @@
 #include <unistd.h>
 
 IndexType globalMax;
-MPICartSubdivision<Field<double, 2> > *subdivision;
-Array<double, 2> dx;
+MPICartSubdivision<Field<double, 1> > *subdivision;
+Array<double, 1> dx;
 
 void SimulationBlock::initParameters(BlockParameters &parameters) {
   parameters.addArrayParameter("N", gridSize, 100);
@@ -46,21 +46,21 @@ void SimulationBlock::preInit() {
   subdivision.init(gridSize, ghostCells);
   ::subdivision = &subdivision;
 
-  Array<int, 2> lo  = subdivision.getInnerLo();
-  Array<int, 2> hi = subdivision.getInnerHi();
+  Array<int, 1> lo  = subdivision.getInnerLo();
+  Array<int, 1> hi = subdivision.getInnerHi();
 
-  Range<double, 2> physRange = subdivision.getInnerExtent(size);
+  Range<double, 1> physRange = subdivision.getInnerExtent(size);
 
-  Field<double, 2> *Ex, *Ey, *Ez;
-  Field<double, 2> *Bx, *By, *Bz;
+  Field<double, 1> *Ex, *Ey, *Ez;
+  Field<double, 1> *Bx, *By, *Bz;
 
-  Array<bool, 2> exStaggerYee(true,  false);
-  Array<bool, 2> eyStaggerYee(false, true);
-  Array<bool, 2> ezStaggerYee(false, false);
+  Array<bool, 1> exStaggerYee(true);
+  Array<bool, 1> eyStaggerYee(false);
+  Array<bool, 1> ezStaggerYee(false);
 
-  Array<bool, 2> bxStaggerYee(false, true);
-  Array<bool, 2> byStaggerYee(true,  false);
-  Array<bool, 2> bzStaggerYee(true,  true);
+  Array<bool, 1> bxStaggerYee(false);
+  Array<bool, 1> byStaggerYee(true);
+  Array<bool, 1> bzStaggerYee(true);
 
   retrieveData("Ex", Ex);
   retrieveData("Ey", Ey);
@@ -86,7 +86,7 @@ void SimulationBlock::execute() {
   DiagnosticManager::instance().setPhysicalTime(&time);
   DiagnosticManager::instance().execute();
 
-  double minDx = std::min(dx[0], dx[1]);
+  double minDx = dx[0];
   dt = cflFactor*minDx/clight;
 
   BOOST_FOREACH(boost::shared_ptr<FieldSolver> f, childBlocks()) {

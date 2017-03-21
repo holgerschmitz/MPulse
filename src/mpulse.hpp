@@ -25,21 +25,21 @@ static const double clight2 = clight*clight;
 static const double mu_0 = 4e-7*PI;
 static const double eps_0 = 1/(mu_0*clight2);
 
-static const int ghostCells = 2;
+static const int ghostCells = 1;
 
-typedef Array<int, 2> IndexType;
+typedef Array<int, 1> IndexType;
 
-extern Array<int, 2> globalMax;
-extern MPICartSubdivision<Field<double, 2> > *subdivision;
-extern Array<double, 2> dx;
+extern Array<int, 1> globalMax;
+extern MPICartSubdivision<Field<double, 1> > *subdivision;
+extern Array<double, 1> dx;
 
 class FieldSolver;
 
 class SimulationBlock : public Block, public BlockContainer<FieldSolver> {
   private:
-    MPICartSubdivision<Field<double, 2> > subdivision;
+    MPICartSubdivision<Field<double, 1> > subdivision;
     IndexType gridSize;
-    Array<double, 2> size;
+    Array<double, 1> size;
 
     double cflFactor;
     double dt;

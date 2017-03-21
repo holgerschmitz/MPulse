@@ -77,12 +77,10 @@ void FieldSolver::stepD(double dt) {
   IndexType low = Ex.getInnerLo();
   IndexType high = Ex.getInnerHi();
 
-  for (int i=low[0]; i<=high[0]; ++i)
-    for (int j=low[1]; j<=high[1]; ++j) {
-      Ex(i,j) += dt*clight2/eps_rel*(   (Bz(i,j) - Bz(i,j-1))/dx[1] );
-      Ey(i,j) += dt*clight2/eps_rel*( - (Bz(i,j) - Bz(i-1,j))/dx[0] );
-      Ez(i,j) += dt*clight2/eps_rel*(   (By(i,j) - By(i-1,j))/dx[0] - (Bx(i,j) - Bx(i,j-1))/dx[1] );
-    }
+  for (int i=low[0]; i<=high[0]; ++i) {
+    Ey(i) += dt*clight2/eps_rel*( - (Bz(i) - Bz(i-1))/dx[0] );
+    Ez(i) += dt*clight2/eps_rel*(   (By(i) - By(i-1))/dx[0] );
+  }
 
 }
 
@@ -91,11 +89,9 @@ void FieldSolver::stepB(double dt) {
   IndexType low = Bx.getInnerLo();
   IndexType high = Bx.getInnerHi();
 
-  for (int i=low[0]; i<=high[0]; ++i)
-    for (int j=low[1]; j<=high[1]; ++j) {
-      Bx(i,j) += dt*( - (Ez(i,j+1) - Ez(i,j))/dx[1] );
-      By(i,j) += dt*(   (Ez(i+1,j) - Ez(i,j))/dx[0] );
-      Bz(i,j) += dt*(   (Ex(i,j+1) - Ex(i,j))/dx[1] - (Ey(i+1,j) - Ey(i,j))/dx[0] );
-    }
+  for (int i=low[0]; i<=high[0]; ++i) {
+    By(i) += dt*(   (Ez(i+1) - Ez(i))/dx[0] );
+    Bz(i) += dt*( - (Ey(i+1) - Ey(i))/dx[0] );
+  }
 
 }
