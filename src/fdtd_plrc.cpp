@@ -23,26 +23,21 @@ void FDTD_PLRCCore::registerData()
   schnek::Array<bool, DIMENSION> stagger;
   stagger = false;
 
-
-  schnek::Range<double, 1> domainSizeX(schnek::Array<double, 1>(0), schnek::Array<double, 1>(MPulse::getSize()[0]));
-  schnek::Range<double, 1> domainSizeY(schnek::Array<double, 1>(0), schnek::Array<double, 1>(MPulse::getSize()[1]));
-  schnek::Range<double, 1> domainSizeZ(schnek::Array<double, 1>(0), schnek::Array<double, 1>(MPulse::getSize()[2]));
-
-  schnek::Array<bool, 1> stagger1d;
-  stagger1d = false;
+  Index low  = subdivision.getLo();
+  Index high = subdivision.getHi();
 
   Index lowIn  = subdivision.getInnerLo();
   Index highIn = subdivision.getInnerHi();
 
   pSigma = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
   
-  pKappaEdx = boost::make_shared<DataLine>(schnek::Array<int, 1>(lowIn[0]), schnek::Array<int, 1>(highIn[0]), domainSizeX, stagger1d, 2);
-  pKappaEdy = boost::make_shared<DataLine>(schnek::Array<int, 1>(lowIn[1]), schnek::Array<int, 1>(highIn[1]), domainSizeY, stagger1d, 2);
-  pKappaEdz = boost::make_shared<DataLine>(schnek::Array<int, 1>(lowIn[2]), schnek::Array<int, 1>(highIn[2]), domainSizeZ, stagger1d, 2);
+  pKappaEdx = boost::make_shared<DataLine>(schnek::Array<int, 1>(low[0]), schnek::Array<int, 1>(high[0]));
+  pKappaEdy = boost::make_shared<DataLine>(schnek::Array<int, 1>(low[1]), schnek::Array<int, 1>(high[1]));
+  pKappaEdz = boost::make_shared<DataLine>(schnek::Array<int, 1>(low[2]), schnek::Array<int, 1>(high[2]));
 
-  pKappaHdx = boost::make_shared<DataLine>(schnek::Array<int, 1>(lowIn[0]), schnek::Array<int, 1>(highIn[0]), domainSizeX, stagger1d, 2);
-  pKappaHdy = boost::make_shared<DataLine>(schnek::Array<int, 1>(lowIn[1]), schnek::Array<int, 1>(highIn[1]), domainSizeY, stagger1d, 2);
-  pKappaHdz = boost::make_shared<DataLine>(schnek::Array<int, 1>(lowIn[2]), schnek::Array<int, 1>(highIn[2]), domainSizeZ, stagger1d, 2);
+  pKappaHdx = boost::make_shared<DataLine>(schnek::Array<int, 1>(low[0]), schnek::Array<int, 1>(high[0]));
+  pKappaHdy = boost::make_shared<DataLine>(schnek::Array<int, 1>(low[1]), schnek::Array<int, 1>(high[1]));
+  pKappaHdz = boost::make_shared<DataLine>(schnek::Array<int, 1>(low[2]), schnek::Array<int, 1>(high[2]));
 
   pPsiRx[0] = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
   pPsiRy[0] = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
