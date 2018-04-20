@@ -6,6 +6,7 @@
  */
 
 #include "diagnostic.hpp"
+#include "em_fields.hpp"
 #include "fieldsolver.hpp"
 #include "fdtd_plain.hpp"
 #include "fdtd_plrc.hpp"
@@ -52,37 +53,38 @@ void MPulse::initParameters(schnek::BlockParameters &parameters)
   spaceVars->addArray(x_parameters);
 }
 
-void MPulse::registerData()
+void MPulse::initFields()
 {
-  Index low  = subdivision.getLo();
-  Index high = subdivision.getHi();
+  if (schnek::BlockContainer<EMFields>::childBlocks().empty())
+  {
+    boost::shared_ptr<EMFields> fields(new EMFields(shared_from_this()));
+    Block::addChild(fields);
+    fields->registerData();
+    fields->preInit();
+  }
+
+  retrieveData("Ex", pEx);
+  retrieveData("Ey", pEy);
+  retrieveData("Ez", pEz);
+
+  retrieveData("Bx", pBx);
+  retrieveData("By", pBy);
+  retrieveData("Bz", pBz);
 
   Index lowIn  = subdivision.getInnerLo();
   Index highIn = subdivision.getInnerHi();
 
   innerRange = Range(lowIn, highIn);
   schnek::Range<double, DIMENSION> domainSize(schnek::Array<double, DIMENSION>(0,0,0), size);
-  schnek::Array<bool, DIMENSION> stagger;
 
-  stagger = false;
+  pEx->resize(lowIn, highIn, domainSize, exStaggerYee, 2);
+  pEy->resize(lowIn, highIn, domainSize, eyStaggerYee, 2);
+  pEz->resize(lowIn, highIn, domainSize, ezStaggerYee, 2);
 
-  Ex = boost::make_shared<Field>(lowIn, highIn, domainSize, exStaggerYee, 2);
-  Ey = boost::make_shared<Field>(lowIn, highIn, domainSize, eyStaggerYee, 2);
-  Ez = boost::make_shared<Field>(lowIn, highIn, domainSize, ezStaggerYee, 2);
-
-  Bx = boost::make_shared<Field>(lowIn, highIn, domainSize, bxStaggerYee, 2);
-  By = boost::make_shared<Field>(lowIn, highIn, domainSize, byStaggerYee, 2);
-  Bz = boost::make_shared<Field>(lowIn, highIn, domainSize, bzStaggerYee, 2);
-
-  addData("Ex", Ex);
-  addData("Ey", Ey);
-  addData("Ez", Ez);
-
-  addData("Bx", Bx);
-  addData("By", By);
-  addData("Bz", Bz);
+  pBx->resize(lowIn, highIn, domainSize, bxStaggerYee, 2);
+  pBy->resize(lowIn, highIn, domainSize, byStaggerYee, 2);
+  pBz->resize(lowIn, highIn, domainSize, bzStaggerYee, 2);
 }
-
 
 void MPulse::fillValues()
 {
@@ -92,24 +94,24 @@ void MPulse::fillValues()
   schnek::DependencyUpdater updater(depMap);
 
   updater.addIndependentArray(x_parameters);
-  schnek::fill_field(*Ex, x, initE[0], updater, E_parameters[0]);
-  schnek::fill_field(*Ey, x, initE[1], updater, E_parameters[1]);
-  schnek::fill_field(*Ez, x, initE[2], updater, E_parameters[2]);
+  schnek::fill_field(*pEx, x, initE[0], updater, E_parameters[0]);
+  schnek::fill_field(*pEy, x, initE[1], updater, E_parameters[1]);
+  schnek::fill_field(*pEz, x, initE[2], updater, E_parameters[2]);
 
-  schnek::fill_field(*Bx, x, initB[0], updater, B_parameters[0]);
-  schnek::fill_field(*By, x, initB[1], updater, B_parameters[1]);
-  schnek::fill_field(*Bz, x, initB[2], updater, B_parameters[2]);
+  schnek::fill_field(*pBx, x, initB[0], updater, B_parameters[0]);
+  schnek::fill_field(*pBy, x, initB[1], updater, B_parameters[1]);
+  schnek::fill_field(*pBz, x, initB[2], updater, B_parameters[2]);
 }
 
 void MPulse::init()
 {
   globalMax = gridSize - 2;
-
   subdivision.init(gridSize, 2);
 
-  for (size_t i=0; i<DIMENSION; ++i) dx[i] = size[i] / gridSize[i];
+  for (std::size_t i=0; i<DIMENSION; ++i) dx[i] = size[i] / gridSize[i];
   dt = cflFactor*std::min(dx[0],std::min(dx[1],dx[2]))/clight;
 
+  initFields();
   fillValues();
 }
 
@@ -150,6 +152,7 @@ int main (int argc, char** argv) {
     schnek::BlockClasses blocks;
 
     blocks.registerBlock("mpulse").setClass<MPulse>();
+    blocks("EMFields").setClass<EMFields>();
     blocks("FDTD_Plain").setClass<FDTD_Plain>();
     blocks("FDTD_PLRC").setClass<FDTD_PLRCLin>();
     blocks("FDTD_PLRC_Nonlinear").setClass<FDTD_PLRCNonlin>();
@@ -161,8 +164,9 @@ int main (int argc, char** argv) {
 
     blocks("PlasmaCurrent").setClass<PlasmaCurrentBlock>();
 
-    blocks("mpulse").addChildren("FieldDiag")
-        ("FDTD_Plain")("FDTD_PLRC")("FDTD_PLRC_Nonlinear");
+    blocks("mpulse").addChildren("EMFields")
+        ("FDTD_Plain")("FDTD_PLRC")("FDTD_PLRC_Nonlinear")
+        ("FieldDiag");
 
     blocks("FDTD_PLRC").addChildren("CPMLBorder")
         ("ShortPulseInject")("PlaneWaveSource")("PlaneGaussSource")

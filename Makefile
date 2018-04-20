@@ -4,7 +4,7 @@ TARGET=mpulse
 #OFLAGS  = -g -O0 -Wall
 OFLAGS  = -O3 -Wall
 
-INCLUDE = -I/usr/local/include
+INCLUDE = -I/usr/local/include -I/usr/include/hdf5/openmpi
 #CXX     = $(X_CXX)
 CXX     = mpic++
 
@@ -14,6 +14,7 @@ SOURCES = src/border.cpp \
   src/cpml_border.cpp \
   src/current.cpp \
   src/diagnostic.cpp \
+  src/em_fields.cpp \
   src/fdtd_plain.cpp \
   src/fdtd_plrc.cpp \
   src/incsource.cpp \
@@ -27,7 +28,7 @@ SOURCES = src/border.cpp \
 
 OBJECTS = $(SOURCES:.cpp=.o)
 
-LDFLAGS = 
+LDFLAGS = -L/usr/lib/x86_64-linux-gnu/hdf5/openmpi
 
 LOADLIBS = -lhdf5 -lschnek -lm
 BINDIR = bin
