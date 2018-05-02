@@ -55,9 +55,9 @@ void FDTD_Plain::stepD(double dt)
 
   Vector dx = MPulse::getDx();
 
-  for (int i=low[0]+1; i<=high[0]; ++i)
-    for (int j=low[1]+1; j<=high[1]; ++j)
-      for (int k=low[2]+1; k<=high[2]; ++k)
+  for (int i=low[0]; i<=high[0]; ++i)
+    for (int j=low[1]; j<=high[1]; ++j)
+      for (int k=low[2]; k<=high[2]; ++k)
   {
     Ex(i,j,k) = Ex(i,j,k) 
       + dt*clight2*(
