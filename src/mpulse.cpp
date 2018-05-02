@@ -51,6 +51,15 @@ void MPulse::initParameters(schnek::BlockParameters &parameters)
 
   spaceVars = schnek::pParametersGroup(new schnek::ParametersGroup());
   spaceVars->addArray(x_parameters);
+
+
+  parameters.addConstant("pi", PI);
+  parameters.addConstant("clight", clight);
+  parameters.addConstant("me", mass_e);
+  parameters.addConstant("mp", mass_p);
+  parameters.addConstant("e", unit_charge);
+  parameters.addConstant("mu0", mu_0);
+  parameters.addConstant("eps0", eps_0);
 }
 
 void MPulse::initFields()
@@ -105,7 +114,7 @@ void MPulse::fillValues()
 
 void MPulse::init()
 {
-  globalMax = gridSize - 2;
+  globalMax = gridSize - 1;
   subdivision.init(gridSize, 2);
 
   for (std::size_t i=0; i<DIMENSION; ++i) dx[i] = size[i] / gridSize[i];

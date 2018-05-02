@@ -14,6 +14,7 @@
 #include <schnek/variables.hpp>
 #include <boost/enable_shared_from_this.hpp>
 
+
 class FieldSolver;
 class EMFields;
 
