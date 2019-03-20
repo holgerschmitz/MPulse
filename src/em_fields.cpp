@@ -11,9 +11,11 @@
 #include <boost/foreach.hpp>
 
 #include <string>
+#include <iostream>
 
 void EMFields::registerData()
 {
+	std::cout << "EMFields registerData" << std::endl;
   pEx = boost::make_shared<Field>();
   pEy = boost::make_shared<Field>();
   pEz = boost::make_shared<Field>();

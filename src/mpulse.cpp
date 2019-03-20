@@ -52,7 +52,6 @@ void MPulse::initParameters(schnek::BlockParameters &parameters)
   spaceVars = schnek::pParametersGroup(new schnek::ParametersGroup());
   spaceVars->addArray(x_parameters);
 
-
   parameters.addConstant("pi", PI);
   parameters.addConstant("clight", clight);
   parameters.addConstant("me", mass_e);

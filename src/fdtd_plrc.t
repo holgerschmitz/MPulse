@@ -153,9 +153,9 @@ void FDTD_PLRCSolver<PLRCImplementation>::initAccumulator(double dt)
   Index low = Ex.getInnerLo();
   Index high = Ex.getInnerHi();
   
-  /// value of beta_p for the three Lorentz poles
+  // value of beta_p for the three Lorentz poles
   double beta[3];
-  /// value of gamma_p for the three Lorentz poles
+  // value of gamma_p for the three Lorentz poles
   double gamma[3];
   
   std::complex<double> I(0,1);

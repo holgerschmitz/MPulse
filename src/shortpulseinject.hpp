@@ -7,7 +7,8 @@
 #include <fftw3.h>
 #include <complex>
 
-/** Calculates a short pulse in the paraxial limit
+/**
+ * Calculates a short pulse in the paraxial limit
  */
 class ShortPulseInject : public IncidentSource
 {
