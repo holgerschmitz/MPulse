@@ -88,6 +88,9 @@ void IncidentSource::initParameters(schnek::BlockParameters &blockPars)
 IncidentSourceCurrent::IncidentSourceCurrent(int distance_, Direction dir_, bool isH_)
   : distance(distance_), dir(dir_), isH(isH_)
 {
+  lowOffset = 0;
+  highOffset = 0;
+
   dx = MPulse::getDx()[0];
   dy = MPulse::getDx()[1];
   dz = MPulse::getDx()[2];

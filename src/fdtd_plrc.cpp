@@ -474,3 +474,16 @@ void FDTD_PLRCNonlinCore::initParameters(schnek::BlockParameters &blockPars)
   blockPars.addParameter("chi", &chi,0.1);
 }
 
+void FDTD_PLRCCore::init()
+{
+  FDTD_PLRCCore::init();
+
+  schnek::LiteratureArticle Schmitz2012("Schmitz2012", "Holger Schmitz and Vladimir Mezentsev",
+      "Full-vectorial modeling of femtosecond pulses for laser inscription of photonic structures",
+      "Journal of the Optical Society of America B", "2012", "29", "1208-1217");
+
+  schnek::LiteratureManager::instance().addReference(
+      "Nonlinear Piecewise Linear Recursive Convolution for dispersive media",
+      Schmitz2012);
+}
+

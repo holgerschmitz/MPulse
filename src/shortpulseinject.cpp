@@ -137,8 +137,6 @@ void ShortPulseInjectSourceFunc::setTime(double time)
 
 Vector ShortPulseInjectSourceFunc::getEField(int i, int j, int k, double time)
 {
-
-
   double ex=0, ey=0;
   double posxo = (i-centrex)*DX;
   double posxh = (i+0.5-centrex)*DX;
