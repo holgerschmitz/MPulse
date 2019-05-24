@@ -4,7 +4,7 @@ TARGET=mpulse
 #OFLAGS  = -g -O0 -Wall
 OFLAGS  = -O3 -Wall
 
-INCLUDE = -I/usr/local/include -I/usr/include/hdf5/openmpi
+INCLUDE = -I/usr/local/include -I/usr/lib/x86_64-linux-gnu/hdf5/mpich/include
 #CXX     = $(X_CXX)
 CXX     = mpic++
 
@@ -17,6 +17,8 @@ SOURCES = src/border.cpp \
   src/em_fields.cpp \
   src/fdtd_plain.cpp \
   src/fdtd_plrc.cpp \
+  src/focusedpulseinject.cpp \
+  src/focusedpulsefunctions.cpp \
   src/incsource.cpp \
   src/plasmacurrent.cpp \
   src/shortpulsefunctions.cpp \
@@ -28,9 +30,9 @@ SOURCES = src/border.cpp \
 
 OBJECTS = $(SOURCES:.cpp=.o)
 
-LDFLAGS = -L/usr/lib/x86_64-linux-gnu/hdf5/openmpi
+LDFLAGS = -L/usr/lib/x86_64-linux-gnu/hdf5/mpich/lib -Wl,-rpath,/usr/lib/x86_64-linux-gnu/hdf5/mpich/lib
 
-LOADLIBS = -lhdf5 -lschnek -lm
+LOADLIBS = -lhdf5 -lschnek -lfftw3 -lm
 BINDIR = bin
 OBJDIR = obj
 

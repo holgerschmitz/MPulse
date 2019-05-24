@@ -1,59 +1,59 @@
-#include "focusedpulseinject.h"
+#include "focusedpulseinject.hpp"
+
+#include "specfunc.hpp"
+
 #include <cmath>
-#include "specfunc.h"
 
 //===============================================================
 //==========  FocusedPulseInject
 //===============================================================
-void FocusedPulseInject::initCurrents(Storage *storage, FieldSolver *solver)
+
+void FocusedPulseInject::initCurrents(CurrentContainer &container)
 {
   generator.setSize(oversample_X, oversample_Y);
   generator.setShifts(TShift, ZShift, 2*M_PI*Phase);
-  IncidentSource::initCurrents(storage, solver);
+  IncidentSource::initCurrents(container);
 }
 
-IncidentSourceCurrent *FocusedPulseInject::makeECurrent(int distance_, Direction dir_)
+pCurrent FocusedPulseInject::makeECurrent(int distance_, Direction dir_)
 {
   std::cerr << "FocusedPulseInject::makeECurrent\n";
   typedef IncidentSourceECurrent<FocusedPulseInjectSourceFunc> CurrentType;
   CurrentType *cur = new CurrentType(distance_,dir_);
   
   cur->setParam(length, width, om0, amp, eps, distance_, &generator);
-  return cur;
+  return pCurrent(cur);
 }
 
-IncidentSourceCurrent *FocusedPulseInject::makeHCurrent(int distance_, Direction dir_)
+pCurrent FocusedPulseInject::makeHCurrent(int distance_, Direction dir_)
 {
   std::cerr << "FocusedPulseInject::makeHCurrent\n";
   typedef IncidentSourceHCurrent<FocusedPulseInjectSourceFunc> CurrentType;
   CurrentType *cur = new CurrentType(distance_,dir_);
   cur->setParam(length, width, om0, amp, eps, distance_, &generator);
-  return cur;
+  return pCurrent(cur);
 }
 
 bool FocusedPulseInject::needCurrent(Direction dir_)
 {
   return true;
 }
-    
-ParameterMap* FocusedPulseInject::MakeParamMap (ParameterMap* pm)
-{
-  std::cerr << "FocusedPulseInject::MakeParamMap\n";
-  pm = IncidentSource::MakeParamMap(pm);
-  
-  (*pm)["length"] = WParameter(new ParameterValue<double>(&this->length,1.));
-  (*pm)["width"] = WParameter(new ParameterValue<double>(&this->width,1.));
-  (*pm)["om0"] = WParameter(new ParameterValue<double>(&this->om0,2*M_PI));
-  (*pm)["TShift"] = WParameter(new ParameterValue<double>(&this->TShift,0));
-  (*pm)["ZShift"] = WParameter(new ParameterValue<double>(&this->ZShift,0));
-  (*pm)["Phase"] = WParameter(new ParameterValue<double>(&this->Phase,0));
-  (*pm)["OversampleX"] = WParameter(new ParameterValue<int>(&this->oversample_X,1));
-  (*pm)["OversampleY"] = WParameter(new ParameterValue<int>(&this->oversample_Y,1));
 
-  (*pm)["amp"] = WParameter(new ParameterValue<double>(&this->amp,1));
-  (*pm)["eps"] = WParameter(new ParameterValue<double>(&this->eps,1));
+void FocusedPulseInject::initParameters(schnek::BlockParameters &blockPars)
+{
+  IncidentSource::initParameters(blockPars);
   
-  return pm;
+  blockPars.addParameter("length", &this->length,1.);
+  blockPars.addParameter("width", &this->width,1.);
+  blockPars.addParameter("om0", &this->om0,2*M_PI);
+  blockPars.addParameter("TShift", &this->TShift,0.);
+  blockPars.addParameter("ZShift", &this->ZShift,0.);
+  blockPars.addParameter("Phase", &this->Phase,0);
+  blockPars.addParameter("OversampleX", &this->oversample_X,1);
+  blockPars.addParameter("OversampleY", &this->oversample_Y,1);
+
+  blockPars.addParameter("amp", &this->amp,1.);
+  blockPars.addParameter("eps", &this->eps,1.);
 }
 
 
@@ -74,15 +74,10 @@ void FocusedPulseInjectSourceFunc::setParam(double length_,
   generator = generator_;
   
   // Grid Spacing and position
+  Index gridLow = MPulse::getSubdivision().getLo();
+  Index gridHigh = MPulse::getSubdivision().getHi();
   
-
-
-
-  GridIndex gridLow = Globals::instance().gridLow();
-  GridIndex gridHigh = Globals::instance().gridHigh();
-  
-
-// setting most parameters
+  // setting most parameters
 
   length = length_;
   width  = width_;
@@ -91,7 +86,7 @@ void FocusedPulseInjectSourceFunc::setParam(double length_,
   eps = eps_;
   dist = distance_;
   
-  lightspeed = sqrt(1/eps);
+  const int lightspeed = sqrt(1/eps);
   
   ZRl = 0.5*om0*width*width/lightspeed;
 //  YComp = Complex(0.0,0.0);
@@ -102,29 +97,30 @@ void FocusedPulseInjectSourceFunc::setParam(double length_,
 //  amp = amp_/Exmax;
 }
 
-void FocusedPulseInjectSourceFunc
-    ::initSourceFunc(Storage *storage, DataGrid *pJx, DataGrid *pJy, DataGrid *pJz)
+void FocusedPulseInjectSourceFunc::initSourceFunc(pGrid pJx, pGrid pJy, pGrid pJz)
 {
-  generator->setLow(storage->getLow());
-  generator->setHigh(storage->getHigh());
-  
   std::cerr << "FocusedPulseInjectSourceFunc::initSourceFunc\n";
+
+  const schnek::DomainSubdivision<Field> &subdivision = MPulse::getSubdivision();
+  Index lo = subdivision.getInnerLo();
+  Index hi = subdivision.getInnerHi();
+  generator->setLow(lo);
+  generator->setHigh(hi);
+  
+  Index blow, bhigh;
+  if (!getBorderExtent(dir, 1, dist, blow, bhigh)) return;
+  x_grid = boost::make_shared<Grid>(blow, bhigh);
+  y_grid = boost::make_shared<Grid>(blow, bhigh);
+  z_grid = boost::make_shared<Grid>(blow, bhigh);
+
   if (isH)
   {
-    x_grid  = storage->addBorderLayer("IncidentBX" , dir, 1, dist, dist);
-    y_grid  = storage->addBorderLayer("IncidentBY" , dir, 1, dist, dist);
-    z_grid  = storage->addBorderLayer("IncidentBZ" , dir, 1, dist, dist);
-    
     generator->addBXData(x_grid);
     generator->addBYData(y_grid);
     generator->addBZData(z_grid);
   }
   else
   {
-    x_grid  = storage->addBorderLayer("IncidentEX" , dir, 1, dist, dist);
-    y_grid  = storage->addBorderLayer("IncidentEY" , dir, 1, dist, dist);
-    z_grid  = storage->addBorderLayer("IncidentEZ" , dir, 1, dist, dist);
-    
     generator->addEXData(x_grid);
     generator->addEYData(y_grid);
     generator->addEZData(z_grid);
@@ -150,32 +146,32 @@ Vector FocusedPulseInjectSourceFunc::getHField(int i, int j, int k, int time)
 //==========  FocusedPulseDataGenerator
 //===============================================================
 
-void FocusedPulseDataGenerator::addEXData(DataGrid *g)
+void FocusedPulseDataGenerator::addEXData(pGrid g)
 {
   ex_grids.push_back(g);
 }
 
-void FocusedPulseDataGenerator::addEYData(DataGrid *g)
+void FocusedPulseDataGenerator::addEYData(pGrid g)
 {
   ey_grids.push_back(g);
 }
 
-void FocusedPulseDataGenerator::addEZData(DataGrid *g)
+void FocusedPulseDataGenerator::addEZData(pGrid g)
 {
   ez_grids.push_back(g);
 }
 
-void FocusedPulseDataGenerator::addBXData(DataGrid *g)
+void FocusedPulseDataGenerator::addBXData(pGrid g)
 {
   bx_grids.push_back(g);
 }
 
-void FocusedPulseDataGenerator::addBYData(DataGrid *g)
+void FocusedPulseDataGenerator::addBYData(pGrid g)
 {
   by_grids.push_back(g);
 }
 
-void FocusedPulseDataGenerator::addBZData(DataGrid *g)
+void FocusedPulseDataGenerator::addBZData(pGrid g)
 {
   bz_grids.push_back(g);
 }
@@ -184,13 +180,13 @@ void FocusedPulseDataGenerator::setSize(int oversample_X_, int oversample_Y_)
 {
   oversample_X = oversample_X_;
   oversample_Y = oversample_Y_;
-  GridIndex low = Globals::instance().gridLow();
-  GridIndex high = Globals::instance().gridHigh();
+  Index low = MPulse::getSubdivision().getLo();
+  Index high = MPulse::getSubdivision().getHi();
 
-  DX = Globals::instance().gridDX();
-  DY = Globals::instance().gridDY();
-  DZ = Globals::instance().gridDZ();
-  DT = Globals::instance().dt();
+  DX = MPulse::getDx()[0];
+  DY = MPulse::getDx()[1];
+  DZ = MPulse::getDx()[2];
+  DT = MPulse::getDt();
   
   sizeX = oversample_X*(high[0]-low[0]+1);
   sizeY = oversample_Y*(high[1]-low[1]+1);
@@ -234,11 +230,16 @@ void FocusedPulseDataGenerator::setTime(int Time)
 
 }
 
+void FocusedPulseDataGenerator::init()
+{
+  throw std::string("Something needs to happen here");
+}
+
 void FocusedPulseDataGenerator::calcEx()
 {
 
-  double DX = Globals::instance().gridDX();
-  double DY = Globals::instance().gridDY();
+  double DX = MPulse::getDx()[0];
+  double DY = MPulse::getDx()[1];
 
   double dKx = 1./(sizeX*DX);
   double dKy = 1./(sizeY*DY);
@@ -290,10 +291,10 @@ void FocusedPulseDataGenerator::calcEx()
 
     for (GridList::iterator git=ex_grids.begin(); git!=ex_grids.end(); ++git)
     {
-      DataGrid &grid = *(*git);
+      Grid &grid = *(*git);
 
-      GridIndex low = grid.getLow();
-      GridIndex high = grid.getHigh();
+      Index low = grid.getLo();
+      Index high = grid.getHi();
 
       if ((z<low[2]) || (z>high[2])) continue;
 
@@ -321,8 +322,8 @@ void FocusedPulseDataGenerator::calcEx()
 void FocusedPulseDataGenerator::calcEy()
 {
 
-  double DX = Globals::instance().gridDX();
-  double DY = Globals::instance().gridDY();
+  double DX = MPulse::getDx()[0];
+  double DY = MPulse::getDx()[1];
 
   double dKx = 1./(sizeX*DX);
   double dKy = 1./(sizeY*DY);
@@ -375,10 +376,10 @@ void FocusedPulseDataGenerator::calcEy()
 
     for (GridList::iterator git=ey_grids.begin(); git!=ey_grids.end(); ++git)
     {
-      DataGrid &grid = *(*git);
+      Grid &grid = *(*git);
 
-      GridIndex low = grid.getLow();
-      GridIndex high = grid.getHigh();
+      Index low = grid.getLo();
+      Index high = grid.getHi();
 
       if ((z<low[2]) || (z>high[2])) continue;
 
@@ -406,8 +407,8 @@ void FocusedPulseDataGenerator::calcEy()
 void FocusedPulseDataGenerator::calcEz()
 {
 
-  double DX = Globals::instance().gridDX();
-  double DY = Globals::instance().gridDY();
+  double DX = MPulse::getDx()[0];
+  double DY = MPulse::getDx()[1];
 
   double dKx = 1./(sizeX*DX);
   double dKy = 1./(sizeY*DY);
@@ -456,10 +457,10 @@ void FocusedPulseDataGenerator::calcEz()
 
     for (GridList::iterator git=ez_grids.begin(); git!=ez_grids.end(); ++git)
     {
-      DataGrid &grid = *(*git);
+      Grid &grid = *(*git);
 
-      GridIndex low = grid.getLow();
-      GridIndex high = grid.getHigh();
+      Index low = grid.getLo();
+      Index high = grid.getHi();
 
       if ((z<low[2]) || (z>high[2])) continue;
 
@@ -487,8 +488,8 @@ void FocusedPulseDataGenerator::calcEz()
 void FocusedPulseDataGenerator::calcBx()
 {
 
-  double DX = Globals::instance().gridDX();
-  double DY = Globals::instance().gridDY();
+  double DX = MPulse::getDx()[0];
+  double DY = MPulse::getDx()[1];
 
   double dKx = 1./(sizeX*DX);
   double dKy = 1./(sizeY*DY);
@@ -540,10 +541,10 @@ void FocusedPulseDataGenerator::calcBx()
 
     for (GridList::iterator git=bx_grids.begin(); git!=bx_grids.end(); ++git)
     {
-      DataGrid &grid = *(*git);
+      Grid &grid = *(*git);
 
-      GridIndex low = grid.getLow();
-      GridIndex high = grid.getHigh();
+      Index low = grid.getLo();
+      Index high = grid.getHi();
 
       if ((z<low[2]) || (z>high[2])) continue;
 
@@ -571,8 +572,8 @@ void FocusedPulseDataGenerator::calcBx()
 void FocusedPulseDataGenerator::calcBy()
 {
 
-  double DX = Globals::instance().gridDX();
-  double DY = Globals::instance().gridDY();
+  double DX = MPulse::getDx()[0];
+  double DY = MPulse::getDx()[1];
 
   double dKx = 1./(sizeX*DX);
   double dKy = 1./(sizeY*DY);
@@ -624,10 +625,10 @@ void FocusedPulseDataGenerator::calcBy()
 
     for (GridList::iterator git=by_grids.begin(); git!=by_grids.end(); ++git)
     {
-      DataGrid &grid = *(*git);
+      Grid &grid = *(*git);
 
-      GridIndex low = grid.getLow();
-      GridIndex high = grid.getHigh();
+      Index low = grid.getLo();
+      Index high = grid.getHi();
 
       if ((z<low[2]) || (z>high[2])) continue;
 
@@ -655,8 +656,8 @@ void FocusedPulseDataGenerator::calcBy()
 void FocusedPulseDataGenerator::calcBz()
 {
 
-  double DX = Globals::instance().gridDX();
-  double DY = Globals::instance().gridDY();
+  double DX = MPulse::getDx()[0];
+  double DY = MPulse::getDx()[1];
 
   double dKx = 1./(sizeX*DX);
   double dKy = 1./(sizeY*DY);
@@ -708,10 +709,10 @@ void FocusedPulseDataGenerator::calcBz()
 
     for (GridList::iterator git=bz_grids.begin(); git!=bz_grids.end(); ++git)
     {
-      DataGrid &grid = *(*git);
+      Grid &grid = *(*git);
 
-      GridIndex low = grid.getLow();
-      GridIndex high = grid.getHigh();
+      Index low = grid.getLo();
+      Index high = grid.getHi();
 
       if ((z<low[2]) || (z>high[2])) continue;
 
