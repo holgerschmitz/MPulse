@@ -48,7 +48,7 @@ void FocusedPulseInject::initParameters(schnek::BlockParameters &blockPars)
   blockPars.addParameter("om0", &this->om0,2*M_PI);
   blockPars.addParameter("TShift", &this->TShift,0.);
   blockPars.addParameter("ZShift", &this->ZShift,0.);
-  blockPars.addParameter("Phase", &this->Phase,0);
+  blockPars.addParameter("Phase", &this->Phase,0.);
   blockPars.addParameter("OversampleX", &this->oversample_X,1);
   blockPars.addParameter("OversampleY", &this->oversample_Y,1);
 
