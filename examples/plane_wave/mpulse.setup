@@ -2,9 +2,9 @@
 float lambda = 1e-6;
 float dx = 0.05*lambda;
 
-Nx = 100;
-Ny = 100;
-Nz = 100;
+Nx = 200;
+Ny = 200;
+Nz = 200;
 
 Lx = dx*Nx;
 Ly = dx*Ny;
@@ -13,19 +13,16 @@ Lz = dx*Nz;
 
 // plasma and laser parameters
 
-
-cflFactor = 0.5;
+cflFactor = 0.99;
 
 float dt = cflFactor*dx/clight;
 
-tMax = 100*dt;
+tMax = 2*Nx*dt;
 
 float w = 3e-6;
 float l = 3e-6;
 
-FDTD_Plain {
-  //eps_rel = 1.2;
-  
+FDTD_Plain {  
   float xm = (x - Lx/2)/l;
   float ym = (y - Ly/2)/w;
   float zm = (y - Lz/2)/w;
@@ -37,11 +34,10 @@ FDTD_Plain {
 
   Bx = 0.0;
   By = 0.0;
-  //Bz = sqrt(eps_rel)*amp/clight;
   Bz = amp/clight;
 }
 
-float outDt = dt;
+float outDt = 10*dt;
 
 
 FieldDiag Ex {

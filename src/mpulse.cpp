@@ -83,7 +83,9 @@ void MPulse::initFields()
   Index highIn = subdivision.getInnerHi();
 
   innerRange = Range(lowIn, highIn);
-  schnek::Range<double, DIMENSION> domainSize(schnek::Array<double, DIMENSION>(0,0,0), size);
+  schnek::Range<double, DIMENSION> domainSize(
+      schnek::Array<double, DIMENSION>(dx[0]*lowIn[0],dx[1]*lowIn[1],dx[2]*lowIn[2]),
+      schnek::Array<double, DIMENSION>(dx[0]*(highIn[0]+1),dx[1]*(highIn[1]+1),dx[2]*(highIn[2]+1)));
 
   pEx->resize(lowIn, highIn, domainSize, exStaggerYee, 2);
   pEy->resize(lowIn, highIn, domainSize, eyStaggerYee, 2);
