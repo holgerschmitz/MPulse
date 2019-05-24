@@ -474,7 +474,7 @@ void FDTD_PLRCNonlinCore::initParameters(schnek::BlockParameters &blockPars)
   blockPars.addParameter("chi", &chi,0.1);
 }
 
-void FDTD_PLRCCore::init()
+void FDTD_PLRCNonlinCore::init()
 {
   FDTD_PLRCCore::init();
 

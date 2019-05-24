@@ -6,8 +6,8 @@
  */
 
 
-#ifndef MPULSE_TYPES_H
-#define MPULSE_TYPES_H
+#ifndef VELLAMO_TYPES_H
+#define VELLAMO_TYPES_H
 
 #include <schnek/grid.hpp>
 #include <cstddef>
@@ -18,30 +18,28 @@
 #define MPulseGridChecker schnek::GridAssertCheck
 #endif
 
-static const std::size_t DIMENSION = 3;
+static const size_t DIMENSION = 3;
 
 typedef schnek::Array<int, DIMENSION> Index;
 typedef schnek::Array<double, DIMENSION> Vector;
-
-typedef schnek::Grid<double, DIMENSION> Grid;
+typedef schnek::Grid<double, DIMENSION, MPulseGridChecker> Grid;
 typedef boost::shared_ptr<Grid> pGrid;
-
-typedef schnek::Field<double, DIMENSION> Field;
+typedef schnek::Field<double, DIMENSION, MPulseGridChecker> Field;
 typedef boost::shared_ptr<Field> pField;
-
-typedef schnek::Grid<double, 1> DataLine;
-typedef boost::shared_ptr<DataLine> pDataLine;
-
 typedef schnek::Range<int, DIMENSION> Range;
 typedef schnek::Array<bool, DIMENSION> Stagger;
+
+
+typedef schnek::Grid<double, 1, MPulseGridChecker> DataLine;
+typedef boost::shared_ptr<DataLine> pDataLine;
 
 static const Stagger exStaggerYee(true,  false, false);
 static const Stagger eyStaggerYee(false, true,  false);
 static const Stagger ezStaggerYee(false, false, true );
-
 static const Stagger bxStaggerYee(false, true,  true );
 static const Stagger byStaggerYee(true,  false, true );
 static const Stagger bzStaggerYee(true,  true,  false);
+
 
 enum Direction {north, south, west, east, up, down};
 
@@ -56,4 +54,4 @@ static const double mu_0 = 4e-7*PI;
 static const double eps_0 = 1/(mu_0*clight2);
 static const double eps_0_inv = (mu_0*clight2);
 
-#endif
+#endif // VELLAMO_TYPES_H

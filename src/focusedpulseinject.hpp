@@ -1,13 +1,14 @@
 #ifndef MPULSE_FOCUSEDPULSEINJECT_H
 #define MPULSE_FOCUSEDPULSEINJECT_H
 
-#include "incsource.h"
+#include "incsource.hpp"
+#include "mpulse.hpp"
+
+#include <schnek/grid.hpp>
 
 #include <fftw3.h>
 #include <complex>
 #include <list>
-#include <schnek/grid.h>
-
 
 class FocusedPulseDataGenerator
 {
@@ -18,22 +19,22 @@ class FocusedPulseDataGenerator
   public:
     FocusedPulseDataGenerator() : currentTime(-1), initialized(false) {};
 
-    void addEXData(DataGrid *g);
-    void addEYData(DataGrid *g);
-    void addEZData(DataGrid *g);
-    void addBXData(DataGrid *g);
-    void addBYData(DataGrid *g);
-    void addBZData(DataGrid *g);
+    void addEXData(pGrid g);
+    void addEYData(pGrid g);
+    void addEZData(pGrid g);
+    void addBXData(pGrid g);
+    void addBYData(pGrid g);
+    void addBZData(pGrid g);
 
     void setTime(int Time);
-    void setLow(const GridIndex &low_) { low = low_; }
-    void setHigh(const GridIndex &high_) { high = high_; }
+    void setLow(const Index &low_) { low = low_; }
+    void setHigh(const Index &high_) { high = high_; }
     void setSize(int oversample_X_, int oversample_Y_);
     void setShifts(double TShift_, double ZShift_, double Phase_);
     typedef std::complex<double> Complex;
   private:
     typedef schnek::Grid<Complex, 2, MPulseGridChecker> ComplexGrid2d;
-    typedef std::list<DataGrid*> GridList;
+    typedef std::list<pGrid> GridList;
 
     GridList ex_grids;
     GridList ey_grids;
@@ -46,6 +47,13 @@ class FocusedPulseDataGenerator
     double TShift;
     double ZShift;
     double Phase;
+    double lightspeed;
+
+    double length; // corresponds to pulse duration
+    double width;
+    double om0;
+    double Time;
+
 
     int oversample_X; ///< Oversampling factor
     int oversample_Y; ///< Oversampling factor
@@ -76,13 +84,13 @@ class FocusedPulseDataGenerator
     fftw_plan pfft;
 
     /** The low index of the fields */
-    GridIndex low;
+    Index low;
     /** The high index of the fields */
-    GridIndex high;
+    Index high;
 
     void init();
 
-    // fill the working grid with data, fourier transform and copy to the
+    // fill the working grid with data, Fourier transform and copy to the
     // respective grids in the lists
     void calcEx();
     void calcEy();
@@ -99,21 +107,24 @@ class FocusedPulseDataGenerator
 };
 
 
-/** Calculates a tightly focused pulse in the long pulse limit
+/**
+ * Injects a tightly focused pulse in the long pulse limit
  */
 class FocusedPulseInject : public IncidentSource
 {
   public:
-    virtual ~FocusedPulseInject() {}
-    void initCurrents(Storage *storage, FieldSolver *solver);
+    /**
+     * Overrides #IncidentSource.initCurrents to initialise the data generator
+     */
+    void initCurrents(CurrentContainer &container);
   protected:
-    virtual IncidentSourceCurrent *makeECurrent(int distance_, Direction dir_);
-    virtual IncidentSourceCurrent *makeHCurrent(int distance_, Direction dir_);
-    virtual bool needCurrent(Direction dir_);
-    
-    ParameterMap* MakeParamMap (ParameterMap* pm = NULL);
+
+    pCurrent makeECurrent(int distance_, Direction dir_);
+    pCurrent makeHCurrent(int distance_, Direction dir_);
+    bool needCurrent(Direction dir_);
+
+    void initParameters(schnek::BlockParameters &blockPars);
   private:
-    double lightspeed;
 
     double length; // corresponds to pulse duration
     double width;
@@ -123,13 +134,7 @@ class FocusedPulseInject : public IncidentSource
     double Time;
     double Phase;
 
-    double lightspeed;
-
     //Complex YComp;
-
-    double length; // corresponds to pulse duration
-    double width;
-    double om0;
 
     int oversample_X;
     int oversample_Y;
@@ -140,22 +145,22 @@ class FocusedPulseInject : public IncidentSource
     FocusedPulseDataGenerator generator;
 };
 
+
 class FocusedPulseInjectSourceFunc
 {
   public:
-    FocusedPulseInjectSourceFunc(Direction dir_, bool isH_) 
+    FocusedPulseInjectSourceFunc(Direction dir_, bool isH_)
       : dir(dir_), isH(isH_) {};
-    ~FocusedPulseInjectSourceFunc() { }
-    
-    void setParam(double length_, 
+
+    void setParam(double length_,
                   double width_,
                   double om0_,
-                  double amp_, 
-                  double eps_, 
+                  double amp_,
+                  double eps_,
                   int distance_,
                   FocusedPulseDataGenerator *generator_);
 
-    void initSourceFunc(Storage *storage, DataGrid *pJx, DataGrid *pJy, DataGrid *pJz);
+    void initSourceFunc(pGrid pJx, pGrid pJy, pGrid pJz);
 
     Vector getEField(int i, int j, int k, int time);
     Vector getHField(int i, int j, int k, int time);
@@ -166,28 +171,32 @@ class FocusedPulseInjectSourceFunc
 
 
     double ZRl;
-    
+
     int lowx;
     int highx;
     int lowy;
     int highy;
-    
+
+    double length; // corresponds to pulse duration
+    double width;
+    double om0;
+
     double amp;
     double eps;
-    
+
     int dim;
     int transverse1, transverse2;
 
     Direction dir;
     bool isH;
-    
+
     int dist;
     FocusedPulseDataGenerator *generator;
-    
-    DataGrid *x_grid;
-    DataGrid *y_grid;
-    DataGrid *z_grid;
-    
+
+    pGrid x_grid;
+    pGrid y_grid;
+    pGrid z_grid;
+
 };
 
 

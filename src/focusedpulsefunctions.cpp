@@ -1,11 +1,11 @@
-#include "focusedpulseinject.h"
+
+#include "focusedpulseinject.hpp"
+#include "specfunc.hpp"
+
 #include <cmath>
-#include "specfunc.h"
 
-#define Power pow
-
-double E = exp(1.);
-double Pi = M_PI;
+extern double E;
+extern double Pi;
 
 typedef FocusedPulseDataGenerator::Complex Complex;
 
@@ -34,9 +34,32 @@ inline Complex Sqrt(Complex x)
   return sqrt(x);
 }
 
+inline Complex Power(Complex x, Complex y) {
+  return pow(x,y);
+}
+
+inline Complex Power(Complex x, double y) {
+  return pow(x,y);
+}
+
+inline Complex Exp(Complex x) {
+  return exp(x);
+}
+
 FocusedPulseDataGenerator::Complex 
   FocusedPulseDataGenerator::FieldFuncs(double kx, double ky, double z, double t, int fieldid)
 {
+  Complex W =0, Sigma = 0;
+  Complex k0 = 0;
+  Complex s = 0, sp = 0, spp = 0;
+  Complex Omega0 = 0;
+  Complex Dph = 0, DDph = 0, DTph = 0;
+  Complex Phi = 0;
+  Complex I = 0;
+  Complex cfB3 = 0, cfB4 = 0, cfB5 = 0;
+  Complex cfC3 = 0, cfC4 = 0, cfC5 = 0;
+  Complex cfD3 = 0, cfD4 = 0, cfD5 = 0;
+  Complex YComp = 0;
 
   double c = lightspeed;
 //  double p = Phase;
@@ -46,7 +69,7 @@ FocusedPulseDataGenerator::Complex
   double T2 = T*T;
   double T4 = T2*T2;
   
-  double Factor = (Power(Pi,1.5)*Power(Sigma,2)*Tau)/2.;
+  Complex Factor = (Power(Pi,1.5)*Power(Sigma,2)*Tau)/Complex(2., 0.0);
   double kp = sqrt(kx*kx+ky*ky);
   
   Complex Kph = -Sqrt(Power(k0,2) - Power(kp,2));
@@ -54,19 +77,19 @@ FocusedPulseDataGenerator::Complex
   Complex  Sph = (-Power(sp,2) + s*spp)/Power(s,2);
 
   Complex  Tph = ((-4*sp + Power(kp,2)*Power(s,2)*sp)/s + (Complex
-(0,2)*(c*Sqrt (Power (Kph,2))*t + k0*z))/(c*Sqrt (Power (Kph,2))))/2.;
+(0,2)*(c*Sqrt (Power (Kph,2))*t + k0*z))/(c*Sqrt (Power (Kph,2))))/Complex(2.);
 
   Complex  phA = Sqrt (-(Power (kp,2)*Power (sp,2)) + 4*Sph - Power
 (kp,2)*s*spp + (Complex (0,2)*Power (kp,2)*z)/(Power (c,2)*Power (Kph,3)) -
-Power (Tau,2))/2.;
+Power (Tau,2))/Complex(2.);
 
   Complex  phB = (Complex (0,0.5)*Tph)/phA;
 
-  Complex  WA = Power (E,Power (Tau,2)*Power (Omega0,2))*Sqrt (Pi)*W
+  Complex  WA = Power (E,Power (Tau,2)*Power (Omega0,2))*Sqrt (Pi)*W * /* This needs checking !!!!! */
 (-phB);                          
 
-  Complex  WAM = Power (E,Power (Tau,2)*Power (Omega0,2))*Sqrt
-(Pi)*W (phB);
+  Complex  WAM = Power (E,Power (Tau,2)*Power (Omega0,2))*Sqrt(Pi)*W * /* This needs checking !!!!! */
+      (phB);
 
   Complex  phC = 2*Dph*DTph - DDph*Tph;
 
@@ -109,7 +132,7 @@ Phi) - 4*Power (Tau,2)*Power (Omega0,2))/4.;
   Complex  cfD2 = phD*phN;
   
 
-  Complex WA, WB;
+  Complex /* WA, */ WB;
   Complex SA, SB;
 
   if (imag(phB)>0)

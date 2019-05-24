@@ -145,7 +145,8 @@ class IncidentSourceCurrent : public Current
  *
  * This function is templated with a source function that should provide the
  * value of the **magnetic field**. `SourceFunc` must expose a method
- * `getHField` to obtain this field.
+ * `getHField` to obtain this field and a method `initSourceFunc` to initialise
+ * the source function.
  */
 template<class SourceFunc>
 class IncidentSourceECurrent : public IncidentSourceCurrent, public SourceFunc
@@ -174,7 +175,8 @@ class IncidentSourceECurrent : public IncidentSourceCurrent, public SourceFunc
  *
  * This function is templated with a source function that should provide the
  * value of the **electric field**. `SourceFunc` must expose a method
- * `getEField` to obtain this field.
+ * `getEField` to obtain this field and a method `initSourceFunc` to initialise
+ * the source function.
  */
 template<class SourceFunc>
 class IncidentSourceHCurrent : public IncidentSourceCurrent, public SourceFunc
