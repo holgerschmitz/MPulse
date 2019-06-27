@@ -15,7 +15,6 @@ class PlaneWaveSource : public IncidentSource
     pCurrent makeECurrent(int distance_, Direction dir_);
     pCurrent makeHCurrent(int distance_, Direction dir_);
     
-    bool needCurrent(Direction dir_);
     void initParameters(schnek::BlockParameters &blockPars);
     
     double kx, ky, kz;
@@ -24,14 +23,14 @@ class PlaneWaveSource : public IncidentSource
     double Ex_bg, Ey_bg, Ez_bg;
     double ramp;
     double eps;
-    
+    Vector front;
 };
 
 class PlaneWaveSourceEFunc
 {
   public:
     PlaneWaveSourceEFunc(Direction dir_, bool isH_);
-    void setParam(Vector k_, Vector E_, Vector H_, Vector E_bg_, Vector H_bg_, double ramp_, double eps_);
+    void setParam(Vector k_, Vector E_, Vector H_, Vector E_bg_, Vector H_bg_, double ramp_, double eps_, const Vector &front_);
 
     Vector getHField(int i, int j, int k, double time);
 
@@ -49,6 +48,7 @@ class PlaneWaveSourceEFunc
     double om;
     double ramp;
     double eps;
+    Vector front;
     
     double dx, dy, dz;
     
@@ -60,7 +60,7 @@ class PlaneWaveSourceHFunc
 {
   public:
     PlaneWaveSourceHFunc(Direction dir_, bool isH_);
-    void setParam(Vector k_, Vector E_, Vector H_, Vector E_bg_, Vector H_bg_, double ramp_, double eps_);
+    void setParam(Vector k_, Vector E_, Vector H_, Vector E_bg_, Vector H_bg_, double ramp_, double eps_, const Vector &front_);
 
     Vector getEField(int i, int j, int k, double time);
 
@@ -78,6 +78,7 @@ class PlaneWaveSourceHFunc
     double om;
     double ramp;
     double eps;
+    Vector front;
     
     double dx, dy, dz;
     
@@ -98,7 +99,6 @@ class PlaneGaussSource : public IncidentSource
     pCurrent makeECurrent(int distance_, Direction dir_);
     pCurrent makeHCurrent(int distance_, Direction dir_);
     
-    bool needCurrent(Direction dir_);
     void initParameters(schnek::BlockParameters &blockPars);
     
     double kx, ky, kz;
@@ -106,7 +106,6 @@ class PlaneGaussSource : public IncidentSource
     double width;
     double offset;
     double eps;
-    
 };
 
 class PlaneGaussSourceEFunc

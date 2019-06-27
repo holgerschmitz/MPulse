@@ -40,6 +40,33 @@ class CurrentContainer
      * The list of magnetic currents
      */
     CurrentList magCurrents;
+
+    /**
+     * Sum of all electric currents
+     */
+    pField pJx, pJy, pJz;
+
+    /**
+     * Sum of all magnetic currents
+     */
+    pField pMx, pMy, pMz;
+
+    /**
+     * Add all electric currents and store the result in #pJx, #pJy, #pJz
+     *
+     * Each current can be defined on a separate sub-domain of the local grid
+     * domain
+     */
+    void sumCurrents();
+
+    /**
+     * Add all magnetic currents and store the result in #pMx, #pMy, #pMz
+     *
+     * Each current can be defined on a separate sub-domain of the local grid
+     * domain
+     */
+    void sumMagCurrents();
+
   public:
 
     /**
@@ -51,6 +78,11 @@ class CurrentContainer
      * Add a magnetic current to the list
      */
     void addMagCurrent(pCurrent current);
+
+    /**
+     * Initialises the sum of the currents to the local grid domain
+     */
+    void init();
 };
 
 /**

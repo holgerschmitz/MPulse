@@ -108,7 +108,7 @@ void FocusedPulseInjectSourceFunc::initSourceFunc(pGrid pJx, pGrid pJy, pGrid pJ
   generator->setHigh(hi);
   
   Index blow, bhigh;
-  if (!getBorderExtent(dir, 1, dist, blow, bhigh)) return;
+  if (!getBorderExtent(dir, 1, dist, blow, bhigh, isH)) return;
   x_grid = boost::make_shared<Grid>(blow, bhigh);
   y_grid = boost::make_shared<Grid>(blow, bhigh);
   z_grid = boost::make_shared<Grid>(blow, bhigh);

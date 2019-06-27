@@ -10,11 +10,12 @@
 #define MPULSE_FDTD_PLAIN_H
 
 #include "fieldsolver.hpp"
+#include "current.hpp"
 #include "mpulse.hpp"
 
 class Storage;
 
-class FDTD_Plain : public FieldSolver
+class FDTD_Plain : public FieldSolver, public CurrentContainer, public schnek::BlockContainer<CurrentBlock>
 {
   private:
     pField pEx;

@@ -11,65 +11,23 @@
 
 void IncidentSource::initCurrents(CurrentContainer &container)
 { 
-  if (needCurrent(north))
-  {
-    container.addCurrent(
-      makeECurrent(distance, north)
-    );
-    container.addMagCurrent(
-      makeHCurrent(distance, north)
-    );
-  }
-  
-  if (needCurrent(south))
-  {
-    container.addCurrent(
-      makeECurrent(distance, south)
-    );
-    container.addMagCurrent(
-      makeHCurrent(distance, south)
-    );
-  }
-  
-  if (needCurrent(east))
-  {
-    container.addCurrent(
-      makeECurrent(distance, east)
-    );
-    container.addMagCurrent(
-      makeHCurrent(distance, east)
-    );
-  }
-  
-  if (needCurrent(west))
-  {
-    container.addCurrent(
-      makeECurrent(distance, west)
-    );
-    container.addMagCurrent(
-      makeHCurrent(distance, west)
-    );
-  }
-  
-  if (needCurrent(up))
-  {
-    container.addCurrent(
-      makeECurrent(distance, up)
-    );
-    container.addMagCurrent(
-      makeHCurrent(distance, up)
-    );
-  }
-  
-  if (needCurrent(down))
-  {
-    container.addCurrent(
-      makeECurrent(distance, down)
-    );
-    container.addMagCurrent(
-      makeHCurrent(distance, down)
-    );
-  }
+  container.addCurrent(makeECurrent(distance, north));
+  container.addMagCurrent(makeHCurrent(distance, north));
+
+  container.addCurrent(makeECurrent(distance, south));
+  container.addMagCurrent(makeHCurrent(distance, south));
+
+  container.addCurrent(makeECurrent(distance, east));
+  container.addMagCurrent(makeHCurrent(distance, east));
+
+  container.addCurrent(makeECurrent(distance, west));
+  container.addMagCurrent(makeHCurrent(distance, west));
+
+  container.addCurrent(makeECurrent(distance, up));
+  container.addMagCurrent(makeHCurrent(distance, up));
+
+  container.addCurrent(makeECurrent(distance, down));
+  container.addMagCurrent(makeHCurrent(distance, down));
 }
 
 
