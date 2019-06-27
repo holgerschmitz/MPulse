@@ -17,7 +17,7 @@ void IncidentSourceECurrent<SourceFunc>::init()
 {
   Index blow, bhigh;
 
-  if (!getBorderExtent(IncidentSourceCurrent::dir, 1, distance, blow, bhigh)) return;
+  if (!getBorderExtent(IncidentSourceCurrent::dir, 1, distance, blow, bhigh, false)) return;
 
   pJx = boost::make_shared<Grid>(blow, bhigh);
   pJy = boost::make_shared<Grid>(blow, bhigh);
@@ -56,7 +56,8 @@ void IncidentSourceECurrent<SourceFunc>::stepScheme(double dt)
   this->setTime(Time);
   
   int off[3] = {0,0,0};
-  off[IncidentSourceCurrent::dim] = reverse?-1:-1;
+  off[IncidentSourceCurrent::dim] = reverse?0:-1;
+  double factor = reverse?1:-1;
   
   double DX = dX[2];
   
@@ -70,8 +71,8 @@ void IncidentSourceECurrent<SourceFunc>::stepScheme(double dt)
       {
         int z = ind[2]+off[2];
         Vector H = this->getHField(x,y,z,Time);
-        J0(ind[0], ind[1], ind[2]) = H[IncidentSourceCurrent::transverse2]/DX;
-        J1(ind[0], ind[1], ind[2]) = H[IncidentSourceCurrent::transverse1]/DX;
+        J0(ind[0], ind[1], ind[2]) = factor*H[IncidentSourceCurrent::transverse2]/DX;
+        J1(ind[0], ind[1], ind[2]) = -factor*H[IncidentSourceCurrent::transverse1]/DX;
       }
     }
   }
@@ -91,11 +92,9 @@ IncidentSourceHCurrent<SourceFunc>::IncidentSourceHCurrent(int distance_, Direct
 template<class SourceFunc>
 void IncidentSourceHCurrent<SourceFunc>::init()
 {
-  if (!reverse) distance = distance-1;
-
   Index blow, bhigh;
 
-  if (!getBorderExtent(IncidentSourceCurrent::dir, 1, distance, blow, bhigh)) return;
+  if (!getBorderExtent(IncidentSourceCurrent::dir, 1, distance, blow, bhigh, true)) return;
 
   pJx = boost::make_shared<Grid>(blow, bhigh);
   pJy = boost::make_shared<Grid>(blow, bhigh);
@@ -126,14 +125,15 @@ void IncidentSourceHCurrent<SourceFunc>::stepScheme(double dt)
   
   Index low  = J0.getLo();
   Index high = J0.getHi();
-  
+
   Index ind, indn;
   
   double Time = MPulse::getTime();
   this->setTime(Time);
   
   int off[3] = {0,0,0};
-  off[IncidentSourceCurrent::dim] = reverse?+1:0;
+  off[IncidentSourceCurrent::dim] = reverse?0:1;
+  double factor = reverse?1:-1;
   
   double DX = dX[2];
   
@@ -147,8 +147,8 @@ void IncidentSourceHCurrent<SourceFunc>::stepScheme(double dt)
       {
         int z = ind[2]+off[2];
         Vector E = this->getEField(x,y,z,Time);
-        J0(ind[0], ind[1], ind[2]) = E[IncidentSourceCurrent::transverse2]/DX;
-        J1(ind[0], ind[1], ind[2]) = E[IncidentSourceCurrent::transverse1]/DX;
+        J0(ind[0], ind[1], ind[2]) = -factor*E[IncidentSourceCurrent::transverse2]/DX;
+        J1(ind[0], ind[1], ind[2]) = factor*E[IncidentSourceCurrent::transverse1]/DX;
       }
     }
   }

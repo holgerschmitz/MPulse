@@ -1,7 +1,5 @@
 
 
-#include <boost/make_shared.hpp>
-
 //===============================================================
 //==========  FDTD_PLRCSolver
 //===============================================================
@@ -12,27 +10,11 @@ void FDTD_PLRCSolver<PLRCImplementation>::init()
 {
   PLRCImplementation::init();
 
-  schnek::DomainSubdivision<Field> &subdivision = MPulse::getSubdivision();
-  Index lowIn = subdivision.getInnerLo();
-  Index highIn = subdivision.getInnerHi();
-
-  schnek::Range<double, DIMENSION> domainSize(schnek::Array<double, DIMENSION>(0,0,0), MPulse::getSize());
-  schnek::Array<bool, DIMENSION> stagger;
-  stagger = false;
-
   if ((this->LOm2[0] == 0) || (this->LOm2[1] == 0) || (this->LOm2[2] == 0))
   {
     std::cerr << "FDTD_PLRCSolver: Omega should not be zero!\n";
     exit(-1);
   }
-  
-  pJx = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
-  pJy = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
-  pJz = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
-  
-  pMx = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
-  pMy = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
-  pMz = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
 }
 
 
@@ -124,7 +106,7 @@ void FDTD_PLRCSolver<PLRCImplementation>::stepD(double dt)
   this->plrcData.sumXi0  = std::real(sumXi);
 
   double jx, jy, jz;
-  sumCurrents();
+  this->sumCurrents();
 
   for (int i=low[0]; i<=high[0]; ++i)
     for (int j=low[1]; j<=high[1]; ++j)
@@ -225,7 +207,7 @@ void FDTD_PLRCSolver<PLRCImplementation>::stepB(double dt)
   double dz = MPulse::getDx()[2];
 
   double jx, jy, jz;
-  sumMagCurrents();
+  this->sumMagCurrents();
 
   for (int i=low[0]; i<=high[0]; ++i)
     for (int j=low[1]; j<=high[1]; ++j)
@@ -241,68 +223,6 @@ void FDTD_PLRCSolver<PLRCImplementation>::stepB(double dt)
   MPulse::getSubdivision().exchange(*this->pBx);
   MPulse::getSubdivision().exchange(*this->pBy);
   MPulse::getSubdivision().exchange(*this->pBz);
-}
-
-template<class PLRCImplementation>
-void FDTD_PLRCSolver<PLRCImplementation>::sumCurrents()
-{
-  Field &jxT = *this->pJx;
-  Field &jyT = *this->pJy;
-  Field &jzT = *this->pJz;
-  
-  jxT = 0;
-  jyT = 0;
-  jzT = 0;
-  
-
-  BOOST_FOREACH(pCurrent current, this->currents)
-  {
-    Grid &jx = *current->getJx();
-    Grid &jy = *current->getJy();
-    Grid &jz = *current->getJz();
-    
-    Index low = jx.getLo();
-    Index high = jx.getHi();
-    for (int i=low[0]; i<=high[0]; ++i)
-      for (int j=low[1]; j<=high[1]; ++j)
-        for (int k=low[2]; k<=high[2]; ++k)
-        {
-          jxT(i,j,k) += jx(i,j,k);
-          jyT(i,j,k) += jy(i,j,k);
-          jzT(i,j,k) += jz(i,j,k);
-        }
-  } 
-}
-
-template<class PLRCImplementation>
-void FDTD_PLRCSolver<PLRCImplementation>::sumMagCurrents()
-{
-  Field &jxT = *this->pMx;
-  Field &jyT = *this->pMy;
-  Field &jzT = *this->pMz;
-  
-  jxT = 0;
-  jyT = 0;
-  jzT = 0;
-  
-
-  BOOST_FOREACH(pCurrent current, this->magCurrents)
-  {
-    Grid &jx = *current->getJx();
-    Grid &jy = *current->getJy();
-    Grid &jz = *current->getJz();
-    
-    Index low = jx.getLo();
-    Index high = jx.getHi();
-    for (int i=low[0]; i<=high[0]; ++i)
-      for (int j=low[1]; j<=high[1]; ++j)
-        for (int k=low[2]; k<=high[2]; ++k)
-        {
-          jxT(i,j,k) += jx(i,j,k);
-          jyT(i,j,k) += jy(i,j,k);
-          jzT(i,j,k) += jz(i,j,k);
-        }
-  } 
 }
 
 template<class PLRCImplementation>

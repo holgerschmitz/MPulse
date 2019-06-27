@@ -235,16 +235,6 @@ class FDTD_PLRCSolver : public PLRCImplementation
   private:
 
     /**
-     * Sum of all electric currents
-     */
-    pField pJx, pJy, pJz;
-    
-    /**
-     * Sum of all magnetic currents
-     */
-    pField pMx, pMy, pMz;
-
-    /**
      * Advance the electric fields
      *
      * Accumulates all magnetic currents and then calls `plrcStepD`
@@ -264,21 +254,6 @@ class FDTD_PLRCSolver : public PLRCImplementation
      */
     void initAccumulator(double dt);
 
-    /**
-     * Add all electric currents and store the result in #pJx, #pJy, #pJz
-     *
-     * Each current can be defined on a separate sub-domain of the local grid
-     * domain
-     */
-    void sumCurrents();
-
-    /**
-     * Add all magnetic currents and store the result in #pMx, #pMy, #pMz
-     *
-     * Each current can be defined on a separate sub-domain of the local grid
-     * domain
-     */
-    void sumMagCurrents();
 };
 
 typedef FDTD_PLRCSolver<FDTD_PLRCLinCore> FDTD_PLRCLin;

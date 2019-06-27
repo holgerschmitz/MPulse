@@ -178,6 +178,8 @@ int main (int argc, char** argv) {
         ("FDTD_Plain")("FDTD_PLRC")("FDTD_PLRC_Nonlinear")
         ("FieldDiag");
 
+    blocks("FDTD_Plain").addChildren("CPMLBorder")
+        ("PlaneWaveSource")("PlaneGaussSource");
     blocks("FDTD_PLRC").addChildren("CPMLBorder")
         ("ShortPulseInject")("PlaneWaveSource")("PlaneGaussSource")
         ("PlasmaCurrent");

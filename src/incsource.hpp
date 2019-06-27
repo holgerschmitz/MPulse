@@ -44,11 +44,6 @@ class IncidentSource : public CurrentBlock
     virtual pCurrent makeHCurrent(int distance_, Direction dir_) = 0;
 
     /**
-     * Check if a current is needed at a particular bounary
-     */
-    virtual bool needCurrent(Direction dir_) = 0;
-    
-    /**
      * Initialise the setup parameters
      */
     void initParameters(schnek::BlockParameters &blockPars);

@@ -54,4 +54,8 @@ static const double mu_0 = 4e-7*PI;
 static const double eps_0 = 1/(mu_0*clight2);
 static const double eps_0_inv = (mu_0*clight2);
 
-#endif // VELLAMO_TYPES_H
+inline bool doDiag(int i, int j, int k) {
+  return (k==50) && (i>=83) && (i<=86) && (j==50); //(j>=13) && (j<=16);
+}
+
+#endif // MPULSE_TYPES_H

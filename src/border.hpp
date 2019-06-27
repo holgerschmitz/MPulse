@@ -14,7 +14,8 @@ bool getBorderExtent(Direction dir,
                      int thickness,
                      int distance,
                      Index &blow,
-                     Index &bhigh);
+                     Index &bhigh,
+                     bool isH);
 
 
 #endif /* BORDER_HPP_ */

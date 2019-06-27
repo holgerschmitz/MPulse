@@ -375,7 +375,7 @@ void CPMLBorderECurrent::init()
 {
   Index blow, bhigh;
 
-  if (!getBorderExtent(dir, thickness, 1, blow, bhigh)) return;
+  if (!getBorderExtent(dir, thickness, 1, blow, bhigh, false)) return;
 
   pJx = boost::make_shared<Grid>(blow, bhigh);
   pJy = boost::make_shared<Grid>(blow, bhigh);
@@ -478,7 +478,7 @@ void CPMLBorderHCurrent::init()
 
   Index blow, bhigh;
 
-  if (!getBorderExtent(dir, thickness, distance, blow, bhigh)) return;
+  if (!getBorderExtent(dir, thickness, distance, blow, bhigh, true)) return;
 
   pJx = boost::make_shared<Grid>(blow, bhigh);
   pJy = boost::make_shared<Grid>(blow, bhigh);

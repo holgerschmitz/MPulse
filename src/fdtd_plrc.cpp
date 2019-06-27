@@ -90,6 +90,8 @@ void FDTD_PLRCCore::init()
     current->initCurrents(*this);
   }
 
+  CurrentContainer::init();
+
   schnek::LiteratureArticle Kelley1996("Kelley1996", "D. F. Kelley and R. J. Luebbers",
       "Piecewise linear recursive convolution for dispersive media using FDTD",
       "IEEE Transactions on Antennas and Propagation", "1996", "44", "792--797");
