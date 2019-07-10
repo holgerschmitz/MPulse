@@ -104,15 +104,16 @@ class PlaneGaussSource : public IncidentSource
     double kx, ky, kz;
     double Hx, Hy, Hz;
     double width;
-    double offset;
     double eps;
+
+    Vector front;
 };
 
 class PlaneGaussSourceEFunc
 {
   public:
     PlaneGaussSourceEFunc(Direction dir_, bool isH_);
-    void setParam(Vector k_, Vector E_, Vector H_, double width_, double offset_, double eps_);
+    void setParam(Vector k_, Vector E_, Vector H_, double width_, double eps_, const Vector &front_);
 
     Vector getHField(int i, int j, int k, double time);
 
@@ -127,8 +128,8 @@ class PlaneGaussSourceEFunc
     double dt;
     double om;
     double width;
-    double offset;
     double eps;
+    Vector front;
     
     double dx, dy, dz;
     
@@ -140,7 +141,7 @@ class PlaneGaussSourceHFunc
 {
   public:
     PlaneGaussSourceHFunc(Direction dir_, bool isH_);
-    void setParam(Vector k_, Vector E_, Vector H_, double width_, double offset_, double eps_);
+    void setParam(Vector k_, Vector E_, Vector H_, double width_, double eps_, const Vector &front_);
 
     Vector getEField(int i, int j, int k, double time);
 
@@ -155,8 +156,8 @@ class PlaneGaussSourceHFunc
     double dt;
     double om;
     double width;
-    double offset;
     double eps;
+    Vector front;
     
     double dx, dy, dz;
     
