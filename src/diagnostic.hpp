@@ -21,6 +21,4 @@ class FieldDiagnostic : public schnek::HDFGridDiagnostic<Field, pField, schnek::
     IndexType getGlobalMax();
 };
 
-
-
 #endif /* SRC_DIAGNOSTIC_HPP_ */

@@ -164,118 +164,6 @@ void CPMLBorder::initParameters(schnek::BlockParameters &blockPars)
 }
 
 //===============================================================
-//==========  CPMLBorderOneD
-//===============================================================
-
-
-void CPMLBorderOneD::initCurrents(CurrentContainer &container)
-{ 
-
-  container.addCurrent(
-      boost::make_shared<CPMLBorderECurrent>(thickness, up, this->kappaMax, this->aMax, this->sigmaMax, 1, boost::ref(*this))
-  );
-  container.addCurrent(
-      boost::make_shared<CPMLBorderECurrent>(thickness, down, this->kappaMax, this->aMax, this->sigmaMax, 1, boost::ref(*this))
-  );
-  
-  container.addMagCurrent(
-      boost::make_shared<CPMLBorderHCurrent>(thickness, up, this->kappaMax, this->aMax, this->sigmaMax, 1, boost::ref(*this))
-  );
-  container.addMagCurrent(
-      boost::make_shared<CPMLBorderHCurrent>(thickness, down, this->kappaMax, this->aMax, this->sigmaMax, 1, boost::ref(*this))
-  );
-  
-  initCoefficients();
-
-}
-
-void CPMLBorderOneD::initCoefficients()
-{
-  // initialize Kappas here
-
-  schnek::DomainSubdivision<Field> &subdivision = MPulse::getSubdivision();
-  Index glow  = Index(0);
-  Index ghigh = MPulse::getGlobalMax();
-
-  Index low  = subdivision.getInnerLo();
-  Index high = subdivision.getInnerHi();
-
-  std::vector<pDataLine> pKappaEdk(3);
-  std::vector<pDataLine> pKappaHdk(3);
-
-  std::vector<pDataLine> pCpmlSigmaE(3);
-  std::vector<pDataLine> pCpmlSigmaH(3);
-
-  retrieveData("KappaEdx", pKappaEdk[0]);
-  retrieveData("KappaEdy", pKappaEdk[1]);
-  retrieveData("KappaEdz", pKappaEdk[2]);
-
-  retrieveData("KappaHdx", pKappaHdk[0]);
-  retrieveData("KappaHdy", pKappaHdk[1]);
-  retrieveData("KappaHdz", pKappaHdk[2]);
-    
-  *(pKappaEdk[0]) = 1;
-  *(pKappaEdk[1]) = 1;
-
-  *(pKappaHdk[0]) = 1;
-  *(pKappaHdk[1]) = 1;
-    
-  std::cerr << "Field Size Edx " << pKappaEdk[2]->getLo()[0] << ", "
-                                 << pKappaEdk[2]->getHi()[0] <<std::endl;
-  
-  std::cerr << "Field Size Hdx " << pKappaHdk[2]->getLo()[0] << ", "
-                                 << pKappaHdk[2]->getHi()[0] <<std::endl;
-  
-  
-    if (low[2]<glow[2]+thickness)
-    {
-      (*pKappaEdk[2]) = 1.0;
-      
-      (*pKappaHdk[2]) = 1.0;
-      
-      for (int i=0; i<thickness; ++i)
-      {
-        double x  = 1 - double(i)/double(thickness);
-        double x3 = x*x*x;
-        (*pKappaEdk[2])(low[2]+i+1) = 1 + (this->kappaMax - 1)*x3;
-      }
-      
-      for (int i=0; i<thickness; ++i)
-      {
-        double x  = 1 - (double(i)+0.5)/double(thickness);
-        double x3 = x*x*x;
-        (*pKappaHdk[2])(low[2]+i) = 1 + (this->kappaMax - 1)*x3;
-      }
-    }
-
-    if (high[2]>ghigh[2]-thickness)
-    {
-      for (int i=0; i<thickness; ++i)      
-      {
-        double x  = 1 - (double(i))/double(thickness);
-        double x3 = x*x*x;
-        (*pKappaEdk[2])(high[2]-i-1) = 1 + (this->kappaMax - 1)*x3;
-      }
-      for (int i=0; i<thickness; ++i)
-      {
-        double x  = 1 - double(i+0.5)/double(thickness);
-        double x3 = x*x*x;
-        (*pKappaHdk[2])(high[2]-i-1) = 1 + (this->kappaMax - 1)*x3;
-      }
-    }
-}
-
-void CPMLBorderOneD::initParameters(schnek::BlockParameters &blockPars)
-{
-  CurrentBlock::initParameters(blockPars);
-
-  blockPars.addParameter("d", &this->thickness, 8);
-  blockPars.addParameter("kappaMax", &this->kappaMax, 15.0);
-  blockPars.addParameter("aMax", &this->aMax, 0.25);
-  blockPars.addParameter("sigmaMax", &this->sigmaMax, 3.0);
-}
-
-//===============================================================
 //==========  CPMLBorderCurrent
 //===============================================================
 
@@ -304,6 +192,9 @@ CPMLBorderCurrent::CPMLBorderCurrent( int thickness_, Direction dir_, bool isH_,
                 transverse2 = 1;
                 break;
   }
+
+  double eta = sqrt(mu_0/eps_0);
+  sigmaMax = sigmaMax *clight* 0.8*4 / MPulse::getDx()[dim];
 }
 
 void CPMLBorderCurrent::makeCoeff()
@@ -351,7 +242,7 @@ void CPMLBorderCurrent::makeCoeff()
     double kappa = 1 + (kappaMax - 1)*x3;
     double a = aMax*(1-x);
     
-    double b = exp(-(sigma/kappa + a)*dt/eps);
+    double b = exp(-(sigma/kappa + a)*dt);
     double c = sigma*(b-1)/(kappa*(sigma+kappa*a));
         
     bCoeff(pos) = b;
@@ -442,11 +333,11 @@ void CPMLBorderECurrent::stepScheme(double dt)
         --indm[dim];
         
         Psi0(ind[0], ind[1], ind[2]) 
-          = bCoeff(j)*Psi0(ind[0], ind[1], ind[2]) 
-            - cCoeff(j)*(B1(ind[0], ind[1], ind[2])-B1(indm[0], indm[1], indm[2]))/dx;
+          = bCoeff(j)*Psi0(ind[0], ind[1], ind[2])
+            - cCoeff(j)*(B1(ind[0], ind[1], ind[2])-B1(indm[0], indm[1], indm[2]))/(mu_0*dx);
         Psi1(ind[0], ind[1], ind[2]) 
           = bCoeff(j)*Psi1(ind[0], ind[1], ind[2]) 
-            + cCoeff(j)*(B0(ind[0], ind[1], ind[2])-B0(indm[0], indm[1], indm[2]))/dx;
+            + cCoeff(j)*(B0(ind[0], ind[1], ind[2])-B0(indm[0], indm[1], indm[2]))/(mu_0*dx);
       }
 }
 
@@ -463,18 +354,18 @@ CPMLBorderHCurrent::CPMLBorderHCurrent( int thickness_, Direction dir_,
 
 void CPMLBorderHCurrent::init()
 {
-  int distance;
+  int distance = 1;
   
-  switch (dir)
-  {
-    case east:  
-    case north: 
-    case up:    distance = 1; break;
-    case west:  
-    case south: 
-    case down:  distance = 0; break;
-    default:    distance = 0; break;
-  }
+//  switch (dir)
+//  {
+//    case east:
+//    case north:
+//    case up:    distance = 1; break;
+//    case west:
+//    case south:
+//    case down:  distance = 0; break;
+//    default:    distance = 0; break;
+//  }
 
   Index blow, bhigh;
 
@@ -552,7 +443,7 @@ void CPMLBorderHCurrent::stepScheme(double dt)
             + cCoeff(j)*(E1(indp[0], indp[1], indp[2])-E1(ind[0], ind[1], ind[2]))/dx;
             
         Psi1(ind[0], ind[1], ind[2]) 
-          = bCoeff(j)*Psi1(ind[0], ind[1], ind[2]) 
+          = bCoeff(j)*Psi1(ind[0], ind[1], ind[2])
             - cCoeff(j)*(E0(indp[0], indp[1], indp[2])-E0(ind[0], ind[1], ind[2]))/dx;
       }
 }
