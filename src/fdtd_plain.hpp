@@ -18,13 +18,37 @@ class Storage;
 class FDTD_Plain : public FieldSolver, public CurrentContainer, public schnek::BlockContainer<CurrentBlock>
 {
   private:
-    pField pEx;
-    pField pEy;
-    pField pEz;
-    pField pBx;
-    pField pBy;
-    pField pBz;
+
+    /**
+     * References to the local grid of the electric field components,
+     * \f$\mathbf{E}\f$
+     */
+    pField pEx, pEy, pEz;
+
+    /**
+     * References to the local grid of the magnetic field components,
+     * \f$\mathbf{E}\f$
+     */
+    pField pBx, pBy, pBz;
+
+    /**
+     * Stretch factors for the grid cell size of the electric fields; used by CPML
+     * schemes.
+     */
+    pDataLine pKappaEdx, pKappaEdy, pKappaEdz;
+
+    /**
+     * Stretch factors for the grid cell size of the magnetic fields; used by CPML
+     * schemes.
+     */
+    pDataLine pKappaHdx, pKappaHdy, pKappaHdz;
   public:
+
+    /**
+     * Registers helper grids for sharing
+     */
+    void registerData();
+
     void init();
   
     void stepSchemeInit(double dt);

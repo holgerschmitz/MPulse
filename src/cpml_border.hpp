@@ -23,22 +23,6 @@ class CPMLBorder : public CurrentBlock
     double eps;
 };
 
-class CPMLBorderOneD : public CurrentBlock
-{
-  public:
-    void initCurrents(CurrentContainer &container);
-  protected:
-    void initParameters(schnek::BlockParameters &blockPars);
-  private:
-    
-    void initCoefficients();
-    
-    int thickness;
-    double kappaMax;
-    double aMax;
-    double sigmaMax;
-};
-
 class CPMLBorderCurrent : public Current
 {
   public:
