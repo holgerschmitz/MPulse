@@ -55,7 +55,7 @@ static const double eps_0 = 1/(mu_0*clight2);
 static const double eps_0_inv = (mu_0*clight2);
 
 inline bool doDiag(int i, int j, int k) {
-  return (i==395) && (j==25) && (k==25); //(j>=13) && (j<=16);
+  return false && (i==395) && (j==25) && (k==25); //(j>=13) && (j<=16);
 }
 
 #endif // MPULSE_TYPES_H
