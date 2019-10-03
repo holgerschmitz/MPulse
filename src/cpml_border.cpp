@@ -114,42 +114,123 @@ void CPMLBorder::initCoefficients()
   for (int dim = 0; dim<3; ++dim)
   {
     std::cerr << "Dim " << dim << std::endl;
-    if (low[dim]<glow[dim]+thickness)
+
+    (*pKappaEdk[dim]) = 1.0;
+    (*pKappaHdk[dim]) = 1.0;
+
+
+    Index blow, bhigh;
+    Direction dir;
+
+    switch (dim)
     {
-      (*pKappaEdk[dim]) = 1.0;
-      
-      (*pKappaHdk[dim]) = 1.0;
-      
-      for (int i=0; i<=thickness; ++i)
+      case 0: dir = west; break;
+      case 1: dir = south; break;
+      case 2: dir = down; break;
+    }
+
+    if (getBorderExtent(dir, thickness, 1, blow, bhigh, false))
+    {
+      int lowk  = blow[dim];
+      int highk = bhigh[dim];
+      int kLimit = highk-lowk + 1;
+
+      for (int k=0; k<kLimit; ++k)
       {
-        double x  = 1 - double(i)/double(thickness);
+        double x = 1 - double(k)/double(thickness);
         double x3 = x*x*x;
-        (*pKappaEdk[dim])(low[dim]+i) = 1 + (this->kappaMax - 1)*x3;
-      }
-      for (int i=0; i<thickness; ++i)
-      {
-        double x  = 1 - (double(i)+0.5)/double(thickness);
-        double x3 = x*x*x;
-        (*pKappaHdk[dim])(low[dim]+i) = 1 + (this->kappaMax - 1)*x3;
+
+        (*pKappaEdk[dim])(lowk+k) = 1 + (this->kappaMax - 1)*x3;
       }
     }
 
-    if (high[dim]>ghigh[dim]-thickness)
+    if (getBorderExtent(dir, thickness, 1, blow, bhigh, true))
     {
-      for (int i=0; i<=thickness; ++i)
+      int lowk  = blow[dim];
+      int highk = bhigh[dim];
+      int kLimit = highk-lowk + 1;
+
+      for (int k=0; k<kLimit; ++k)
       {
-        double x  = 1 - double(i)/double(thickness);
+        double x = 1 - (double(k) + 0.5)/double(thickness);
         double x3 = x*x*x;
-        (*pKappaHdk[dim])(high[dim]-i) = 1 + (this->kappaMax - 1)*x3;
-      }
-      for (int i=0; i<thickness; ++i)
-      
-      {
-        double x  = 1 - (double(i)+0.5)/double(thickness);
-        double x3 = x*x*x;
-        (*pKappaEdk[dim])(high[dim]-i) = 1 + (this->kappaMax - 1)*x3;
+
+        (*pKappaHdk[dim])(lowk+k) = 1 + (this->kappaMax - 1)*x3;
       }
     }
+
+    switch (dim)
+    {
+      case 0: dir = east; break;
+      case 1: dir = north; break;
+      case 2: dir = up; break;
+    }
+
+    if (getBorderExtent(dir, thickness, 1, blow, bhigh, false))
+    {
+      int lowk  = blow[dim];
+      int highk = bhigh[dim];
+      int kLimit = highk-lowk + 1;
+
+      for (int k=0; k<kLimit; ++k)
+      {
+        double x = 1 - double(k)/double(thickness);
+        double x3 = x*x*x;
+
+        (*pKappaEdk[dim])(highk-k) = 1 + (this->kappaMax - 1)*x3;
+      }
+    }
+
+    if (getBorderExtent(dir, thickness, 1, blow, bhigh, true))
+    {
+      int lowk  = blow[dim];
+      int highk = bhigh[dim];
+      int kLimit = highk-lowk + 1;
+
+      for (int k=0; k<kLimit; ++k)
+      {
+        double x = 1 - (double(k) - 0.5)/double(thickness);
+        double x3 = x*x*x;
+
+        (*pKappaHdk[dim])(highk-k) = 1 + (this->kappaMax - 1)*x3;
+      }
+    }
+
+//
+//
+//    if (low[dim]<glow[dim]+thickness)
+//    {
+//
+//      for (int i=0; i<=thickness; ++i)
+//      {
+//        double x  = 1 - double(i)/double(thickness);
+//        double x3 = x*x*x;
+//        (*pKappaEdk[dim])(low[dim]+i) = 1 + (this->kappaMax - 1)*x3;
+//      }
+//      for (int i=0; i<thickness; ++i)
+//      {
+//        double x  = 1 - (double(i)+0.5)/double(thickness);
+//        double x3 = x*x*x;
+//        (*pKappaHdk[dim])(low[dim]+i) = 1 + (this->kappaMax - 1)*x3;
+//      }
+//    }
+//
+//    if (high[dim]>ghigh[dim]-thickness)
+//    {
+//      for (int i=0; i<=thickness; ++i)
+//      {
+//        double x  = 1 - double(i)/double(thickness);
+//        double x3 = x*x*x;
+//        (*pKappaHdk[dim])(high[dim]-i) = 1 + (this->kappaMax - 1)*x3;
+//      }
+//      for (int i=0; i<thickness; ++i)
+//
+//      {
+//        double x  = 1 - (double(i)+0.5)/double(thickness);
+//        double x3 = x*x*x;
+//        (*pKappaEdk[dim])(high[dim]-i) = 1 + (this->kappaMax - 1)*x3;
+//      }
+//    }
   }
 }
 
@@ -223,7 +304,7 @@ void CPMLBorderCurrent::makeCoeff()
   
   double offset = 0.0;
   lowOffset = 1;
-  
+
   if (isH)
   {
     offset = 0.5;
@@ -231,7 +312,9 @@ void CPMLBorderCurrent::makeCoeff()
   }
   
     
-  for (int k=0; k<thickness; ++k)
+  int kLimit = highk-lowk + 1;
+
+  for (int k=0; k<kLimit; ++k)
   {
     double x = 1 - (double(k)-offset)/double(thickness);
     double x3 = x*x*x;
