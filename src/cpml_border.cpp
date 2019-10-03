@@ -437,22 +437,9 @@ CPMLBorderHCurrent::CPMLBorderHCurrent( int thickness_, Direction dir_,
 
 void CPMLBorderHCurrent::init()
 {
-  int distance = 1;
-  
-//  switch (dir)
-//  {
-//    case east:
-//    case north:
-//    case up:    distance = 1; break;
-//    case west:
-//    case south:
-//    case down:  distance = 0; break;
-//    default:    distance = 0; break;
-//  }
-
   Index blow, bhigh;
 
-  if (!getBorderExtent(dir, thickness, distance, blow, bhigh, true)) return;
+  if (!getBorderExtent(dir, thickness, 1, blow, bhigh, true)) return;
 
   pJx = boost::make_shared<Grid>(blow, bhigh);
   pJy = boost::make_shared<Grid>(blow, bhigh);
