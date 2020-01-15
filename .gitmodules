@@ -1,0 +1,3 @@
+[submodule "schnar"]
+	path = schnar
+	url = https://holgerschmitz@github.com/holgerschmitz/SchnAR.git
