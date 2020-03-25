@@ -1,3 +1,6 @@
 [submodule "schnar"]
 	path = schnar
 	url = https://holgerschmitz@github.com/holgerschmitz/SchnAR.git
+[submodule "huerto"]
+	path = huerto
+	url = https://holgerschmitz@github.com/holgerschmitz/huerto.git
