@@ -15,7 +15,8 @@ bool getBorderExtent(Direction dir,
                      int distance,
                      Index &blow,
                      Index &bhigh,
-                     bool isH);
+                     bool isH,
+                     SimulationContext &context);
 
 
 #endif /* BORDER_HPP_ */

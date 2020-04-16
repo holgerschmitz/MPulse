@@ -10,7 +10,7 @@
 
 
 void IncidentSource::initCurrents(CurrentContainer &container)
-{ 
+{
   container.addCurrent(makeECurrent(distance, north));
   container.addMagCurrent(makeHCurrent(distance, north));
 
@@ -34,7 +34,7 @@ void IncidentSource::initCurrents(CurrentContainer &container)
 void IncidentSource::initParameters(schnek::BlockParameters &blockPars)
 {
   CurrentBlock::initParameters(blockPars);
-  
+
   blockPars.addParameter("d",&this->distance,15);
 }
 
@@ -43,20 +43,20 @@ void IncidentSource::initParameters(schnek::BlockParameters &blockPars)
 //===============================================================
 
 
-IncidentSourceCurrent::IncidentSourceCurrent(int distance_, Direction dir_, bool isH_)
-  : distance(distance_), dir(dir_), isH(isH_)
+IncidentSourceCurrent::IncidentSourceCurrent(int distance_, Direction dir_, bool isH_, SimulationContext &context)
+  : distance(distance_), dir(dir_), isH(isH_), context(context)
 {
   lowOffset = 0;
   highOffset = 0;
 
-  dx = MPulse::getDx()[0];
-  dy = MPulse::getDx()[1];
-  dz = MPulse::getDx()[2];
-  dt = MPulse::getDt();
+  dx = context.getDx()[0];
+  dy = context.getDx()[1];
+  dz = context.getDx()[2];
+  dt = context.getDt();
 
   switch (dir)
   {
-    case east:  
+    case east:
     case west:  dim = 0;
                 transverse1 = 1;
                 transverse2 = 2;
@@ -66,7 +66,7 @@ IncidentSourceCurrent::IncidentSourceCurrent(int distance_, Direction dir_, bool
                 dX[1] = dz;
                 dX[2] = dx;
                 break;
-    case north: 
+    case north:
     case south: dim = 1;
                 transverse1 = 2;
                 transverse2 = 0;
@@ -76,7 +76,7 @@ IncidentSourceCurrent::IncidentSourceCurrent(int distance_, Direction dir_, bool
                 dX[2] = dx;
                 dX[1] = dy;
                 break;
-    case up:     
+    case up:
     case down:  dim = 2;
                 transverse1 = 0;
                 transverse2 = 1;
@@ -87,7 +87,7 @@ IncidentSourceCurrent::IncidentSourceCurrent(int distance_, Direction dir_, bool
                 dX[2] = dz;
                 break;
   }
-  
+
   reverse = ( (dir==east) || (dir==north) || (dir==up) );
 }
 

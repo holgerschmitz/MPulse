@@ -14,7 +14,6 @@ SOURCES = src/border.cpp \
   src/cpml_border.cpp \
   src/current.cpp \
   src/diagnostic.cpp \
-  src/em_fields.cpp \
   src/fdtd_plain.cpp \
   src/fdtd_plrc.cpp \
   src/focusedpulseinject.cpp \
@@ -25,7 +24,8 @@ SOURCES = src/border.cpp \
   src/shortpulseinject.cpp \
   src/sources.cpp \
   src/specfunc.cpp \
-  src/mpulse.cpp
+  src/mpulse.cpp \
+  huerto/electromagnetics/em_fields.cpp
 
 
 OBJECTS = $(SOURCES:.cpp=.o)

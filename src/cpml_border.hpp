@@ -4,7 +4,6 @@
 #include "mpulse.hpp"
 #include "current.hpp"
 
-
 class CPMLBorder : public CurrentBlock
 {
   public:
@@ -13,9 +12,9 @@ class CPMLBorder : public CurrentBlock
     void initParameters(schnek::BlockParameters &blockPars);
     void init();
   private:
-    
+
     void initCoefficients();
-    
+
     int thickness;
     double kappaMax;
     double aMax;
@@ -32,22 +31,22 @@ class CPMLBorderCurrent : public Current
   protected:
     bool reverse;
     int thickness;
-    
+
     int dim;
     int transverse1, transverse2;
-    
+
     Direction dir;
     bool isH;
     int lowOffset;
     int highOffset;
-    
+
     int zerolayer;
-    
+
     double kappaMax;
     double aMax;
     double sigmaMax;
     double eps;
-    
+
     DataLine bCoeff;
     DataLine cCoeff;
 
@@ -59,16 +58,16 @@ class CPMLBorderCurrent : public Current
 class CPMLBorderECurrent : public CPMLBorderCurrent
 {
   public:
-    CPMLBorderECurrent( int thickness_, Direction dir_, 
+    CPMLBorderECurrent( int thickness_, Direction dir_,
                         double kappaMax_, double aMax_, double sigmaMax_, double eps_,
                         CurrentBlock &borderBlock_);
-                       
+
     void init();
-    
+
     void stepSchemeInit(double dt);
     void stepScheme(double dt);
   protected:
-    
+
     pField pB[3];
     pGrid pPsi[2];
     double dx;
@@ -80,9 +79,9 @@ class CPMLBorderHCurrent : public CPMLBorderCurrent
     CPMLBorderHCurrent( int thickness_, Direction dir_,
                         double kappaMax_, double aMax_, double sigmaMax_, double eps_,
                         CurrentBlock &borderBlock_);
-                       
+
     void init();
-    
+
     void stepSchemeInit(double dt);
     void stepScheme(double dt);
   protected:
