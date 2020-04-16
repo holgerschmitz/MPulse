@@ -10,12 +10,16 @@
 
 FieldDiagnostic::IndexType FieldDiagnostic::getGlobalMin()
 {
-  return IndexType(0);
+  return getContext().getSubdivision().getGlobalDomain().getLo();
 }
 
 FieldDiagnostic::IndexType FieldDiagnostic::getGlobalMax()
 {
-  return MPulse::getGlobalMax();
+  return getContext().getSubdivision().getGlobalDomain().getHi();
 }
 
+void FieldDiagnostic::init()
+{
+  SimulationEntity::init(this);
+}
 

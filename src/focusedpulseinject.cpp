@@ -19,8 +19,8 @@ pCurrent FocusedPulseInject::makeECurrent(int distance_, Direction dir_)
 {
   std::cerr << "FocusedPulseInject::makeECurrent\n";
   typedef IncidentSourceECurrent<FocusedPulseInjectSourceFunc> CurrentType;
-  CurrentType *cur = new CurrentType(distance_,dir_);
-  
+  CurrentType *cur = new CurrentType(distance_, dir_, context);
+
   cur->setParam(length, width, om0, amp, eps, distance_, &generator);
   return pCurrent(cur);
 }
@@ -29,7 +29,7 @@ pCurrent FocusedPulseInject::makeHCurrent(int distance_, Direction dir_)
 {
   std::cerr << "FocusedPulseInject::makeHCurrent\n";
   typedef IncidentSourceHCurrent<FocusedPulseInjectSourceFunc> CurrentType;
-  CurrentType *cur = new CurrentType(distance_,dir_);
+  CurrentType *cur = new CurrentType(distance_, dir_, context);
   cur->setParam(length, width, om0, amp, eps, distance_, &generator);
   return pCurrent(cur);
 }
@@ -42,7 +42,7 @@ bool FocusedPulseInject::needCurrent(Direction dir_)
 void FocusedPulseInject::initParameters(schnek::BlockParameters &blockPars)
 {
   IncidentSource::initParameters(blockPars);
-  
+
   blockPars.addParameter("length", &this->length,1.);
   blockPars.addParameter("width", &this->width,1.);
   blockPars.addParameter("om0", &this->om0,2*M_PI);
@@ -64,30 +64,30 @@ void FocusedPulseInject::initParameters(schnek::BlockParameters &blockPars)
 void FocusedPulseInjectSourceFunc::setParam(double length_,
                                           double width_,
                                           double om0_,
-                                          double amp_, 
+                                          double amp_,
                                           double eps_,
-                                          int distance_, 
+                                          int distance_,
                                           FocusedPulseDataGenerator *generator_)
 {
   std::cerr << "FocusedPulseInjectSourceFunc::setParam\n";
-  
+
   generator = generator_;
-  
+
   // Grid Spacing and position
   Index gridLow = MPulse::getSubdivision().getLo();
   Index gridHigh = MPulse::getSubdivision().getHi();
-  
+
   // setting most parameters
 
   length = length_;
   width  = width_;
   om0     = om0_;
-  
+
   eps = eps_;
   dist = distance_;
-  
+
   const int lightspeed = sqrt(1/eps);
-  
+
   ZRl = 0.5*om0*width*width/lightspeed;
 //  YComp = Complex(0.0,0.0);
 
@@ -106,7 +106,7 @@ void FocusedPulseInjectSourceFunc::initSourceFunc(pGrid pJx, pGrid pJy, pGrid pJ
   Index hi = subdivision.getInnerHi();
   generator->setLow(lo);
   generator->setHigh(hi);
-  
+
   Index blow, bhigh;
   if (!getBorderExtent(dir, 1, dist, blow, bhigh, isH)) return;
   x_grid = boost::make_shared<Grid>(blow, bhigh);
@@ -187,10 +187,10 @@ void FocusedPulseDataGenerator::setSize(int oversample_X_, int oversample_Y_)
   DY = MPulse::getDx()[1];
   DZ = MPulse::getDx()[2];
   DT = MPulse::getDt();
-  
+
   sizeX = oversample_X*(high[0]-low[0]+1);
   sizeY = oversample_Y*(high[1]-low[1]+1);
-  
+
   gLowX = low[0];
   gLowY = low[1];
   gHighX = high[0];
@@ -203,7 +203,7 @@ void FocusedPulseDataGenerator::setSize(int oversample_X_, int oversample_Y_)
 
   fft_field_k = (fftw_complex *) fftw_malloc(sizeof(fftw_complex) * sizeX * sizeY);
   fft_field   = (fftw_complex *) fftw_malloc(sizeof(fftw_complex) * sizeX * sizeY);
-  
+
   pfft = fftw_plan_dft_2d(sizeX, sizeY, fft_field_k, fft_field, FFTW_FORWARD, FFTW_ESTIMATE);
 }
 
@@ -218,9 +218,9 @@ void FocusedPulseDataGenerator::setTime(int Time)
 {
   if (!initialized) this->init();
   if (Time==currentTime) return;
-  
+
   currentTime = Time;
-  
+
   calcEx();
   calcEy();
   calcEz();

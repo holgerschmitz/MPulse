@@ -30,7 +30,7 @@ class IncidentSource : public CurrentBlock
      * The current created in this way will usually extend #IncidentSourceCurrent
      */
     void initCurrents(CurrentContainer &container);
-    
+
   protected:
 
     /**
@@ -75,7 +75,7 @@ class IncidentSourceCurrent : public Current
      * @param isH_       a flag indicating whether the current is a magnetic
      *                   current.
      */
-    IncidentSourceCurrent(int distance_, Direction dir_, bool isH_);                       
+    IncidentSourceCurrent(int distance_, Direction dir_, bool isH_, SimulationContext &context);
 
   protected:
     /**
@@ -89,7 +89,7 @@ class IncidentSourceCurrent : public Current
      * border
      */
     int distance;
-    
+
     /**
      * The propagation axis
      */
@@ -99,7 +99,7 @@ class IncidentSourceCurrent : public Current
      * The transverse axes
      */
     int transverse1, transverse2;
-    
+
     /**
      * The direction of the border from which the wave should be injected
      */
@@ -121,7 +121,7 @@ class IncidentSourceCurrent : public Current
      * The time step
      */
     double dt;
-    
+
     /**
      * References to the transverse components of the current from #Current.pJx,
      * #Current.pJy, and #Current.pJz
@@ -133,6 +133,11 @@ class IncidentSourceCurrent : public Current
      * which the propagation direction is along the positive z-axis
      */
     double dX[3];
+
+    /**
+     * The simulation context
+     */
+    SimulationContext &context;
 };
 
 /**
@@ -156,13 +161,13 @@ class IncidentSourceECurrent : public IncidentSourceCurrent, public SourceFunc
      * @param dir_       the direction of the border from which the wave should
      *                   be injected
      */
-    IncidentSourceECurrent(int distance_, Direction dir_);
+    IncidentSourceECurrent(int distance_, Direction dir_, SimulationContext &context);
 
     void init();
     void stepSchemeInit(double dt);
     void stepScheme(double dt);
   protected:
-    
+
 };
 
 /**
@@ -186,8 +191,8 @@ class IncidentSourceHCurrent : public IncidentSourceCurrent, public SourceFunc
      * @param dir_       the direction of the border from which the wave should
      *                   be injected
      */
-    IncidentSourceHCurrent(int distance_, Direction dir_);
-                       
+    IncidentSourceHCurrent(int distance_, Direction dir_, SimulationContext &context);
+
     void init();
 
     void stepSchemeInit(double dt);

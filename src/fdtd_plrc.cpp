@@ -17,9 +17,9 @@
 
 void FDTD_PLRCCore::registerData()
 {
-  schnek::DomainSubdivision<Field> &subdivision = MPulse::getSubdivision();
+  schnek::DomainSubdivision<Field> &subdivision = getContext().getSubdivision();
 
-  schnek::Range<double, DIMENSION> domainSize(schnek::Array<double, DIMENSION>(0,0,0), MPulse::getSize());
+  schnek::Range<double, DIMENSION> domainSize(schnek::Array<double, DIMENSION>(0,0,0), getContext().getSize());
   schnek::Array<bool, DIMENSION> stagger;
   stagger = false;
 
@@ -30,7 +30,7 @@ void FDTD_PLRCCore::registerData()
   Index highIn = subdivision.getInnerHi();
 
   pSigma = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
-  
+
   pKappaEdx = boost::make_shared<DataLine>(schnek::Array<int, 1>(low[0]), schnek::Array<int, 1>(high[0]));
   pKappaEdy = boost::make_shared<DataLine>(schnek::Array<int, 1>(low[1]), schnek::Array<int, 1>(high[1]));
   pKappaEdz = boost::make_shared<DataLine>(schnek::Array<int, 1>(low[2]), schnek::Array<int, 1>(high[2]));
@@ -42,11 +42,11 @@ void FDTD_PLRCCore::registerData()
   pPsiRx[0] = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
   pPsiRy[0] = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
   pPsiRz[0] = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
-  
+
   pPsiRx[1] = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
   pPsiRy[1] = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
   pPsiRz[1] = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
-  
+
   pPsiRx[2] = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
   pPsiRy[2] = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
   pPsiRz[2] = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
@@ -54,7 +54,7 @@ void FDTD_PLRCCore::registerData()
   pPsiIx[0] = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
   pPsiIy[0] = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
   pPsiIz[0] = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
-  
+
   pPsiIx[1] = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
   pPsiIy[1] = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
   pPsiIz[1] = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
@@ -84,13 +84,13 @@ void FDTD_PLRCCore::init()
   retrieveData("By", pBy);
   retrieveData("Bz", pBz);
 
-  
+
   BOOST_FOREACH(pCurrentBlock current, schnek::BlockContainer<CurrentBlock>::childBlocks())
   {
     current->initCurrents(*this);
   }
 
-  CurrentContainer::init();
+  CurrentContainer::init(getContext());
 
   schnek::LiteratureArticle Kelley1996("Kelley1996", "D. F. Kelley and R. J. Luebbers",
       "Piecewise linear recursive convolution for dispersive media using FDTD",
@@ -108,21 +108,21 @@ void FDTD_PLRCCore::init()
 
 #include <iostream>
 
-void FDTD_PLRCLinCore::plrcStepD(double dt, 
-                                 int i, int j, int k, 
+void FDTD_PLRCLinCore::plrcStepD(double dt,
+                                 int i, int j, int k,
                                  double dx, double dy, double dz,
                                  double Jx, double Jy, double Jz)
 {
-  
+
 //  for (int l=pKappaEdx->getLow()[0]; l<=pKappaEdx->getHigh()[0]; ++l)
 //  {
 //    std::cout << l << " " << (*pKappaEdx)(l) << std::endl;
 //  }
-  
+
   double &ex = (*pEx)(i,j,k);
   double &ey = (*pEy)(i,j,k);
   double &ez = (*pEz)(i,j,k);
-  
+
 #ifndef NDEBUG
   {
       double test = ex*ey*ez;
@@ -137,9 +137,9 @@ void FDTD_PLRCLinCore::plrcStepD(double dt,
   double kappaEdx = (*pKappaEdx)(i)*dx;
   double kappaEdy = (*pKappaEdy)(j)*dy;
   double kappaEdz = (*pKappaEdz)(k)*dz;
-  
+
 //  std::cerr << i << " " << j << " " << k << " " << kappaEdx << " " << kappaEdy << " " << kappaEdz << " " << std::endl;
-         
+
 #ifndef NDEBUG
   {
       double test = kappaEdx*kappaEdy*kappaEdz;
@@ -189,7 +189,7 @@ void FDTD_PLRCLinCore::plrcStepD(double dt,
     pzi = std::imag(pz);
 
   }
-  
+
 #ifndef NDEBUG
   {
       double test = Psix*Psiy*Psiz;
@@ -207,22 +207,22 @@ void FDTD_PLRCLinCore::plrcStepD(double dt,
   double denomX = eps + (plrcData.sumChi0 - plrcData.sumXi0) + sigma;
   double denomY = eps + (plrcData.sumChi0 - plrcData.sumXi0) + sigma;
   double denomZ = eps + (plrcData.sumChi0 - plrcData.sumXi0) + sigma;
-  
+
   double numerX = eps - plrcData.sumXi0 - sigma;
   double numerY = eps - plrcData.sumXi0 - sigma;
   double numerZ = eps - plrcData.sumXi0 - sigma;
-  
+
 //    double E2 = ex*ex + ey*ey + ez*ez;
 
   // after this Dx, Dy and Dz actually contain D - P_L
-  
+
 //  if ((Jx!=0.0) || (Jy!=0.0) || (Jz!=0.0))
 //    std::cerr << i << ' ' << j << ' ' << k << ' ' << Jx << ' ' << Jy << ' ' << Jz << '\n';
-  
+
 //  if (fabs(Jx+Jy+Jz) > 1e-40) std::cerr << "Current " << Jx << " " << Jy << " " << Jz << std::endl;
 
   double exn =
-    ( 
+    (
       numerX*ex
       + (
           dt*(
@@ -235,7 +235,7 @@ void FDTD_PLRCLinCore::plrcStepD(double dt,
     ) / denomX;
 
   double eyn =
-    ( 
+    (
       numerY*ey
       + (
           dt*(
@@ -243,12 +243,12 @@ void FDTD_PLRCLinCore::plrcStepD(double dt,
           - ((*pBz)(i,j,k) - (*pBz)(i-1,j,k))/kappaEdx
           + Jy
         )
-        + Psiy  
+        + Psiy
       )
     ) / denomY;
 
   double ezn =
-    ( 
+    (
       numerZ*ez
       + (
           dt*(
@@ -256,14 +256,14 @@ void FDTD_PLRCLinCore::plrcStepD(double dt,
           - ((*pBx)(i,j,k) - (*pBx)(i,j-1,k))/kappaEdy
           + Jz
         )
-        + Psiz  
+        + Psiz
       )
     ) / denomZ;
 
   ex = exn;
   ey = eyn;
   ez = ezn;
-  
+
 #ifndef NDEBUG
  {
      double test = ex*ey*ez;
@@ -277,35 +277,35 @@ void FDTD_PLRCLinCore::plrcStepD(double dt,
 
 }
 
-void FDTD_PLRCLinCore::plrcStepB(double dt, 
-                                 int i, int j, int k, 
+void FDTD_PLRCLinCore::plrcStepB(double dt,
+                                 int i, int j, int k,
                                  double dx, double dy, double dz,
                                  double Jx, double Jy, double Jz)
 {
-  
+
   double kappaHdx = (*pKappaHdx)(i)*dx;
   double kappaHdy = (*pKappaHdy)(j)*dy;
   double kappaHdz = (*pKappaHdz)(k)*dz;
-  
-  (*pBx)(i,j,k) = (*pBx)(i,j,k) 
+
+  (*pBx)(i,j,k) = (*pBx)(i,j,k)
     + dt*(
         ((*pEy)(i,j,k+1) - (*pEy)(i,j,k))/kappaHdz
       - ((*pEz)(i,j+1,k) - (*pEz)(i,j,k))/kappaHdy
      + Jx
     );
 
-  (*pBy)(i,j,k) = (*pBy)(i,j,k) 
+  (*pBy)(i,j,k) = (*pBy)(i,j,k)
     + dt*(
         ((*pEz)(i+1,j,k) - (*pEz)(i,j,k))/kappaHdx
       - ((*pEx)(i,j,k+1) - (*pEx)(i,j,k))/kappaHdz
-     + Jy    
+     + Jy
     );
 
-  (*pBz)(i,j,k) = (*pBz)(i,j,k) 
-    + dt*( 
+  (*pBz)(i,j,k) = (*pBz)(i,j,k)
+    + dt*(
         ((*pEx)(i,j+1,k) - (*pEx)(i,j,k))/kappaHdy
       - ((*pEy)(i+1,j,k) - (*pEy)(i,j,k))/kappaHdx
-     + Jz     
+     + Jz
     );
 }
 
@@ -314,8 +314,8 @@ void FDTD_PLRCLinCore::plrcStepB(double dt,
 //==========  FDTD_PLRCNonlinCore
 //===============================================================
 
-void FDTD_PLRCNonlinCore::plrcStepD(double dt, 
-                                    int i, int j, int k, 
+void FDTD_PLRCNonlinCore::plrcStepD(double dt,
+                                    int i, int j, int k,
                                     double dx, double dy, double dz,
                                     double Jx, double Jy, double Jz)
 {
@@ -379,7 +379,7 @@ void FDTD_PLRCNonlinCore::plrcStepD(double dt,
 
 
   double cx =
-    ( 
+    (
       (numer + chi*E2)*ex
 
       + dt*(
@@ -391,7 +391,7 @@ void FDTD_PLRCNonlinCore::plrcStepD(double dt,
     ) / denom;
 
   double cy =
-    ( 
+    (
       (numer + chi*E2)*ey
       + dt*(
           ((*pBx)(i,j,k) - (*pBx)(i,j,k-1))/kappaEdz
@@ -402,7 +402,7 @@ void FDTD_PLRCNonlinCore::plrcStepD(double dt,
     ) / denom;
 
   double cz =
-    ( 
+    (
       (numer + chi*E2)*ez
       + dt*(
           ((*pBy)(i,j,k) - (*pBy)(i-1,j,k))/kappaEdx
@@ -415,7 +415,7 @@ void FDTD_PLRCNonlinCore::plrcStepD(double dt,
   double E = sqrt(E2);
   double A = chi/denom;
   double C = sqrt(cx*cx + cy*cy + cz*cz);
-      
+
   if (C>0)
   {
     // Newton iteration
@@ -436,11 +436,11 @@ void FDTD_PLRCNonlinCore::plrcStepD(double dt,
     ey = 0.0;
     ez = 0.0;
   }
-   
+
 }
 
-void FDTD_PLRCNonlinCore::plrcStepB(double dt, 
-                                    int i, int j, int k, 
+void FDTD_PLRCNonlinCore::plrcStepB(double dt,
+                                    int i, int j, int k,
                                     double dx, double dy, double dz,
                                     double Jx, double Jy, double Jz)
 {
@@ -448,22 +448,22 @@ void FDTD_PLRCNonlinCore::plrcStepB(double dt,
   double kappaHdy = (*pKappaHdy)(j)*dy;
   double kappaHdz = (*pKappaHdz)(k)*dz;
 
-  (*pBx)(i,j,k) = (*pBx)(i,j,k) 
+  (*pBx)(i,j,k) = (*pBx)(i,j,k)
     + dt*(
         ((*pEy)(i,j,k+1) - (*pEy)(i,j,k))/kappaHdz
       - ((*pEz)(i,j+1,k) - (*pEz)(i,j,k))/kappaHdy
       + Jx
     );
 
-  (*pBy)(i,j,k) = (*pBy)(i,j,k) 
+  (*pBy)(i,j,k) = (*pBy)(i,j,k)
     + dt*(
         ((*pEz)(i+1,j,k) - (*pEz)(i,j,k))/kappaHdx
       - ((*pEx)(i,j,k+1) - (*pEx)(i,j,k))/kappaHdz
        + Jy
     );
 
-  (*pBz)(i,j,k) = (*pBz)(i,j,k) 
-    + dt*( 
+  (*pBz)(i,j,k) = (*pBz)(i,j,k)
+    + dt*(
         ((*pEx)(i,j+1,k) - (*pEx)(i,j,k))/kappaHdy
       - ((*pEy)(i+1,j,k) - (*pEy)(i,j,k))/kappaHdx
        + Jz

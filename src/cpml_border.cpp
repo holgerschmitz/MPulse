@@ -4,6 +4,8 @@
 #include "border.hpp"
 #include "fieldsolver.hpp"
 
+#include "../huerto/constants.hpp"
+
 #include <schnek/tools/literature.hpp>
 
 #include <boost/make_shared.hpp>
@@ -16,6 +18,8 @@
 
 void CPMLBorder::init()
 {
+  CurrentBlock::init();
+
   schnek::LiteratureArticle Roden2000("Roden2000", "Roden, J. A. and Gedney, S. D.",
       "An efficient fdtd implementation of the cfs-pml for arbitrary media",
       "Microwave and Optical Technology Letters", "2000", "27", "334--339");
@@ -25,7 +29,7 @@ void CPMLBorder::init()
 }
 
 void CPMLBorder::initCurrents(CurrentContainer &container)
-{ 
+{
   container.addCurrent(
     boost::make_shared<CPMLBorderECurrent>(thickness, north, this->kappaMax, this->aMax, this->sigmaMax, 1.0, boost::ref(*this))
   );
@@ -44,7 +48,7 @@ void CPMLBorder::initCurrents(CurrentContainer &container)
   container.addCurrent(
       boost::make_shared<CPMLBorderECurrent>(thickness, down, this->kappaMax, this->aMax, this->sigmaMax, 1, boost::ref(*this))
   );
-  
+
   container.addMagCurrent(
       boost::make_shared<CPMLBorderHCurrent>(thickness, north, this->kappaMax, this->aMax, this->sigmaMax, 1, boost::ref(*this))
   );
@@ -63,22 +67,23 @@ void CPMLBorder::initCurrents(CurrentContainer &container)
   container.addMagCurrent(
       boost::make_shared<CPMLBorderHCurrent>(thickness, down, this->kappaMax, this->aMax, this->sigmaMax, 1, boost::ref(*this))
   );
-  
+
   initCoefficients();
 
 }
 
 void CPMLBorder::initCoefficients()
 {
-  schnek::DomainSubdivision<Field> &subdivision = MPulse::getSubdivision();
+  schnek::DomainSubdivision<Field> &subdivision = getContext().getSubdivision();
   // initialize Kappas here
-  
-  Index glow  = Index(0);
-  Index ghigh = MPulse::getGlobalMax();
+
+  Range gdomain = subdivision.getGlobalDomain();
+  Index glow  = gdomain.getLo();
+  Index ghigh = gdomain.getHi();
 
   Index low  = subdivision.getInnerLo();
   Index high = subdivision.getInnerHi();
-  
+
   std::vector<pDataLine> pKappaEdk(3);
   std::vector<pDataLine> pKappaHdk(3);
 
@@ -92,25 +97,25 @@ void CPMLBorder::initCoefficients()
   retrieveData("KappaHdx", pKappaHdk[0]);
   retrieveData("KappaHdy", pKappaHdk[1]);
   retrieveData("KappaHdz", pKappaHdk[2]);
-  
+
   std::cerr << "Field Size Edx " << pKappaEdk[0]->getLo()[0] << ", "
                                  << pKappaEdk[0]->getHi()[0] <<std::endl;
-  
+
   std::cerr << "Field Size Edy " << pKappaEdk[1]->getLo()[0] << ", "
                                  << pKappaEdk[1]->getHi()[0] <<std::endl;
-  
+
   std::cerr << "Field Size Edz " << pKappaEdk[2]->getLo()[0] << ", "
                                  << pKappaEdk[2]->getHi()[0] <<std::endl;
-  
+
   std::cerr << "Field Size Hdx " << pKappaHdk[0]->getLo()[0] << ", "
                                  << pKappaHdk[0]->getHi()[0] <<std::endl;
-  
+
   std::cerr << "Field Size Hdy " << pKappaHdk[1]->getLo()[0] << ", "
                                  << pKappaHdk[1]->getHi()[0] <<std::endl;
-  
+
   std::cerr << "Field Size Hdz " << pKappaHdk[2]->getLo()[0] << ", "
                                  << pKappaHdk[2]->getHi()[0] <<std::endl;
-  
+
   for (int dim = 0; dim<3; ++dim)
   {
     std::cerr << "Dim " << dim << std::endl;
@@ -129,7 +134,7 @@ void CPMLBorder::initCoefficients()
       case 2: dir = down; break;
     }
 
-    if (getBorderExtent(dir, thickness, 1, blow, bhigh, false))
+    if (getBorderExtent(dir, thickness, 1, blow, bhigh, false, getContext()))
     {
       int lowk  = blow[dim];
       int highk = bhigh[dim];
@@ -144,7 +149,7 @@ void CPMLBorder::initCoefficients()
       }
     }
 
-    if (getBorderExtent(dir, thickness, 1, blow, bhigh, true))
+    if (getBorderExtent(dir, thickness, 1, blow, bhigh, true, getContext()))
     {
       int lowk  = blow[dim];
       int highk = bhigh[dim];
@@ -166,7 +171,7 @@ void CPMLBorder::initCoefficients()
       case 2: dir = up; break;
     }
 
-    if (getBorderExtent(dir, thickness, 1, blow, bhigh, false))
+    if (getBorderExtent(dir, thickness, 1, blow, bhigh, false, getContext()))
     {
       int lowk  = blow[dim];
       int highk = bhigh[dim];
@@ -181,7 +186,7 @@ void CPMLBorder::initCoefficients()
       }
     }
 
-    if (getBorderExtent(dir, thickness, 1, blow, bhigh, true))
+    if (getBorderExtent(dir, thickness, 1, blow, bhigh, true, getContext()))
     {
       int lowk  = blow[dim];
       int highk = bhigh[dim];
@@ -252,22 +257,22 @@ void CPMLBorder::initParameters(schnek::BlockParameters &blockPars)
 CPMLBorderCurrent::CPMLBorderCurrent( int thickness_, Direction dir_, bool isH_,
                                       double kappaMax_, double aMax_, double sigmaMax_, double eps_,
                                       CurrentBlock &borderBlock_)
-  : thickness(thickness_), dir(dir_), isH(isH_),
+  : reverse(false), thickness(thickness_), dir(dir_), isH(isH_), lowOffset(0), highOffset(0), zerolayer(0),
     kappaMax(kappaMax_), aMax(aMax_), sigmaMax(sigmaMax_), eps(eps_), borderBlock(borderBlock_)
 {
   switch (dir)
   {
-    case east:  
+    case east:
     case west:  dim = 0;
                 transverse1 = 1;
                 transverse2 = 2;
                 break;
-    case north: 
+    case north:
     case south: dim = 1;
                 transverse1 = 0;
                 transverse2 = 2;
                 break;
-    case up:    
+    case up:
     case down:  dim = 2;
                 transverse1 = 0;
                 transverse2 = 1;
@@ -275,33 +280,33 @@ CPMLBorderCurrent::CPMLBorderCurrent( int thickness_, Direction dir_, bool isH_,
   }
 
   double eta = sqrt(mu_0/eps_0);
-  sigmaMax = sigmaMax *clight* 0.8*4 / MPulse::getDx()[dim];
+  sigmaMax = sigmaMax *clight* 0.8*4 / borderBlock.getContext().getDx()[dim];
 }
 
 void CPMLBorderCurrent::makeCoeff()
 {
-  double dt = MPulse::getDt();
-  
+  double dt = borderBlock.getContext().getDt();
+
   Index low  = pJx->getLo();
   Index high = pJx->getHi();
-  
+
   switch (dir)
   {
-    case east:  
-    case north: 
+    case east:
+    case north:
     case up:    reverse = false; break;
-    case west:  
-    case south: 
+    case west:
+    case south:
     case down:  reverse = true;  break;
   }
-  
-    
+
+
   int lowk  = low[dim];
   int highk = high[dim];
-  
+
   bCoeff.resize(lowk, highk);
   cCoeff.resize(lowk, highk);
-  
+
   double offset = 0.0;
   lowOffset = 1;
 
@@ -310,28 +315,28 @@ void CPMLBorderCurrent::makeCoeff()
     offset = 0.5;
     lowOffset = 0;
   }
-  
-    
+
+
   int kLimit = highk-lowk + 1;
 
   for (int k=0; k<kLimit; ++k)
   {
     double x = 1 - (double(k)-offset)/double(thickness);
     double x3 = x*x*x;
-    
+
     int pos = reverse ? (lowk+k) : (highk-k);
-    
+
     double sigma = x3*sigmaMax;
     double kappa = 1 + (kappaMax - 1)*x3;
     double a = aMax*(1-x);
-    
+
     double b = exp(-(sigma/kappa + a)*dt);
     double c = sigma*(b-1)/(kappa*(sigma+kappa*a));
-        
+
     bCoeff(pos) = b;
     cCoeff(pos) = c;
   }
-  
+
 }
 
 //===============================================================
@@ -339,7 +344,7 @@ void CPMLBorderCurrent::makeCoeff()
 //===============================================================
 
 
-CPMLBorderECurrent::CPMLBorderECurrent( int thickness_, Direction dir_, 
+CPMLBorderECurrent::CPMLBorderECurrent( int thickness_, Direction dir_,
                                         double kappaMax_, double aMax_, double sigmaMax_, double eps_,
                                         CurrentBlock &borderBlock_)
   : CPMLBorderCurrent(thickness_,dir_,false,kappaMax_,aMax_,sigmaMax_,eps_,borderBlock_)
@@ -349,7 +354,7 @@ void CPMLBorderECurrent::init()
 {
   Index blow, bhigh;
 
-  if (!getBorderExtent(dir, thickness, 1, blow, bhigh, false)) return;
+  if (!getBorderExtent(dir, thickness, 1, blow, bhigh, false, borderBlock.getContext())) return;
 
   pJx = boost::make_shared<Grid>(blow, bhigh);
   pJy = boost::make_shared<Grid>(blow, bhigh);
@@ -357,7 +362,7 @@ void CPMLBorderECurrent::init()
 
   switch (dir)
   {
-    case east:  
+    case east:
     case west:
       pPsi[0] = pJy;
       pPsi[1] = pJz;
@@ -365,9 +370,9 @@ void CPMLBorderECurrent::init()
       borderBlock.retrieveData("Bz", pB[1]);
       borderBlock.retrieveData("Bx", pB[2]);
 
-      dx = MPulse::getDx()[0];
+      dx = borderBlock.getContext().getDx()[0];
       break;
-    case north: 
+    case north:
     case south:
       pPsi[0] = pJz;
       pPsi[1] = pJx;
@@ -375,9 +380,9 @@ void CPMLBorderECurrent::init()
       borderBlock.retrieveData("Bx", pB[1]);
       borderBlock.retrieveData("By", pB[2]);
 
-      dx = MPulse::getDx()[1];
+      dx = borderBlock.getContext().getDx()[1];
       break;
-    case up:    
+    case up:
     case down:
       pPsi[0] = pJx;
       pPsi[1] = pJy;
@@ -385,10 +390,10 @@ void CPMLBorderECurrent::init()
       borderBlock.retrieveData("By", pB[1]);
       borderBlock.retrieveData("Bz", pB[2]);
 
-      dx = MPulse::getDx()[2];
+      dx = borderBlock.getContext().getDx()[2];
       break;
   }
-  
+
   makeCoeff();
 }
 
@@ -399,14 +404,14 @@ void CPMLBorderECurrent::stepScheme(double dt)
 {
   Index low  = pPsi[0]->getLo();
   Index high = pPsi[0]->getHi();
-    
+
   Grid &Psi0 = *pPsi[0];
   Grid &Psi1 = *pPsi[1];
   Field &B0 = *pB[0];
   Field &B1 = *pB[1];
-  
+
   Index ind, indn;
-      
+
   for (ind[0]=low[0]; ind[0]<=high[0]; ++ind[0])
     for (ind[1]=low[1]; ind[1]<=high[1]; ++ind[1])
       for (ind[2]=low[2]; ind[2]<=high[2]; ++ind[2])
@@ -414,12 +419,12 @@ void CPMLBorderECurrent::stepScheme(double dt)
         int j = ind[dim];
         Index indm(ind);
         --indm[dim];
-        
-        Psi0(ind[0], ind[1], ind[2]) 
+
+        Psi0(ind[0], ind[1], ind[2])
           = bCoeff(j)*Psi0(ind[0], ind[1], ind[2])
             - cCoeff(j)*(B1(ind[0], ind[1], ind[2])-B1(indm[0], indm[1], indm[2]))/(mu_0*dx);
-        Psi1(ind[0], ind[1], ind[2]) 
-          = bCoeff(j)*Psi1(ind[0], ind[1], ind[2]) 
+        Psi1(ind[0], ind[1], ind[2])
+          = bCoeff(j)*Psi1(ind[0], ind[1], ind[2])
             + cCoeff(j)*(B0(ind[0], ind[1], ind[2])-B0(indm[0], indm[1], indm[2]))/(mu_0*dx);
       }
 }
@@ -429,7 +434,7 @@ void CPMLBorderECurrent::stepScheme(double dt)
 //==========  CPMLBorderHCurrent
 //===============================================================
 
-CPMLBorderHCurrent::CPMLBorderHCurrent( int thickness_, Direction dir_, 
+CPMLBorderHCurrent::CPMLBorderHCurrent( int thickness_, Direction dir_,
                                         double kappaMax_, double aMax_, double sigmaMax_, double eps_,
                                         CurrentBlock &borderBlock_)
   : CPMLBorderCurrent(thickness_,dir_,true,kappaMax_,aMax_,sigmaMax_,eps_,borderBlock_)
@@ -439,7 +444,7 @@ void CPMLBorderHCurrent::init()
 {
   Index blow, bhigh;
 
-  if (!getBorderExtent(dir, thickness, 1, blow, bhigh, true)) return;
+  if (!getBorderExtent(dir, thickness, 1, blow, bhigh, true, borderBlock.getContext())) return;
 
   pJx = boost::make_shared<Grid>(blow, bhigh);
   pJy = boost::make_shared<Grid>(blow, bhigh);
@@ -447,7 +452,7 @@ void CPMLBorderHCurrent::init()
 
   switch (dir)
   {
-    case east:  
+    case east:
     case west:
       pPsi[0] = pJy;
       pPsi[1] = pJz;
@@ -455,9 +460,9 @@ void CPMLBorderHCurrent::init()
       borderBlock.retrieveData("Ez", pE[1]);
       borderBlock.retrieveData("Ex", pE[2]);
 
-      dx = MPulse::getDx()[0];
+      dx = borderBlock.getContext().getDx()[0];
       break;
-    case north: 
+    case north:
     case south:
       pPsi[0] = pJz;
       pPsi[1] = pJx;
@@ -465,9 +470,9 @@ void CPMLBorderHCurrent::init()
       borderBlock.retrieveData("Ex", pE[1]);
       borderBlock.retrieveData("Ey", pE[2]);
 
-      dx = MPulse::getDx()[1];
+      dx = borderBlock.getContext().getDx()[1];
       break;
-    case up:    
+    case up:
     case down:
       pPsi[0] = pJx;
       pPsi[1] = pJy;
@@ -475,10 +480,10 @@ void CPMLBorderHCurrent::init()
       borderBlock.retrieveData("Ey", pE[1]);
       borderBlock.retrieveData("Ez", pE[2]);
 
-      dx = MPulse::getDx()[2];
+      dx = borderBlock.getContext().getDx()[2];
       break;
   }
-  
+
   makeCoeff();
 
 }
@@ -492,14 +497,14 @@ void CPMLBorderHCurrent::stepScheme(double dt)
 {
   Index low  = pPsi[0]->getLo();
   Index high = pPsi[0]->getHi();
-    
+
   Grid &Psi0 = *pPsi[0];
   Grid &Psi1 = *pPsi[1];
   Field &E0 = *pE[0];
   Field &E1 = *pE[1];
-  
+
   Index ind, indn;
-      
+
   for (ind[0]=low[0]; ind[0]<=high[0]; ++ind[0])
     for (ind[1]=low[1]; ind[1]<=high[1]; ++ind[1])
       for (ind[2]=low[2]; ind[2]<=high[2]; ++ind[2])
@@ -507,12 +512,12 @@ void CPMLBorderHCurrent::stepScheme(double dt)
         int j = ind[dim];
         Index indp(ind);
         ++indp[dim];
-        
-        Psi0(ind[0], ind[1], ind[2]) 
-          = bCoeff(j)*Psi0(ind[0], ind[1], ind[2]) 
+
+        Psi0(ind[0], ind[1], ind[2])
+          = bCoeff(j)*Psi0(ind[0], ind[1], ind[2])
             + cCoeff(j)*(E1(indp[0], indp[1], indp[2])-E1(ind[0], ind[1], ind[2]))/dx;
-            
-        Psi1(ind[0], ind[1], ind[2]) 
+
+        Psi1(ind[0], ind[1], ind[2])
           = bCoeff(j)*Psi1(ind[0], ind[1], ind[2])
             - cCoeff(j)*(E0(indp[0], indp[1], indp[2])-E0(ind[0], ind[1], ind[2]))/dx;
       }

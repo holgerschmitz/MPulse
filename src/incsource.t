@@ -7,8 +7,8 @@
 //===============================================================
 
 template<class SourceFunc>
-IncidentSourceECurrent<SourceFunc>::IncidentSourceECurrent(int distance_, Direction dir_)
-  : IncidentSourceCurrent(distance_, dir_, false),
+IncidentSourceECurrent<SourceFunc>::IncidentSourceECurrent(int distance_, Direction dir_, SimulationContext &context)
+  : IncidentSourceCurrent(distance_, dir_, false, context),
     SourceFunc(dir_, false)
 {}
 
@@ -17,20 +17,20 @@ void IncidentSourceECurrent<SourceFunc>::init()
 {
   Index blow, bhigh;
 
-  if (!getBorderExtent(IncidentSourceCurrent::dir, 1, distance, blow, bhigh, false)) return;
+  if (!getBorderExtent(IncidentSourceCurrent::dir, 1, distance, blow, bhigh, false, context)) return;
 
   pJx = boost::make_shared<Grid>(blow, bhigh);
   pJy = boost::make_shared<Grid>(blow, bhigh);
   pJz = boost::make_shared<Grid>(blow, bhigh);
-  
+
   pGrid allJ[3];
   allJ[0] = pJx;
   allJ[1] = pJy;
   allJ[2] = pJz;
-  
+
   pJ[0] = allJ[IncidentSourceCurrent::transverse1];
   pJ[1] = allJ[IncidentSourceCurrent::transverse2];
-  
+
   if ((pJx!=0) && (pJy!=0) && (pJz!=0))
      this->initSourceFunc(pJx, pJy, pJz);
 }
@@ -49,18 +49,18 @@ void IncidentSourceECurrent<SourceFunc>::stepScheme(double dt)
 
   Index low  = J0.getLo();
   Index high = J0.getHi();
-  
+
   Index ind, indn;
-  
+
   double Time = MPulse::getTime();
   this->setTime(Time);
-  
+
   int off[3] = {0,0,0};
   off[IncidentSourceCurrent::dim] = reverse?0:-1;
   double factor = reverse?1:-1;
-  
+
   double DX = dX[2];
-  
+
   for (ind[0]=low[0]; ind[0]<=high[0]; ++ind[0])
   {
     int x = ind[0]+off[0];
@@ -84,8 +84,8 @@ void IncidentSourceECurrent<SourceFunc>::stepScheme(double dt)
 //===============================================================
 
 template<class SourceFunc>
-IncidentSourceHCurrent<SourceFunc>::IncidentSourceHCurrent(int distance_, Direction dir_)
-  : IncidentSourceCurrent(distance_, dir_, true),
+IncidentSourceHCurrent<SourceFunc>::IncidentSourceHCurrent(int distance_, Direction dir_, SimulationContext &context)
+  : IncidentSourceCurrent(distance_, dir_, true, context),
     SourceFunc(dir_, true)
 {}
 
@@ -94,7 +94,7 @@ void IncidentSourceHCurrent<SourceFunc>::init()
 {
   Index blow, bhigh;
 
-  if (!getBorderExtent(IncidentSourceCurrent::dir, 1, distance, blow, bhigh, true)) return;
+  if (!getBorderExtent(IncidentSourceCurrent::dir, 1, distance, blow, bhigh, true, context)) return;
 
   pJx = boost::make_shared<Grid>(blow, bhigh);
   pJy = boost::make_shared<Grid>(blow, bhigh);
@@ -104,7 +104,7 @@ void IncidentSourceHCurrent<SourceFunc>::init()
   allJ[0] = pJx;
   allJ[1] = pJy;
   allJ[2] = pJz;
-  
+
   pJ[0] = allJ[IncidentSourceCurrent::transverse1];
   pJ[1] = allJ[IncidentSourceCurrent::transverse2];
 
@@ -122,21 +122,21 @@ void IncidentSourceHCurrent<SourceFunc>::stepScheme(double dt)
 {
   Grid &J0 = *pJ[0];
   Grid &J1 = *pJ[1];
-  
+
   Index low  = J0.getLo();
   Index high = J0.getHi();
 
   Index ind, indn;
-  
+
   double Time = MPulse::getTime();
   this->setTime(Time);
-  
+
   int off[3] = {0,0,0};
   off[IncidentSourceCurrent::dim] = reverse?0:1;
   double factor = reverse?1:-1;
-  
+
   double DX = dX[2];
-  
+
   for (ind[0]=low[0]; ind[0]<=high[0]; ++ind[0])
   {
     int x = ind[0]+off[0];

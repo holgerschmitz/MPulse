@@ -12,15 +12,17 @@ bool getBorderExtent(Direction dir,
                      int distance,
                      Index &blow,
                      Index &bhigh,
-                     bool isH)
+                     bool isH,
+                     SimulationContext &context)
 {
   bool haveBorder = false;
   int distanceLow = distance - (isH?1:0);
   int distanceHigh = distance - 0; //(isH?0:1);
 
-  schnek::DomainSubdivision<Field> &subdivision = MPulse::getSubdivision();
-  Index glow  = Index(0);
-  Index ghigh = MPulse::getGlobalMax();
+  schnek::DomainSubdivision<Field> &subdivision = context.getSubdivision();
+  Range gdomain = subdivision.getGlobalDomain();
+  Index glow  = gdomain.getLo();
+  Index ghigh = gdomain.getHi();
 
   Index low  = subdivision.getInnerLo();
   Index high = subdivision.getInnerHi();

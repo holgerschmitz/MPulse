@@ -22,7 +22,10 @@ class Storage;
  * that enter the Faraday equation much like the electric current enters the
  * Ampere equation. These can be used to provide absorbing boundary layers.
  */
-class FDTD_PLRCCore : public FieldSolver, public CurrentContainer, public schnek::BlockContainer<CurrentBlock>
+class FDTD_PLRCCore :
+        public FieldSolver,
+        public CurrentContainer,
+        public schnek::BlockContainer<CurrentBlock>
 {
   public:
     /**
@@ -48,7 +51,7 @@ class FDTD_PLRCCore : public FieldSolver, public CurrentContainer, public schnek
      * \f$\mathbf{E}\f$
      */
     pField pBx, pBy, pBz;
-    
+
     /**
      * Electrical conductivity of the medium
      */
@@ -75,17 +78,17 @@ class FDTD_PLRCCore : public FieldSolver, public CurrentContainer, public schnek
      * Conductivity factor for the magnetic fields used by CPML schemes
      */
     pDataLine pCpmlSigmaHx, pCpmlSigmaHy, pCpmlSigmaHz;
-    
+
     /**
      * Real part of the accumulator for three poles
      */
     pField pPsiRx[3], pPsiRy[3], pPsiRz[3];
-    
+
     /**
      * Imaginary part of the accumulator for three poles
      */
     pField pPsiIx[3], pPsiIy[3], pPsiIz[3];
-    
+
     struct PLRCData
     {
       std::complex<double> dchi0[3];
@@ -96,12 +99,12 @@ class FDTD_PLRCCore : public FieldSolver, public CurrentContainer, public schnek
     };
 
     PLRCData plrcData;
-    
+
     /**
      * value of eps_infty (note that eps_0 = mu_0 = 1)
      */
     double eps;
-    
+
     /**
      * Value of Delta epsilon_p for the three Lorentz poles
      */
@@ -134,16 +137,16 @@ class FDTD_PLRCLinCore : public FDTD_PLRCCore
     /**
      * Advance the electric fields
      */
-    void plrcStepD(double dt, 
-                   int i, int j, int k, 
+    void plrcStepD(double dt,
+                   int i, int j, int k,
                    double dx, double dy, double dz,
                    double Jx, double Jy, double Jz);
-                   
+
     /**
      * Advance the magnetic fields
      */
-    void plrcStepB(double dt, 
-                   int i, int j, int k, 
+    void plrcStepB(double dt,
+                   int i, int j, int k,
                    double dx, double dy, double dz,
                    double Jx, double Jy, double Jz);
 };
@@ -157,21 +160,21 @@ class FDTD_PLRCLinCore : public FDTD_PLRCCore
  */
 class FDTD_PLRCNonlinCore : public FDTD_PLRCCore
 {
-  protected: 
+  protected:
 
     /**
      * Advance the electric fields
      */
-    void plrcStepD(double dt, 
-                   int i, int j, int k, 
+    void plrcStepD(double dt,
+                   int i, int j, int k,
                    double dx, double dy, double dz,
                    double Jx, double Jy, double Jz);
 
     /**
      * Advance the magnetic fields
      */
-    void plrcStepB(double dt, 
-                   int i, int j, int k, 
+    void plrcStepB(double dt,
+                   int i, int j, int k,
                    double dx, double dy, double dz,
                    double Jx, double Jy, double Jz);
 
@@ -189,7 +192,7 @@ class FDTD_PLRCNonlinCore : public FDTD_PLRCCore
      * Value of the nonlinearity \f$\chi^3\f$
      */
     double chi;
-    
+
 };
 
 /**
@@ -247,7 +250,7 @@ class FDTD_PLRCSolver : public PLRCImplementation
      * Accumulates all electric currents and then calls `plrcStepB`
      */
     void stepB(double dt);
-    
+
     /**
      * Initialise the accumulators in #FDTD_PLRCCore at the start of the
      * simulation
