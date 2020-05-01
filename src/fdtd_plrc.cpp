@@ -3,12 +3,11 @@
 
 #include <schnek/tools/literature.hpp>
 
-#include <boost/make_shared.hpp>
-
 #include <cmath>
 #include <complex>
 #include <algorithm>
 #include <limits>
+#include <memory>
 
 //===============================================================
 //==========  FDTD_PLRCCore
@@ -29,39 +28,26 @@ void FDTD_PLRCCore::registerData()
   Index lowIn  = subdivision.getInnerLo();
   Index highIn = subdivision.getInnerHi();
 
-  pSigma = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
+  pSigma = std::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
 
-  pKappaEdx = boost::make_shared<DataLine>(schnek::Array<int, 1>(low[0]), schnek::Array<int, 1>(high[0]));
-  pKappaEdy = boost::make_shared<DataLine>(schnek::Array<int, 1>(low[1]), schnek::Array<int, 1>(high[1]));
-  pKappaEdz = boost::make_shared<DataLine>(schnek::Array<int, 1>(low[2]), schnek::Array<int, 1>(high[2]));
+  pKappaEdx = std::make_shared<Grid1d>(schnek::Array<int, 1>(low[0]), schnek::Array<int, 1>(high[0]));
+  pKappaEdy = std::make_shared<Grid1d>(schnek::Array<int, 1>(low[1]), schnek::Array<int, 1>(high[1]));
+  pKappaEdz = std::make_shared<Grid1d>(schnek::Array<int, 1>(low[2]), schnek::Array<int, 1>(high[2]));
 
-  pKappaHdx = boost::make_shared<DataLine>(schnek::Array<int, 1>(low[0]), schnek::Array<int, 1>(high[0]));
-  pKappaHdy = boost::make_shared<DataLine>(schnek::Array<int, 1>(low[1]), schnek::Array<int, 1>(high[1]));
-  pKappaHdz = boost::make_shared<DataLine>(schnek::Array<int, 1>(low[2]), schnek::Array<int, 1>(high[2]));
+  pKappaHdx = std::make_shared<Grid1d>(schnek::Array<int, 1>(low[0]), schnek::Array<int, 1>(high[0]));
+  pKappaHdy = std::make_shared<Grid1d>(schnek::Array<int, 1>(low[1]), schnek::Array<int, 1>(high[1]));
+  pKappaHdz = std::make_shared<Grid1d>(schnek::Array<int, 1>(low[2]), schnek::Array<int, 1>(high[2]));
 
-  pPsiRx[0] = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
-  pPsiRy[0] = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
-  pPsiRz[0] = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
+  for (int d=0; d<3; d++)
+  {
+    pPsiRx[d] = std::make_unique<Field>(lowIn, highIn, domainSize, stagger, 2);
+    pPsiRy[d] = std::make_unique<Field>(lowIn, highIn, domainSize, stagger, 2);
+    pPsiRz[d] = std::make_unique<Field>(lowIn, highIn, domainSize, stagger, 2);
 
-  pPsiRx[1] = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
-  pPsiRy[1] = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
-  pPsiRz[1] = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
-
-  pPsiRx[2] = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
-  pPsiRy[2] = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
-  pPsiRz[2] = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
-
-  pPsiIx[0] = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
-  pPsiIy[0] = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
-  pPsiIz[0] = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
-
-  pPsiIx[1] = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
-  pPsiIy[1] = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
-  pPsiIz[1] = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
-
-  pPsiIx[2] = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
-  pPsiIy[2] = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
-  pPsiIz[2] = boost::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
+    pPsiIx[d] = std::make_unique<Field>(lowIn, highIn, domainSize, stagger, 2);
+    pPsiIy[d] = std::make_unique<Field>(lowIn, highIn, domainSize, stagger, 2);
+    pPsiIz[d] = std::make_unique<Field>(lowIn, highIn, domainSize, stagger, 2);
+  }
 
   addData("KappaEdx", pKappaEdx);
   addData("KappaEdy", pKappaEdy);
@@ -75,7 +61,6 @@ void FDTD_PLRCCore::registerData()
 
 void FDTD_PLRCCore::init()
 {
-
   retrieveData("Ex", pEx);
   retrieveData("Ey", pEy);
   retrieveData("Ez", pEz);

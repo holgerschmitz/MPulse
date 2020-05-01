@@ -1,7 +1,7 @@
 #include "plasmacurrent.hpp"
 #include "fieldsolver.hpp"
 
-#include <boost/make_shared.hpp>
+#include <memory>
 
 void PlasmaCurrentBlock::initParameters(schnek::BlockParameters &blockPars)
 {
@@ -23,7 +23,7 @@ PlasmaCurrent::PlasmaCurrent(double em_, double mi_, double Z_, double gamma_, C
 
 void PlasmaCurrent::init()
 {
-  schnek::DomainSubdivision<Field> &subdivision = MPulse::getSubdivision();
+  schnek::DomainSubdivision<Field> &subdivision = plasmaBlock.getContext().getSubdivision();
 
   Index lowIn  = subdivision.getInnerLo();
   Index highIn = subdivision.getInnerHi();
@@ -35,16 +35,16 @@ void PlasmaCurrent::init()
   plasmaBlock.retrieveData("Rho", pRho);
 
 
-  pJx = boost::make_shared<Grid>(lowIn, highIn);
-  pJy = boost::make_shared<Grid>(lowIn, highIn);
-  pJz = boost::make_shared<Grid>(lowIn, highIn);
+  pJx = std::make_shared<Grid>(lowIn, highIn);
+  pJy = std::make_shared<Grid>(lowIn, highIn);
+  pJz = std::make_shared<Grid>(lowIn, highIn);
 
   plasmaBlock.addData("PlasmaJx", pJx);
   plasmaBlock.addData("PlasmaJy", pJy);
   plasmaBlock.addData("PlasmaJz", pJz);
-  
+
 }
-    
+
 void PlasmaCurrent::stepScheme(double dt)
 {
   Field &Ex = *pEx;
@@ -52,18 +52,18 @@ void PlasmaCurrent::stepScheme(double dt)
   Field &Ez = *pEz;
 
   Field &Rho = *pRho;
-  
+
   Grid &Jx = *pJx;
   Grid &Jy = *pJy;
   Grid &Jz = *pJz;
 
   Index low = Jx.getLo();
   Index high = Jx.getHi();
-  
+
   const double gdtn = 1-0.5*gamma*dt;
   const double gdtd = 1+0.5*gamma*dt;
   const double emdt = dt*Z*em/mi;
-  
+
   for (int i=low[0]; i<high[0]; ++i)
     for (int j=low[1]; j<high[1]; ++j)
       for (int k=low[2]; k<high[2]; ++k)
@@ -72,7 +72,7 @@ void PlasmaCurrent::stepScheme(double dt)
     double &jy = Jy(i,j,k);
     double &jz = Jz(i,j,k);
     double rho = Rho(i,j,k);
-    
+
     jx = (jx*gdtn - emdt*Ex(i,j,k)*rho)/gdtd;
     jy = (jy*gdtn - emdt*Ey(i,j,k)*rho)/gdtd;
     jz = (jz*gdtn - emdt*Ez(i,j,k)*rho)/gdtd;

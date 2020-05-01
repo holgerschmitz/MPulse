@@ -16,7 +16,7 @@ class ShortPulseInject : public IncidentSource
     pCurrent makeECurrent(int distance_, Direction dir_);
     pCurrent makeHCurrent(int distance_, Direction dir_);
     bool needCurrent(Direction dir_);
-    
+
     void initParameters(schnek::BlockParameters &blockPars);
     void init();
   private:
@@ -38,16 +38,17 @@ class ShortPulseInject : public IncidentSource
 class ShortPulseInjectSourceFunc
 {
   public:
-    ShortPulseInjectSourceFunc(Direction dir_, bool isH_) : dir(dir_), isH(isH_) {};
-    
-    void setParam(double length_, 
+    ShortPulseInjectSourceFunc(Direction dir_, bool isH_, SimulationContext &context) :
+      dir(dir_), isH(isH_), context(context) {};
+
+    void setParam(double length_,
                   double width_,
                   double om0_,
                   double TShift_,
                   double ZShift_,
                   double Phase_,
-                  double amp_, 
-                  double eps_, 
+                  double amp_,
+                  double eps_,
                   int distance_);
 
     void initSourceFunc(pGrid pJx, pGrid pJy, pGrid pJz);
@@ -59,10 +60,10 @@ class ShortPulseInjectSourceFunc
 
     typedef std::complex<double> Complex;
   private:
-        
+
     Complex Efunc(double x, double y, double z, double t);
     Complex Bfunc(double x, double y, double z, double t, bool bx);
-           
+
     double DX;
     double DY;
     double DZ;
@@ -80,26 +81,27 @@ class ShortPulseInjectSourceFunc
     double Phase;
 
     double ZRl;
-    
+
     int lowx;
     int highx;
     int lowy;
     int highy;
-    
+
     double centrex;
     double centrey;
     double centrez;
 
     double amp;
     double eps;
-    
+
     int dim;
     int transverse1, transverse2;
 
     Direction dir;
     bool isH;
-    
+
     int dist;
+    SimulationContext &context;
 };
 
 #endif

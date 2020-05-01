@@ -74,8 +74,8 @@ void FocusedPulseInjectSourceFunc::setParam(double length_,
   generator = generator_;
 
   // Grid Spacing and position
-  Index gridLow = MPulse::getSubdivision().getLo();
-  Index gridHigh = MPulse::getSubdivision().getHi();
+  Index gridLow = context.getSubdivision().getLo();
+  Index gridHigh = context.getSubdivision().getHi();
 
   // setting most parameters
 
@@ -101,17 +101,17 @@ void FocusedPulseInjectSourceFunc::initSourceFunc(pGrid pJx, pGrid pJy, pGrid pJ
 {
   std::cerr << "FocusedPulseInjectSourceFunc::initSourceFunc\n";
 
-  const schnek::DomainSubdivision<Field> &subdivision = MPulse::getSubdivision();
+  const schnek::DomainSubdivision<Field> &subdivision = context.getSubdivision();
   Index lo = subdivision.getInnerLo();
   Index hi = subdivision.getInnerHi();
   generator->setLow(lo);
   generator->setHigh(hi);
 
   Index blow, bhigh;
-  if (!getBorderExtent(dir, 1, dist, blow, bhigh, isH)) return;
-  x_grid = boost::make_shared<Grid>(blow, bhigh);
-  y_grid = boost::make_shared<Grid>(blow, bhigh);
-  z_grid = boost::make_shared<Grid>(blow, bhigh);
+  if (!getBorderExtent(dir, 1, dist, blow, bhigh, isH, context)) return;
+  x_grid = std::make_shared<Grid>(blow, bhigh);
+  y_grid = std::make_shared<Grid>(blow, bhigh);
+  z_grid = std::make_shared<Grid>(blow, bhigh);
 
   if (isH)
   {
@@ -180,13 +180,13 @@ void FocusedPulseDataGenerator::setSize(int oversample_X_, int oversample_Y_)
 {
   oversample_X = oversample_X_;
   oversample_Y = oversample_Y_;
-  Index low = MPulse::getSubdivision().getLo();
-  Index high = MPulse::getSubdivision().getHi();
+  Index low = context.getSubdivision().getLo();
+  Index high = context.getSubdivision().getHi();
 
-  DX = MPulse::getDx()[0];
-  DY = MPulse::getDx()[1];
-  DZ = MPulse::getDx()[2];
-  DT = MPulse::getDt();
+  DX = context.getDx()[0];
+  DY = context.getDx()[1];
+  DZ = context.getDx()[2];
+  DT = context.getDt();
 
   sizeX = oversample_X*(high[0]-low[0]+1);
   sizeY = oversample_Y*(high[1]-low[1]+1);
@@ -238,8 +238,8 @@ void FocusedPulseDataGenerator::init()
 void FocusedPulseDataGenerator::calcEx()
 {
 
-  double DX = MPulse::getDx()[0];
-  double DY = MPulse::getDx()[1];
+  double DX = context.getDx()[0];
+  double DY = context.getDx()[1];
 
   double dKx = 1./(sizeX*DX);
   double dKy = 1./(sizeY*DY);
@@ -322,8 +322,8 @@ void FocusedPulseDataGenerator::calcEx()
 void FocusedPulseDataGenerator::calcEy()
 {
 
-  double DX = MPulse::getDx()[0];
-  double DY = MPulse::getDx()[1];
+  double DX = context.getDx()[0];
+  double DY = context.getDx()[1];
 
   double dKx = 1./(sizeX*DX);
   double dKy = 1./(sizeY*DY);
@@ -407,8 +407,8 @@ void FocusedPulseDataGenerator::calcEy()
 void FocusedPulseDataGenerator::calcEz()
 {
 
-  double DX = MPulse::getDx()[0];
-  double DY = MPulse::getDx()[1];
+  double DX = context.getDx()[0];
+  double DY = context.getDx()[1];
 
   double dKx = 1./(sizeX*DX);
   double dKy = 1./(sizeY*DY);
@@ -488,8 +488,8 @@ void FocusedPulseDataGenerator::calcEz()
 void FocusedPulseDataGenerator::calcBx()
 {
 
-  double DX = MPulse::getDx()[0];
-  double DY = MPulse::getDx()[1];
+  double DX = context.getDx()[0];
+  double DY = context.getDx()[1];
 
   double dKx = 1./(sizeX*DX);
   double dKy = 1./(sizeY*DY);
@@ -572,8 +572,8 @@ void FocusedPulseDataGenerator::calcBx()
 void FocusedPulseDataGenerator::calcBy()
 {
 
-  double DX = MPulse::getDx()[0];
-  double DY = MPulse::getDx()[1];
+  double DX = context.getDx()[0];
+  double DY = context.getDx()[1];
 
   double dKx = 1./(sizeX*DX);
   double dKy = 1./(sizeY*DY);
@@ -656,8 +656,8 @@ void FocusedPulseDataGenerator::calcBy()
 void FocusedPulseDataGenerator::calcBz()
 {
 
-  double DX = MPulse::getDx()[0];
-  double DY = MPulse::getDx()[1];
+  double DX = context.getDx()[0];
+  double DY = context.getDx()[1];
 
   double dKx = 1./(sizeX*DX);
   double dKy = 1./(sizeY*DY);

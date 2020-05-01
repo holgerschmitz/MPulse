@@ -1,5 +1,7 @@
 #include "sources.hpp"
 
+#include "../huerto/constants.hpp"
+
 #include <cmath>
 
 //===============================================================
@@ -25,14 +27,14 @@ pCurrent PlaneWaveSource::makeECurrent(int distance_, Direction dir_)
   Vector E_bg(Ex_bg,Ey_bg,Ez_bg);
 
   Vector E(ky*Hz-kz*Hy, kz*Hx-kx*Hz, kx*Hy-ky*Hx);
-  
+
   double bmag = sqrt(Hx*Hx + Hy*Hy + Hz*Hz);
   double factor = -bmag/sqrt(E[0]*E[0] + E[1]*E[1] + E[2]*E[2]);
-  
+
   E[0] *= clight*factor/sqrt(eps);
   E[1] *= clight*factor/sqrt(eps);
   E[2] *= clight*factor/sqrt(eps);
-  
+
   typedef IncidentSourceECurrent<PlaneWaveSourceEFunc> CurrentType;
   CurrentType *cur = new CurrentType(distance_, dir_);
   cur->setParam(k, E, H, E_bg, H_bg, ramp, eps, front);
@@ -47,14 +49,14 @@ pCurrent PlaneWaveSource::makeHCurrent(int distance_, Direction dir_)
   Vector E_bg(Ex_bg,Ey_bg,Ez_bg);
 
   Vector E(ky*Hz-kz*Hy, kz*Hx-kx*Hz, kx*Hy-ky*Hx);
-  
+
   double bmag = sqrt(Hx*Hx + Hy*Hy + Hz*Hz);
   double factor = -bmag/sqrt(E[0]*E[0] + E[1]*E[1] + E[2]*E[2]);
-  
+
   E[0] *= clight*factor/sqrt(eps);
   E[1] *= clight*factor/sqrt(eps);
   E[2] *= clight*factor/sqrt(eps);
-    
+
   typedef IncidentSourceHCurrent<PlaneWaveSourceHFunc> CurrentType;
   CurrentType *cur = new CurrentType(distance_,dir_);
   cur->setParam(k, E, H, E_bg, H_bg, ramp, eps, front);
@@ -87,8 +89,8 @@ void PlaneWaveSource::initParameters(schnek::BlockParameters &blockPars)
 }
 
 
-PlaneWaveSourceEFunc::PlaneWaveSourceEFunc(Direction dir_, bool isH_)
-  : dir(dir_), isH(isH_)
+PlaneWaveSourceEFunc::PlaneWaveSourceEFunc(Direction dir_, bool isH_, SimulationContext &context)
+  : dir(dir_), isH(isH_), context(context)
 {}
 
 void PlaneWaveSourceEFunc::setParam(Vector k_, Vector E_, Vector H_, Vector E_bg_, Vector H_bg_, double ramp_, double eps_, const Vector &front_)
@@ -101,12 +103,12 @@ void PlaneWaveSourceEFunc::setParam(Vector k_, Vector E_, Vector H_, Vector E_bg
   ramp = ramp_;
   eps = eps_;
   front = front_;
-  dt = MPulse::getDt();
+  dt = context.getDt();
   om = clight*sqrt(k[0]*k[0] + k[1]*k[1] + k[2]*k[2])/sqrt(eps);
 
-  dx = MPulse::getDx()[0];
-  dy = MPulse::getDx()[1];
-  dz = MPulse::getDx()[2];
+  dx = context.getDx()[0];
+  dy = context.getDx()[1];
+  dz = context.getDx()[2];
 }
 
 
@@ -121,11 +123,11 @@ Vector PlaneWaveSourceEFunc::getHField(int i, int j, int l, double time)
   double posx = k[0]*x + k[1]*(y+0.5*dy) + k[2]*(z+0.5*dz) - om*realtime;
   double posy = k[0]*(x+0.5*dx) + k[1]*y + k[2]*(z+0.5*dz) - om*realtime;
   double posz = k[0]*(x+0.5*dx) + k[1]*(y+0.5*dy) + k[2]*z - om*realtime;
-  
+
   double hx = applyPlaneWaveField(posx, ramp, H[0], H_bg[0]);
   double hy = applyPlaneWaveField(posy, ramp, H[1], H_bg[1]);
   double hz = applyPlaneWaveField(posz, ramp, H[2], H_bg[2]);
- 
+
 //  if ((j==50) && (l==50)) {
 //    std::cout << "H " << time << " "  << om << " " << posx << " " << front[0] << " | " << i << " " << hx << " " << hy << " " << hz << std::endl;
 //  }
@@ -134,8 +136,8 @@ Vector PlaneWaveSourceEFunc::getHField(int i, int j, int l, double time)
 }
 
 
-PlaneWaveSourceHFunc::PlaneWaveSourceHFunc(Direction dir_, bool isH_)
-  : dir(dir_), isH(isH_)
+PlaneWaveSourceHFunc::PlaneWaveSourceHFunc(Direction dir_, bool isH_, SimulationContext &context)
+  : dir(dir_), isH(isH_), context(context)
 {}
 
 void PlaneWaveSourceHFunc::setParam(Vector k_, Vector E_, Vector H_, Vector E_bg_, Vector H_bg_, double ramp_, double eps_, const Vector &front_)
@@ -148,12 +150,12 @@ void PlaneWaveSourceHFunc::setParam(Vector k_, Vector E_, Vector H_, Vector E_bg
   ramp = ramp_;
   eps = eps_;
   front = front_;
-  dt = MPulse::getDt();
+  dt = context.getDt();
   om = clight*sqrt(k[0]*k[0] + k[1]*k[1] + k[2]*k[2])/sqrt(eps);
 
-  dx = MPulse::getDx()[0];
-  dy = MPulse::getDx()[1];
-  dz = MPulse::getDx()[2];
+  dx = context.getDx()[0];
+  dy = context.getDx()[1];
+  dz = context.getDx()[2];
 }
 
 
@@ -168,11 +170,11 @@ Vector PlaneWaveSourceHFunc::getEField(int i, int j, int l, double time)
   double posx = k[0]*(x+0.5*dx) + k[1]*y + k[2]*z - om*realtime;
   double posy = k[0]*x + k[1]*(y+0.5*dy) + k[2]*z - om*realtime;
   double posz = k[0]*x + k[1]*y + k[2]*(z+0.5*dz) - om*realtime;
-  
+
   double ex = applyPlaneWaveField(posx, ramp, E[0], E_bg[0]);
   double ey = applyPlaneWaveField(posy, ramp, E[1], E_bg[1]);
   double ez = applyPlaneWaveField(posz, ramp, E[2], E_bg[2]);
- 
+
   return Vector(ex, ey, ez);
 }
 
@@ -186,14 +188,14 @@ pCurrent PlaneGaussSource::makeECurrent(int distance_, Direction dir_)
   Vector H(Hx,Hy,Hz);
 
   Vector E(ky*Hz-kz*Hy, kz*Hx-kx*Hz, kx*Hy-ky*Hx);
-  
+
   double bmag = sqrt(Hx*Hx + Hy*Hy + Hz*Hz);
   double factor = -bmag/sqrt(E[0]*E[0] + E[1]*E[1] + E[2]*E[2]);
-  
+
   E[0] *= clight*factor/sqrt(eps);
   E[1] *= clight*factor/sqrt(eps);
   E[2] *= clight*factor/sqrt(eps);
-  
+
   typedef IncidentSourceECurrent<PlaneGaussSourceEFunc> CurrentType;
   CurrentType *cur = new CurrentType(distance_,dir_);
   cur->setParam(k, E, H, width, eps, front);
@@ -206,14 +208,14 @@ pCurrent PlaneGaussSource::makeHCurrent(int distance_, Direction dir_)
   Vector H(Hx,Hy,Hz);
 
   Vector E(ky*Hz-kz*Hy, kz*Hx-kx*Hz, kx*Hy-ky*Hx);
-  
+
   double bmag = sqrt(Hx*Hx + Hy*Hy + Hz*Hz);
   double factor = -bmag/sqrt(E[0]*E[0] + E[1]*E[1] + E[2]*E[2]);
-  
+
   E[0] *= clight*factor/sqrt(eps);
   E[1] *= clight*factor/sqrt(eps);
   E[2] *= clight*factor/sqrt(eps);
-    
+
   typedef IncidentSourceHCurrent<PlaneGaussSourceHFunc> CurrentType;
   CurrentType *cur = new CurrentType(distance_,dir_);
   cur->setParam(k, E, H, width, eps, front);
@@ -239,8 +241,8 @@ void PlaneGaussSource::initParameters(schnek::BlockParameters &blockPars)
 }
 
 
-PlaneGaussSourceEFunc::PlaneGaussSourceEFunc(Direction dir_, bool isH_)
-  : dir(dir_), isH(isH_)
+PlaneGaussSourceEFunc::PlaneGaussSourceEFunc(Direction dir_, bool isH_, SimulationContext &context)
+  : dir(dir_), isH(isH_), context(context)
 {}
 
 void PlaneGaussSourceEFunc::setParam(Vector k_, Vector E_, Vector H_, double width_, double eps_, const Vector &front_)
@@ -252,12 +254,12 @@ void PlaneGaussSourceEFunc::setParam(Vector k_, Vector E_, Vector H_, double wid
   width = width_*kn;
   eps = eps_;
   front = front_;
-  dt = MPulse::getDt();
+  dt = context.getDt();
   om = clight*kn/sqrt(eps);
 
-  dx = MPulse::getDx()[0];
-  dy = MPulse::getDx()[1];
-  dz = MPulse::getDx()[2];
+  dx = context.getDx()[0];
+  dy = context.getDx()[1];
+  dz = context.getDx()[2];
 }
 
 
@@ -272,17 +274,17 @@ Vector PlaneGaussSourceEFunc::getHField(int i, int j, int l, double time)
   double posx = k[0]*x + k[1]*(y+0.5*dy) + k[2]*(z+0.5*dz) - om*realtime;
   double posy = k[0]*(x+0.5*dx) + k[1]*y + k[2]*(z+0.5*dz) - om*realtime;
   double posz = k[0]*(x+0.5*dx) + k[1]*(y+0.5*dy) + k[2]*z - om*realtime;
-  
+
   double hx = applyPlaneGaussField(posx, width, H[0]);
   double hy = applyPlaneGaussField(posy, width, H[1]);
   double hz = applyPlaneGaussField(posz, width, H[2]);
- 
+
   return Vector(hx, hy, hz);
 }
 
 
-PlaneGaussSourceHFunc::PlaneGaussSourceHFunc(Direction dir_, bool isH_)
-  : dir(dir_), isH(isH_)
+PlaneGaussSourceHFunc::PlaneGaussSourceHFunc(Direction dir_, bool isH_, SimulationContext &context)
+  : dir(dir_), isH(isH_), context(context)
 {}
 
 void PlaneGaussSourceHFunc::setParam(Vector k_, Vector E_, Vector H_, double width_, double eps_, const Vector &front_)
@@ -294,12 +296,12 @@ void PlaneGaussSourceHFunc::setParam(Vector k_, Vector E_, Vector H_, double wid
   width = width_*kn;
   eps = eps_;
   front = front_;
-  dt = MPulse::getDt();
+  dt = context.getDt();
   om = clight*kn/sqrt(eps);
 
-  dx = MPulse::getDx()[0];
-  dy = MPulse::getDx()[1];
-  dz = MPulse::getDx()[2];
+  dx = context.getDx()[0];
+  dy = context.getDx()[1];
+  dz = context.getDx()[2];
 }
 
 
@@ -318,7 +320,7 @@ Vector PlaneGaussSourceHFunc::getEField(int i, int j, int l, double time)
   double ex = applyPlaneGaussField(posx, width, E[0]);
   double ey = applyPlaneGaussField(posy, width, E[1]);
   double ez = applyPlaneGaussField(posz, width, E[2]);
- 
+
   return Vector(ex, ey, ez);
 }
 

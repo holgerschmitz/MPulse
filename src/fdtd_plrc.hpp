@@ -5,6 +5,8 @@
 #include "current.hpp"
 #include "mpulse.hpp"
 
+#include "../huerto/simulation/simulation_context.hpp"
+
 #include <complex>
 
 class Storage;
@@ -61,33 +63,37 @@ class FDTD_PLRCCore :
      * Stretch factors for the grid cell size of the electric fields; used by CPML
      * schemes.
      */
-    pDataLine pKappaEdx, pKappaEdy, pKappaEdz;
+    pGrid1d pKappaEdx, pKappaEdy, pKappaEdz;
 
     /**
      * Stretch factors for the grid cell size of the magnetic fields; used by CPML
      * schemes.
      */
-    pDataLine pKappaHdx, pKappaHdy, pKappaHdz;
+    pGrid1d pKappaHdx, pKappaHdy, pKappaHdz;
 
     /**
      * Conductivity factor for the electric fields used by CPML schemes
+     *
+     * @todo dead code
      */
-    pDataLine pCpmlSigmaEx, pCpmlSigmaEy, pCpmlSigmaEz;
+    // pGrid1d pCpmlSigmaEx, pCpmlSigmaEy, pCpmlSigmaEz;
 
     /**
      * Conductivity factor for the magnetic fields used by CPML schemes
+     *
+     * @todo dead code
      */
-    pDataLine pCpmlSigmaHx, pCpmlSigmaHy, pCpmlSigmaHz;
+    // pGrid1d pCpmlSigmaHx, pCpmlSigmaHy, pCpmlSigmaHz;
 
     /**
      * Real part of the accumulator for three poles
      */
-    pField pPsiRx[3], pPsiRy[3], pPsiRz[3];
+    uField pPsiRx[3], pPsiRy[3], pPsiRz[3];
 
     /**
      * Imaginary part of the accumulator for three poles
      */
-    pField pPsiIx[3], pPsiIy[3], pPsiIz[3];
+    uField pPsiIx[3], pPsiIy[3], pPsiIz[3];
 
     struct PLRCData
     {
@@ -206,7 +212,9 @@ class FDTD_PLRCNonlinCore : public FDTD_PLRCCore
  * #FDTD_PLRCNonlinCore.
  */
 template<class PLRCImplementation>
-class FDTD_PLRCSolver : public PLRCImplementation
+class FDTD_PLRCSolver :
+        public PLRCImplementation,
+        public SimulationEntity
 {
   public:
 
