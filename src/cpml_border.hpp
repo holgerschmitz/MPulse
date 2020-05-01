@@ -47,8 +47,8 @@ class CPMLBorderCurrent : public Current
     double sigmaMax;
     double eps;
 
-    DataLine bCoeff;
-    DataLine cCoeff;
+    Grid1d bCoeff;
+    Grid1d cCoeff;
 
     CurrentBlock &borderBlock;
 

@@ -8,6 +8,8 @@ INCLUDE = -I/usr/local/include -I/usr/lib/x86_64-linux-gnu/hdf5/mpich/include
 #CXX     = $(X_CXX)
 CXX     = mpic++
 
+DEFINES = -DHUERTO_THREE_DIM
+
 CXXFLAGS = $(OFLAGS)
 
 SOURCES = src/border.cpp \

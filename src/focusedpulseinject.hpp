@@ -16,8 +16,13 @@ class FocusedPulseDataGenerator
     int currentTime;
     bool initialized;
 
+    SimulationContext &context;
+
   public:
-    FocusedPulseDataGenerator() : currentTime(-1), initialized(false) {};
+    FocusedPulseDataGenerator(SimulationContext &context) :
+      currentTime(-1),
+      initialized(false),
+      context(context) {};
 
     void addEXData(pGrid g);
     void addEYData(pGrid g);
@@ -33,7 +38,7 @@ class FocusedPulseDataGenerator
     void setShifts(double TShift_, double ZShift_, double Phase_);
     typedef std::complex<double> Complex;
   private:
-    typedef schnek::Grid<Complex, 2, MPulseGridChecker> ComplexGrid2d;
+    typedef schnek::Grid<Complex, 2, HuertoGridChecker> ComplexGrid2d;
     typedef std::list<pGrid> GridList;
 
     GridList ex_grids;
@@ -149,8 +154,8 @@ class FocusedPulseInject : public IncidentSource
 class FocusedPulseInjectSourceFunc
 {
   public:
-    FocusedPulseInjectSourceFunc(Direction dir_, bool isH_)
-      : dir(dir_), isH(isH_) {};
+    FocusedPulseInjectSourceFunc(Direction dir_, bool isH_, SimulationContext &context)
+      : dir(dir_), isH(isH_), context(context) {};
 
     void setParam(double length_,
                   double width_,
@@ -197,6 +202,7 @@ class FocusedPulseInjectSourceFunc
     pGrid y_grid;
     pGrid z_grid;
 
+    SimulationContext &context;
 };
 
 

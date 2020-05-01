@@ -9,7 +9,7 @@
 template<class SourceFunc>
 IncidentSourceECurrent<SourceFunc>::IncidentSourceECurrent(int distance_, Direction dir_, SimulationContext &context)
   : IncidentSourceCurrent(distance_, dir_, false, context),
-    SourceFunc(dir_, false)
+    SourceFunc(dir_, false, context)
 {}
 
 template<class SourceFunc>
@@ -86,7 +86,7 @@ void IncidentSourceECurrent<SourceFunc>::stepScheme(double dt)
 template<class SourceFunc>
 IncidentSourceHCurrent<SourceFunc>::IncidentSourceHCurrent(int distance_, Direction dir_, SimulationContext &context)
   : IncidentSourceCurrent(distance_, dir_, true, context),
-    SourceFunc(dir_, true)
+    SourceFunc(dir_, true, context)
 {}
 
 template<class SourceFunc>
