@@ -19,7 +19,7 @@ pCurrent FocusedPulseInject::makeECurrent(int distance_, Direction dir_)
 {
   std::cerr << "FocusedPulseInject::makeECurrent\n";
   typedef IncidentSourceECurrent<FocusedPulseInjectSourceFunc> CurrentType;
-  CurrentType *cur = new CurrentType(distance_, dir_, context);
+  CurrentType *cur = new CurrentType(distance_, dir_, getContext());
 
   cur->setParam(length, width, om0, amp, eps, distance_, &generator);
   return pCurrent(cur);
@@ -29,7 +29,7 @@ pCurrent FocusedPulseInject::makeHCurrent(int distance_, Direction dir_)
 {
   std::cerr << "FocusedPulseInject::makeHCurrent\n";
   typedef IncidentSourceHCurrent<FocusedPulseInjectSourceFunc> CurrentType;
-  CurrentType *cur = new CurrentType(distance_, dir_, context);
+  CurrentType *cur = new CurrentType(distance_, dir_, getContext());
   cur->setParam(length, width, om0, amp, eps, distance_, &generator);
   return pCurrent(cur);
 }

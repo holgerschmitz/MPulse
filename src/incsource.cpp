@@ -1,5 +1,6 @@
 #include "incsource.hpp"
-#include "fieldsolver.hpp"
+
+#include "../huerto/electromagnetics/fieldsolver.hpp"
 
 #include <vector>
 #include <sstream>

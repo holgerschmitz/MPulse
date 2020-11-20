@@ -1,11 +1,11 @@
 #ifndef MPULSE_FDTD_PLRC_H
 #define MPULSE_FDTD_PLRC_H
 
-#include "fieldsolver.hpp"
-#include "current.hpp"
 #include "mpulse.hpp"
 
 #include "../huerto/simulation/simulation_context.hpp"
+#include "../huerto/electromagnetics/fieldsolver.hpp"
+#include "../huerto/electromagnetics/current.hpp"
 
 #include <complex>
 
@@ -24,10 +24,9 @@ class Storage;
  * that enter the Faraday equation much like the electric current enters the
  * Ampere equation. These can be used to provide absorbing boundary layers.
  */
-class FDTD_PLRCCore :
-        public FieldSolver,
-        public CurrentContainer,
-        public schnek::BlockContainer<CurrentBlock>
+class FDTD_PLRCCore : public FieldSolver,
+                      public CurrentContainer,
+                      public schnek::BlockContainer<CurrentBlock>
 {
   public:
     /**
@@ -212,10 +211,7 @@ class FDTD_PLRCNonlinCore : public FDTD_PLRCCore
  * #FDTD_PLRCNonlinCore.
  */
 template<class PLRCImplementation>
-class FDTD_PLRCSolver :
-        public PLRCImplementation,
-        public SimulationEntity
-{
+class FDTD_PLRCSolver : public PLRCImplementation {
   public:
 
     /**

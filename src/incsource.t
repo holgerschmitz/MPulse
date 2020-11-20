@@ -19,9 +19,9 @@ void IncidentSourceECurrent<SourceFunc>::init()
 
   if (!getBorderExtent(IncidentSourceCurrent::dir, 1, distance, blow, bhigh, false, context)) return;
 
-  pJx = boost::make_shared<Grid>(blow, bhigh);
-  pJy = boost::make_shared<Grid>(blow, bhigh);
-  pJz = boost::make_shared<Grid>(blow, bhigh);
+  pJx = std::make_shared<Grid>(blow, bhigh);
+  pJy = std::make_shared<Grid>(blow, bhigh);
+  pJz = std::make_shared<Grid>(blow, bhigh);
 
   pGrid allJ[3];
   allJ[0] = pJx;
@@ -52,7 +52,7 @@ void IncidentSourceECurrent<SourceFunc>::stepScheme(double dt)
 
   Index ind, indn;
 
-  double Time = MPulse::getTime();
+  double Time = context.getTime();
   this->setTime(Time);
 
   int off[3] = {0,0,0};
@@ -96,9 +96,9 @@ void IncidentSourceHCurrent<SourceFunc>::init()
 
   if (!getBorderExtent(IncidentSourceCurrent::dir, 1, distance, blow, bhigh, true, context)) return;
 
-  pJx = boost::make_shared<Grid>(blow, bhigh);
-  pJy = boost::make_shared<Grid>(blow, bhigh);
-  pJz = boost::make_shared<Grid>(blow, bhigh);
+  pJx = std::make_shared<Grid>(blow, bhigh);
+  pJy = std::make_shared<Grid>(blow, bhigh);
+  pJz = std::make_shared<Grid>(blow, bhigh);
 
   pGrid allJ[3];
   allJ[0] = pJx;
@@ -128,7 +128,7 @@ void IncidentSourceHCurrent<SourceFunc>::stepScheme(double dt)
 
   Index ind, indn;
 
-  double Time = MPulse::getTime();
+  double Time = context.getTime();
   this->setTime(Time);
 
   int off[3] = {0,0,0};

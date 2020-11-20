@@ -2,13 +2,13 @@
 
 #include "mpulse.hpp"
 #include "border.hpp"
-#include "fieldsolver.hpp"
 
 #include "../huerto/constants.hpp"
+#include "../huerto/electromagnetics/fieldsolver.hpp"
 
 #include <schnek/tools/literature.hpp>
 
-#include <boost/make_shared.hpp>
+#include <memory>
 
 #include <vector>
 
@@ -31,41 +31,41 @@ void CPMLBorder::init()
 void CPMLBorder::initCurrents(CurrentContainer &container)
 {
   container.addCurrent(
-    boost::make_shared<CPMLBorderECurrent>(thickness, north, this->kappaMax, this->aMax, this->sigmaMax, 1.0, boost::ref(*this))
+    std::make_shared<CPMLBorderECurrent>(thickness, north, this->kappaMax, this->aMax, this->sigmaMax, 1.0, boost::ref(*this))
   );
   container.addCurrent(
-      boost::make_shared<CPMLBorderECurrent>(thickness, south, this->kappaMax, this->aMax, this->sigmaMax, 1, boost::ref(*this))
+    std::make_shared<CPMLBorderECurrent>(thickness, south, this->kappaMax, this->aMax, this->sigmaMax, 1, boost::ref(*this))
   );
   container.addCurrent(
-      boost::make_shared<CPMLBorderECurrent>(thickness, east, this->kappaMax, this->aMax, this->sigmaMax, 1, boost::ref(*this))
+    std::make_shared<CPMLBorderECurrent>(thickness, east, this->kappaMax, this->aMax, this->sigmaMax, 1, boost::ref(*this))
   );
   container.addCurrent(
-      boost::make_shared<CPMLBorderECurrent>(thickness, west, this->kappaMax, this->aMax, this->sigmaMax, 1, boost::ref(*this))
+    std::make_shared<CPMLBorderECurrent>(thickness, west, this->kappaMax, this->aMax, this->sigmaMax, 1, boost::ref(*this))
   );
   container.addCurrent(
-      boost::make_shared<CPMLBorderECurrent>(thickness, up, this->kappaMax, this->aMax, this->sigmaMax, 1, boost::ref(*this))
+    std::make_shared<CPMLBorderECurrent>(thickness, up, this->kappaMax, this->aMax, this->sigmaMax, 1, boost::ref(*this))
   );
   container.addCurrent(
-      boost::make_shared<CPMLBorderECurrent>(thickness, down, this->kappaMax, this->aMax, this->sigmaMax, 1, boost::ref(*this))
+    std::make_shared<CPMLBorderECurrent>(thickness, down, this->kappaMax, this->aMax, this->sigmaMax, 1, boost::ref(*this))
   );
 
   container.addMagCurrent(
-      boost::make_shared<CPMLBorderHCurrent>(thickness, north, this->kappaMax, this->aMax, this->sigmaMax, 1, boost::ref(*this))
+    std::make_shared<CPMLBorderHCurrent>(thickness, north, this->kappaMax, this->aMax, this->sigmaMax, 1, boost::ref(*this))
   );
   container.addMagCurrent(
-      boost::make_shared<CPMLBorderHCurrent>(thickness, south, this->kappaMax, this->aMax, this->sigmaMax, 1, boost::ref(*this))
+    std::make_shared<CPMLBorderHCurrent>(thickness, south, this->kappaMax, this->aMax, this->sigmaMax, 1, boost::ref(*this))
   );
   container.addMagCurrent(
-      boost::make_shared<CPMLBorderHCurrent>(thickness, east, this->kappaMax, this->aMax, this->sigmaMax, 1, boost::ref(*this))
+    std::make_shared<CPMLBorderHCurrent>(thickness, east, this->kappaMax, this->aMax, this->sigmaMax, 1, boost::ref(*this))
   );
   container.addMagCurrent(
-      boost::make_shared<CPMLBorderHCurrent>(thickness, west, this->kappaMax, this->aMax, this->sigmaMax, 1, boost::ref(*this))
+    std::make_shared<CPMLBorderHCurrent>(thickness, west, this->kappaMax, this->aMax, this->sigmaMax, 1, boost::ref(*this))
   );
   container.addMagCurrent(
-      boost::make_shared<CPMLBorderHCurrent>(thickness, up, this->kappaMax, this->aMax, this->sigmaMax, 1, boost::ref(*this))
+    std::make_shared<CPMLBorderHCurrent>(thickness, up, this->kappaMax, this->aMax, this->sigmaMax, 1, boost::ref(*this))
   );
   container.addMagCurrent(
-      boost::make_shared<CPMLBorderHCurrent>(thickness, down, this->kappaMax, this->aMax, this->sigmaMax, 1, boost::ref(*this))
+    std::make_shared<CPMLBorderHCurrent>(thickness, down, this->kappaMax, this->aMax, this->sigmaMax, 1, boost::ref(*this))
   );
 
   initCoefficients();
@@ -84,11 +84,11 @@ void CPMLBorder::initCoefficients()
   Index low  = subdivision.getInnerLo();
   Index high = subdivision.getInnerHi();
 
-  std::vector<pDataLine> pKappaEdk(3);
-  std::vector<pDataLine> pKappaHdk(3);
+  std::vector<pGrid1d> pKappaEdk(3);
+  std::vector<pGrid1d> pKappaHdk(3);
 
-  std::vector<pDataLine> pCpmlSigmaE(3);
-  std::vector<pDataLine> pCpmlSigmaH(3);
+  std::vector<pGrid1d> pCpmlSigmaE(3);
+  std::vector<pGrid1d> pCpmlSigmaH(3);
 
   retrieveData("KappaEdx", pKappaEdk[0]);
   retrieveData("KappaEdy", pKappaEdk[1]);
@@ -254,11 +254,11 @@ void CPMLBorder::initParameters(schnek::BlockParameters &blockPars)
 //===============================================================
 
 
-CPMLBorderCurrent::CPMLBorderCurrent( int thickness_, Direction dir_, bool isH_,
-                                      double kappaMax_, double aMax_, double sigmaMax_, double eps_,
-                                      CurrentBlock &borderBlock_)
-  : reverse(false), thickness(thickness_), dir(dir_), isH(isH_), lowOffset(0), highOffset(0), zerolayer(0),
-    kappaMax(kappaMax_), aMax(aMax_), sigmaMax(sigmaMax_), eps(eps_), borderBlock(borderBlock_)
+CPMLBorderCurrent::CPMLBorderCurrent(int thickness, Direction dir, bool isH,
+                                     double kappaMax, double aMax, double sigmaMax, double eps,
+                                     CurrentBlock &borderBlock)
+  : reverse(false), thickness(thickness), dir(dir), isH(isH), lowOffset(0), highOffset(0), zerolayer(0),
+    kappaMax(kappaMax), aMax(aMax), sigmaMax(sigmaMax), eps(eps), borderBlock(borderBlock)
 {
   switch (dir)
   {
@@ -356,9 +356,9 @@ void CPMLBorderECurrent::init()
 
   if (!getBorderExtent(dir, thickness, 1, blow, bhigh, false, borderBlock.getContext())) return;
 
-  pJx = boost::make_shared<Grid>(blow, bhigh);
-  pJy = boost::make_shared<Grid>(blow, bhigh);
-  pJz = boost::make_shared<Grid>(blow, bhigh);
+  pJx = std::make_shared<Grid>(blow, bhigh);
+  pJy = std::make_shared<Grid>(blow, bhigh);
+  pJz = std::make_shared<Grid>(blow, bhigh);
 
   switch (dir)
   {
@@ -446,9 +446,9 @@ void CPMLBorderHCurrent::init()
 
   if (!getBorderExtent(dir, thickness, 1, blow, bhigh, true, borderBlock.getContext())) return;
 
-  pJx = boost::make_shared<Grid>(blow, bhigh);
-  pJy = boost::make_shared<Grid>(blow, bhigh);
-  pJz = boost::make_shared<Grid>(blow, bhigh);
+  pJx = std::make_shared<Grid>(blow, bhigh);
+  pJy = std::make_shared<Grid>(blow, bhigh);
+  pJz = std::make_shared<Grid>(blow, bhigh);
 
   switch (dir)
   {

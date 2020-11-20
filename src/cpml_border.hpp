@@ -2,7 +2,7 @@
 #define MPULSE_CPML_BORDER_H
 
 #include "mpulse.hpp"
-#include "current.hpp"
+#include "../huerto/electromagnetics/current.hpp"
 
 class CPMLBorder : public CurrentBlock
 {
@@ -25,9 +25,9 @@ class CPMLBorder : public CurrentBlock
 class CPMLBorderCurrent : public Current
 {
   public:
-    CPMLBorderCurrent( int thickness_, Direction dir_, bool isH_,
-                       double kappaMax_, double aMax_, double sigmaMax_, double eps_,
-                       CurrentBlock &borderBlock_);
+    CPMLBorderCurrent(int thickness, Direction dir, bool isH,
+                      double kappaMax, double aMax, double sigmaMax, double eps,
+                      CurrentBlock &borderBlock);
   protected:
     bool reverse;
     int thickness;

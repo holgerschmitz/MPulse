@@ -70,7 +70,7 @@ void FDTD_PLRCCore::init()
   retrieveData("Bz", pBz);
 
 
-  BOOST_FOREACH(pCurrentBlock current, schnek::BlockContainer<CurrentBlock>::childBlocks())
+  for(pCurrentBlock current: schnek::BlockContainer<CurrentBlock>::childBlocks())
   {
     current->initCurrents(*this);
   }

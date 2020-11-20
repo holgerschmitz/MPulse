@@ -6,16 +6,16 @@
  */
 
 #include "diagnostic.hpp"
-#include "em_fields.hpp"
-#include "fieldsolver.hpp"
 #include "fdtd_plrc.hpp"
 #include "cpml_border.hpp"
 #include "sources.hpp"
 #include "shortpulseinject.hpp"
 #include "plasmacurrent.hpp"
 
-#include "../huerto/electromagnetics/fdtd/fdtd_plain.hpp"
 #include "../huerto/electromagnetics/em_fields.hpp"
+#include "../huerto/electromagnetics/fieldsolver.hpp"
+#include "../huerto/electromagnetics/fdtd/fdtd_plain.hpp"
+#include "../huerto/maths/functions/core.hpp"
 #include "../huerto/constants.hpp"
 
 #include <schnek/parser.hpp>
@@ -43,7 +43,7 @@ void MPulse::initParameters(schnek::BlockParameters &parameters)
   parameters.addParameter("tMax", &tMax);
   parameters.addParameter("cflFactor", &cflFactor, 0.99);
 
-  initConstantParameters(parameters);
+  registerConstants(parameters);
 }
 
 void MPulse::initFields()
@@ -70,7 +70,7 @@ void MPulse::init()
 
 void MPulse::execute()
 {
-  BOOST_FOREACH(pFieldSolver f, schnek::BlockContainer<FieldSolver>::childBlocks())
+  for(pFieldSolver f: schnek::BlockContainer<FieldSolver>::childBlocks())
   {
     f->stepSchemeInit(dt);
   }
@@ -82,13 +82,14 @@ void MPulse::execute()
   {
     schnek::DiagnosticManager::instance().execute();
 
-    if (getSubdivision().master())
+    if (getSubdivision().master()) {
       schnek::Logger::instance().out() <<"Time "<< time << std::endl;
+    }
 
-      BOOST_FOREACH(pFieldSolver f, schnek::BlockContainer<FieldSolver>::childBlocks())
-      {
-        f->stepScheme(dt);
-      }
+    for(pFieldSolver f: schnek::BlockContainer<FieldSolver>::childBlocks())
+    {
+      f->stepScheme(dt);
+    }
 
     time += dt;
   }

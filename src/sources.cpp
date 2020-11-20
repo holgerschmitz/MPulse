@@ -19,7 +19,7 @@ inline double applyPlaneGaussField(double pos, double width, double F) {
   return F*exp(-r*r)*sin(pos);
 }
 
-pCurrent PlaneWaveSource::makeECurrent(int distance_, Direction dir_)
+pCurrent PlaneWaveSource::makeECurrent(int distance, Direction dir)
 {
   Vector k(kx,ky,kz);
   Vector H(Hx,Hy,Hz);
@@ -36,12 +36,12 @@ pCurrent PlaneWaveSource::makeECurrent(int distance_, Direction dir_)
   E[2] *= clight*factor/sqrt(eps);
 
   typedef IncidentSourceECurrent<PlaneWaveSourceEFunc> CurrentType;
-  CurrentType *cur = new CurrentType(distance_, dir_);
+  CurrentType *cur = new CurrentType(distance, dir, getContext());
   cur->setParam(k, E, H, E_bg, H_bg, ramp, eps, front);
   return pCurrent(cur);
 }
 
-pCurrent PlaneWaveSource::makeHCurrent(int distance_, Direction dir_)
+pCurrent PlaneWaveSource::makeHCurrent(int distance, Direction dir)
 {
   Vector k(kx,ky,kz);
   Vector H(Hx,Hy,Hz);
@@ -58,7 +58,7 @@ pCurrent PlaneWaveSource::makeHCurrent(int distance_, Direction dir_)
   E[2] *= clight*factor/sqrt(eps);
 
   typedef IncidentSourceHCurrent<PlaneWaveSourceHFunc> CurrentType;
-  CurrentType *cur = new CurrentType(distance_,dir_);
+  CurrentType *cur = new CurrentType(distance, dir, getContext());
   cur->setParam(k, E, H, E_bg, H_bg, ramp, eps, front);
   return pCurrent(cur);
 }
@@ -182,7 +182,7 @@ Vector PlaneWaveSourceHFunc::getEField(int i, int j, int l, double time)
 //==========  Plane Gaussian Wave Packet
 //===============================================================
 
-pCurrent PlaneGaussSource::makeECurrent(int distance_, Direction dir_)
+pCurrent PlaneGaussSource::makeECurrent(int distance, Direction dir)
 {
   Vector k(kx,ky,kz);
   Vector H(Hx,Hy,Hz);
@@ -197,12 +197,12 @@ pCurrent PlaneGaussSource::makeECurrent(int distance_, Direction dir_)
   E[2] *= clight*factor/sqrt(eps);
 
   typedef IncidentSourceECurrent<PlaneGaussSourceEFunc> CurrentType;
-  CurrentType *cur = new CurrentType(distance_,dir_);
+  CurrentType *cur = new CurrentType(distance, dir, getContext());
   cur->setParam(k, E, H, width, eps, front);
   return pCurrent(cur);
 }
 
-pCurrent PlaneGaussSource::makeHCurrent(int distance_, Direction dir_)
+pCurrent PlaneGaussSource::makeHCurrent(int distance, Direction dir)
 {
   Vector k(kx,ky,kz);
   Vector H(Hx,Hy,Hz);
@@ -217,7 +217,7 @@ pCurrent PlaneGaussSource::makeHCurrent(int distance_, Direction dir_)
   E[2] *= clight*factor/sqrt(eps);
 
   typedef IncidentSourceHCurrent<PlaneGaussSourceHFunc> CurrentType;
-  CurrentType *cur = new CurrentType(distance_,dir_);
+  CurrentType *cur = new CurrentType(distance, dir, getContext());
   cur->setParam(k, E, H, width, eps, front);
   return pCurrent(cur);
 }

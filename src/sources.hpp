@@ -84,7 +84,8 @@ class PlaneWaveSourceHFunc
     double dx, dy, dz;
 
     Direction dir;
-    bool isH;SimulationContext &context
+    bool isH;
+    SimulationContext &context;
 };
 
 

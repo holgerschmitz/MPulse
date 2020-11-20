@@ -2,7 +2,8 @@
 #define MPULSE_INCSOURCE_H
 
 #include "mpulse.hpp"
-#include "current.hpp"
+
+#include "../huerto/electromagnetics/current.hpp"
 
 class IncidentSourceCurrent;
 
