@@ -21,22 +21,22 @@ void ShortPulseInject::init()
       anderBrugge2009);
 }
 
-pCurrent ShortPulseInject::makeECurrent(int distance_, Direction dir_)
+pCurrent ShortPulseInject::makeECurrent(int distance, Direction dir)
 {
   std::cerr << "ShortPulseInjectSourceFunc::makeECurrent\n";
   typedef IncidentSourceECurrent<ShortPulseInjectSourceFunc> CurrentType;
-  CurrentType *cur = new CurrentType(distance_,dir_);
+  CurrentType *cur = new CurrentType(distance, dir, getContext());
 
-  cur->setParam(length, width, om0, TShift, ZShift, Phase, amp, eps, distance_);
+  cur->setParam(length, width, om0, TShift, ZShift, Phase, amp, eps, distance);
   return pCurrent(cur);
 }
 
-pCurrent ShortPulseInject::makeHCurrent(int distance_, Direction dir_)
+pCurrent ShortPulseInject::makeHCurrent(int distance, Direction dir)
 {
   std::cerr << "ShortPulseInjectSourceFunc::makeHCurrent\n";
   typedef IncidentSourceHCurrent<ShortPulseInjectSourceFunc> CurrentType;
-  CurrentType *cur = new CurrentType(distance_,dir_);
-  cur->setParam(length, width, om0, TShift, ZShift, Phase, amp, eps, distance_);
+  CurrentType *cur = new CurrentType(distance, dir, getContext());
+  cur->setParam(length, width, om0, TShift, ZShift, Phase, amp, eps, distance);
   return pCurrent(cur);
 }
 

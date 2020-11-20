@@ -64,9 +64,9 @@ void FDTD_PLRCSolver<PLRCImplementation>::stepD(double dt)
   Index low = this->pEx->getInnerLo();
   Index high = this->pEx->getInnerHi();
 
-  double dx = getContext().getDx()[0];
-  double dy = getContext().getDx()[1];
-  double dz = getContext().getDx()[2];
+  double dx = this->getContext().getDx()[0];
+  double dy = this->getContext().getDx()[1];
+  double dz = this->getContext().getDx()[2];
 
   /// value of beta_p for the three Lorentz poles
   double beta[3];
@@ -119,9 +119,9 @@ void FDTD_PLRCSolver<PLRCImplementation>::stepD(double dt)
         this->plrcStepD(dt, i, j, k, dx, dy, dz, jx, jy, jz);
       }
 
-  getContext().getSubdivision().exchange(*this->pEx);
-  getContext().getSubdivision().exchange(*this->pEy);
-  getContext().getSubdivision().exchange(*this->pEz);
+  this->getContext().getSubdivision().exchange(*this->pEx);
+  this->getContext().getSubdivision().exchange(*this->pEy);
+  this->getContext().getSubdivision().exchange(*this->pEz);
 }
 
 
@@ -202,9 +202,9 @@ void FDTD_PLRCSolver<PLRCImplementation>::stepB(double dt)
   Index low = this->pBx->getInnerLo();
   Index high = this->pBx->getInnerHi();
 
-  double dx = getContext().getDx()[0];
-  double dy = getContext().getDx()[1];
-  double dz = getContext().getDx()[2];
+  double dx = this->getContext().getDx()[0];
+  double dy = this->getContext().getDx()[1];
+  double dz = this->getContext().getDx()[2];
 
   double jx, jy, jz;
   this->sumMagCurrents();
@@ -220,9 +220,9 @@ void FDTD_PLRCSolver<PLRCImplementation>::stepB(double dt)
         this->plrcStepB(dt, i, j, k, dx, dy, dz, jx, jy, jz);
       }
 
-  getContext().getSubdivision().exchange(*this->pBx);
-  getContext().getSubdivision().exchange(*this->pBy);
-  getContext().getSubdivision().exchange(*this->pBz);
+  this->getContext().getSubdivision().exchange(*this->pBx);
+  this->getContext().getSubdivision().exchange(*this->pBy);
+  this->getContext().getSubdivision().exchange(*this->pBz);
 }
 
 template<class PLRCImplementation>

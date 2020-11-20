@@ -2,9 +2,9 @@
 TARGET=mpulse
 
 #OFLAGS  = -g -O0 -Wall
-OFLAGS  = -O3 -Wall
+OFLAGS  = -O3 -Wall -std=c++14
 
-INCLUDE = -I/usr/local/include -I/usr/lib/x86_64-linux-gnu/hdf5/mpich/include
+INCLUDE = -I/usr/local/include -I/usr/lib/x86_64-linux-gnu/hdf5/openmpi/include
 #CXX     = $(X_CXX)
 CXX     = mpic++
 
@@ -14,9 +14,7 @@ CXXFLAGS = $(OFLAGS)
 
 SOURCES = src/border.cpp \
   src/cpml_border.cpp \
-  src/current.cpp \
   src/diagnostic.cpp \
-  src/fdtd_plain.cpp \
   src/fdtd_plrc.cpp \
   src/focusedpulseinject.cpp \
   src/focusedpulsefunctions.cpp \
@@ -27,12 +25,15 @@ SOURCES = src/border.cpp \
   src/sources.cpp \
   src/specfunc.cpp \
   src/mpulse.cpp \
-  huerto/electromagnetics/em_fields.cpp
+  huerto/electromagnetics/current.cpp \
+  huerto/electromagnetics/em_fields.cpp \
+  huerto/electromagnetics/fdtd/fdtd_plain.cpp \
+  huerto/maths/functions/core.cpp
 
 
-OBJECTS = $(SOURCES:.cpp=.o)
+OBJECTS = $(addprefix obj/,$(SOURCES:.cpp=.o))
 
-LDFLAGS = -L/usr/lib/x86_64-linux-gnu/hdf5/mpich/lib -Wl,-rpath,/usr/lib/x86_64-linux-gnu/hdf5/mpich/lib
+LDFLAGS = -L/usr/lib/x86_64-linux-gnu/hdf5/openmpi/lib -Wl,-rpath,/usr/lib/x86_64-linux-gnu/hdf5/openmpi/lib
 
 LOADLIBS = -lhdf5 -lschnek -lfftw3 -lm
 BINDIR = bin
@@ -47,8 +48,9 @@ $(FULLTARGET): $(OBJECTS)
 	$(CXX) $^ -o $@ $(OFLAGS) $(LDFLAGS) $(LOADLIBS)
 
 
-%.o: %.cpp
-	$(CXX) -o $@ -c $(CXXFLAGS) $(INCLUDE) $<
+obj/%.o: %.cpp
+	@mkdir -p $(dir $@)
+	$(CXX) -o $@ -c $(CXXFLAGS) $(INCLUDE) $(DEFINES) $<
 
 
 clean:

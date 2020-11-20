@@ -1,16 +1,15 @@
 #ifndef MPULSE_PLASMACURRENT_H
 #define MPULSE_PLASMACURRENT_H
 
-#include "current.hpp"
-
+#include "../huerto/electromagnetics/current.hpp"
 
 class PlasmaCurrentBlock : public CurrentBlock
 {
-  public:    
+  public:
     void initCurrents(CurrentContainer &container);
   protected:
     void initParameters(schnek::BlockParameters &blockPars);
-    
+
     /// e/m for the charge carriers
     double em;
     /// ion mass
@@ -31,7 +30,7 @@ class PlasmaCurrent : public Current
     pField pEz;
 
     pField pRho;
-    
+
     /// e/m for the charge carriers
     double em;
     /// ion mass
@@ -40,15 +39,15 @@ class PlasmaCurrent : public Current
     double Z;
     /// friction coefficient
     double gamma;
-    
+
   public:
     PlasmaCurrent(double em_, double mi_, double Z_, double gamma_, CurrentBlock &plasmaBlock_);
-    
+
     void init();
-    
+
     void stepSchemeInit(double dt) {}
     void stepScheme(double dt);
-    
+
 };
 
 

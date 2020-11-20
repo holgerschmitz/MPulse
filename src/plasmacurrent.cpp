@@ -1,5 +1,6 @@
 #include "plasmacurrent.hpp"
-#include "fieldsolver.hpp"
+
+#include "../huerto/electromagnetics/fieldsolver.hpp"
 
 #include <memory>
 
@@ -14,7 +15,7 @@ void PlasmaCurrentBlock::initParameters(schnek::BlockParameters &blockPars)
 
 void PlasmaCurrentBlock::initCurrents(CurrentContainer &container)
 {
-  container.addCurrent(boost::make_shared<PlasmaCurrent>(em, gamma, Z, gamma, boost::ref(*this)));
+  container.addCurrent(std::make_shared<PlasmaCurrent>(em, gamma, Z, gamma, boost::ref(*this)));
 }
 
 PlasmaCurrent::PlasmaCurrent(double em_, double mi_, double Z_, double gamma_, CurrentBlock &plasmaBlock_)
