@@ -7,7 +7,6 @@ DIMENSIONS = 3
 OFLAGS  = -O3 -Wall -std=c++14
 
 INCLUDE = -I/usr/local/include -I/usr/lib/x86_64-linux-gnu/hdf5/openmpi/include
-#CXX     = $(X_CXX)
 CXX     = mpic++
 LINK	 = mpic++
 
