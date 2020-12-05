@@ -1,7 +1,7 @@
 
 TARGET_BASE = mpulse
 
-DIMENSIONS = 3
+DIMENSIONS = 1 2 3
 
 #OFLAGS  = -g -O0 -Wall
 OFLAGS  = -O3 -Wall -std=c++14
