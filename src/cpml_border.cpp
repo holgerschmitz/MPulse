@@ -31,42 +31,50 @@ void CPMLBorder::init()
 void CPMLBorder::initCurrents(CurrentContainer &container)
 {
   container.addCurrent(
-    std::make_shared<CPMLBorderECurrent>(thickness, north, this->kappaMax, this->aMax, this->sigmaMax, 1.0, boost::ref(*this))
-  );
-  container.addCurrent(
-    std::make_shared<CPMLBorderECurrent>(thickness, south, this->kappaMax, this->aMax, this->sigmaMax, 1, boost::ref(*this))
-  );
-  container.addCurrent(
     std::make_shared<CPMLBorderECurrent>(thickness, east, this->kappaMax, this->aMax, this->sigmaMax, 1, boost::ref(*this))
   );
   container.addCurrent(
     std::make_shared<CPMLBorderECurrent>(thickness, west, this->kappaMax, this->aMax, this->sigmaMax, 1, boost::ref(*this))
   );
+#ifndef HUERTO_ONE_DIM
+  container.addCurrent(
+    std::make_shared<CPMLBorderECurrent>(thickness, north, this->kappaMax, this->aMax, this->sigmaMax, 1.0, boost::ref(*this))
+  );
+  container.addCurrent(
+    std::make_shared<CPMLBorderECurrent>(thickness, south, this->kappaMax, this->aMax, this->sigmaMax, 1, boost::ref(*this))
+  );
+#endif
+#ifdef HUERTO_THREE_DIM
   container.addCurrent(
     std::make_shared<CPMLBorderECurrent>(thickness, up, this->kappaMax, this->aMax, this->sigmaMax, 1, boost::ref(*this))
   );
   container.addCurrent(
     std::make_shared<CPMLBorderECurrent>(thickness, down, this->kappaMax, this->aMax, this->sigmaMax, 1, boost::ref(*this))
   );
+#endif
 
-  container.addMagCurrent(
-    std::make_shared<CPMLBorderHCurrent>(thickness, north, this->kappaMax, this->aMax, this->sigmaMax, 1, boost::ref(*this))
-  );
-  container.addMagCurrent(
-    std::make_shared<CPMLBorderHCurrent>(thickness, south, this->kappaMax, this->aMax, this->sigmaMax, 1, boost::ref(*this))
-  );
   container.addMagCurrent(
     std::make_shared<CPMLBorderHCurrent>(thickness, east, this->kappaMax, this->aMax, this->sigmaMax, 1, boost::ref(*this))
   );
   container.addMagCurrent(
     std::make_shared<CPMLBorderHCurrent>(thickness, west, this->kappaMax, this->aMax, this->sigmaMax, 1, boost::ref(*this))
   );
+#ifndef HUERTO_ONE_DIM
+  container.addMagCurrent(
+    std::make_shared<CPMLBorderHCurrent>(thickness, north, this->kappaMax, this->aMax, this->sigmaMax, 1, boost::ref(*this))
+  );
+  container.addMagCurrent(
+    std::make_shared<CPMLBorderHCurrent>(thickness, south, this->kappaMax, this->aMax, this->sigmaMax, 1, boost::ref(*this))
+  );
+#endif
+#ifdef HUERTO_THREE_DIM
   container.addMagCurrent(
     std::make_shared<CPMLBorderHCurrent>(thickness, up, this->kappaMax, this->aMax, this->sigmaMax, 1, boost::ref(*this))
   );
   container.addMagCurrent(
     std::make_shared<CPMLBorderHCurrent>(thickness, down, this->kappaMax, this->aMax, this->sigmaMax, 1, boost::ref(*this))
   );
+#endif
 
   initCoefficients();
 
@@ -84,39 +92,47 @@ void CPMLBorder::initCoefficients()
   Index low  = subdivision.getInnerLo();
   Index high = subdivision.getInnerHi();
 
-  std::vector<pGrid1d> pKappaEdk(3);
-  std::vector<pGrid1d> pKappaHdk(3);
+  std::vector<pGrid1d> pKappaEdk(DIMENSION);
+  std::vector<pGrid1d> pKappaHdk(DIMENSION);
 
-  std::vector<pGrid1d> pCpmlSigmaE(3);
-  std::vector<pGrid1d> pCpmlSigmaH(3);
+  std::vector<pGrid1d> pCpmlSigmaE(DIMENSION);
+  std::vector<pGrid1d> pCpmlSigmaH(DIMENSION);
 
   retrieveData("KappaEdx", pKappaEdk[0]);
+#ifndef HUERTO_ONE_DIM
   retrieveData("KappaEdy", pKappaEdk[1]);
+#endif
+#ifdef HUERTO_THREE_DIM
   retrieveData("KappaEdz", pKappaEdk[2]);
+#endif
 
   retrieveData("KappaHdx", pKappaHdk[0]);
+#ifndef HUERTO_ONE_DIM
   retrieveData("KappaHdy", pKappaHdk[1]);
+#endif
+#ifdef HUERTO_THREE_DIM
   retrieveData("KappaHdz", pKappaHdk[2]);
+#endif
 
-  std::cerr << "Field Size Edx " << pKappaEdk[0]->getLo()[0] << ", "
-                                 << pKappaEdk[0]->getHi()[0] <<std::endl;
+//  std::cerr << "Field Size Edx " << pKappaEdk[0]->getLo()[0] << ", "
+//                                 << pKappaEdk[0]->getHi()[0] <<std::endl;
+//
+//  std::cerr << "Field Size Edy " << pKappaEdk[1]->getLo()[0] << ", "
+//                                 << pKappaEdk[1]->getHi()[0] <<std::endl;
+//
+//  std::cerr << "Field Size Edz " << pKappaEdk[2]->getLo()[0] << ", "
+//                                 << pKappaEdk[2]->getHi()[0] <<std::endl;
+//
+//  std::cerr << "Field Size Hdx " << pKappaHdk[0]->getLo()[0] << ", "
+//                                 << pKappaHdk[0]->getHi()[0] <<std::endl;
+//
+//  std::cerr << "Field Size Hdy " << pKappaHdk[1]->getLo()[0] << ", "
+//                                 << pKappaHdk[1]->getHi()[0] <<std::endl;
+//
+//  std::cerr << "Field Size Hdz " << pKappaHdk[2]->getLo()[0] << ", "
+//                                 << pKappaHdk[2]->getHi()[0] <<std::endl;
 
-  std::cerr << "Field Size Edy " << pKappaEdk[1]->getLo()[0] << ", "
-                                 << pKappaEdk[1]->getHi()[0] <<std::endl;
-
-  std::cerr << "Field Size Edz " << pKappaEdk[2]->getLo()[0] << ", "
-                                 << pKappaEdk[2]->getHi()[0] <<std::endl;
-
-  std::cerr << "Field Size Hdx " << pKappaHdk[0]->getLo()[0] << ", "
-                                 << pKappaHdk[0]->getHi()[0] <<std::endl;
-
-  std::cerr << "Field Size Hdy " << pKappaHdk[1]->getLo()[0] << ", "
-                                 << pKappaHdk[1]->getHi()[0] <<std::endl;
-
-  std::cerr << "Field Size Hdz " << pKappaHdk[2]->getLo()[0] << ", "
-                                 << pKappaHdk[2]->getHi()[0] <<std::endl;
-
-  for (int dim = 0; dim<3; ++dim)
+  for (size_t dim = 0; dim<DIMENSION; ++dim)
   {
     std::cerr << "Dim " << dim << std::endl;
 
@@ -130,8 +146,12 @@ void CPMLBorder::initCoefficients()
     switch (dim)
     {
       case 0: dir = west; break;
+#ifndef HUERTO_ONE_DIM
       case 1: dir = south; break;
+#endif
+#ifdef HUERTO_THREE_DIM
       case 2: dir = down; break;
+#endif
     }
 
     if (getBorderExtent(dir, thickness, 1, blow, bhigh, false, getContext()))
@@ -167,8 +187,12 @@ void CPMLBorder::initCoefficients()
     switch (dim)
     {
       case 0: dir = east; break;
+#ifndef HUERTO_ONE_DIM
       case 1: dir = north; break;
+#endif
+#ifdef HUERTO_THREE_DIM
       case 2: dir = up; break;
+#endif
     }
 
     if (getBorderExtent(dir, thickness, 1, blow, bhigh, false, getContext()))
@@ -267,19 +291,23 @@ CPMLBorderCurrent::CPMLBorderCurrent(int thickness, Direction dir, bool isH,
                 transverse1 = 1;
                 transverse2 = 2;
                 break;
+#ifndef HUERTO_ONE_DIM
     case north:
     case south: dim = 1;
                 transverse1 = 0;
                 transverse2 = 2;
                 break;
+#endif
+#ifdef HUERTO_THREE_DIM
     case up:
     case down:  dim = 2;
                 transverse1 = 0;
                 transverse2 = 1;
                 break;
+#endif
   }
 
-  double eta = sqrt(mu_0/eps_0);
+//  double eta = sqrt(mu_0/eps_0);
   sigmaMax = sigmaMax *clight* 0.8*4 / borderBlock.getContext().getDx()[dim];
 }
 
@@ -293,11 +321,23 @@ void CPMLBorderCurrent::makeCoeff()
   switch (dir)
   {
     case east:
+#ifndef HUERTO_ONE_DIM
     case north:
-    case up:    reverse = false; break;
+#endif
+#ifdef HUERTO_THREE_DIM
+    case up:
+#endif
+      reverse = false;
+      break;
     case west:
+#ifndef HUERTO_ONE_DIM
     case south:
-    case down:  reverse = true;  break;
+#endif
+#ifdef HUERTO_THREE_DIM
+    case down:
+#endif
+      reverse = true;
+      break;
   }
 
 
@@ -344,10 +384,15 @@ void CPMLBorderCurrent::makeCoeff()
 //===============================================================
 
 
-CPMLBorderECurrent::CPMLBorderECurrent( int thickness_, Direction dir_,
-                                        double kappaMax_, double aMax_, double sigmaMax_, double eps_,
-                                        CurrentBlock &borderBlock_)
-  : CPMLBorderCurrent(thickness_,dir_,false,kappaMax_,aMax_,sigmaMax_,eps_,borderBlock_)
+CPMLBorderECurrent::CPMLBorderECurrent(int thickness,
+                                       Direction dir,
+                                       double kappaMax,
+                                       double aMax,
+                                       double sigmaMax,
+                                       double eps,
+                                       CurrentBlock &borderBlock)
+  : CPMLBorderCurrent(thickness,dir,false,kappaMax,aMax,sigmaMax,eps,borderBlock),
+    dx(0)
 {}
 
 void CPMLBorderECurrent::init()
@@ -372,6 +417,7 @@ void CPMLBorderECurrent::init()
 
       dx = borderBlock.getContext().getDx()[0];
       break;
+#ifndef HUERTO_ONE_DIM
     case north:
     case south:
       pPsi[0] = pJz;
@@ -382,6 +428,8 @@ void CPMLBorderECurrent::init()
 
       dx = borderBlock.getContext().getDx()[1];
       break;
+#endif
+#ifdef HUERTO_THREE_DIM
     case up:
     case down:
       pPsi[0] = pJx;
@@ -392,6 +440,7 @@ void CPMLBorderECurrent::init()
 
       dx = borderBlock.getContext().getDx()[2];
       break;
+#endif
   }
 
   makeCoeff();
@@ -412,21 +461,31 @@ void CPMLBorderECurrent::stepScheme(double dt)
 
   Index ind, indn;
 
-  for (ind[0]=low[0]; ind[0]<=high[0]; ++ind[0])
-    for (ind[1]=low[1]; ind[1]<=high[1]; ++ind[1])
-      for (ind[2]=low[2]; ind[2]<=high[2]; ++ind[2])
-      {
+  for (ind[0]=low[0]; ind[0]<=high[0]; ++ind[0]) {
+#ifndef HUERTO_ONE_DIM
+    for (ind[1]=low[1]; ind[1]<=high[1]; ++ind[1]) {
+#endif
+#ifdef HUERTO_THREE_DIM
+      for (ind[2]=low[2]; ind[2]<=high[2]; ++ind[2]) {
+#endif
+
         int j = ind[dim];
         Index indm(ind);
         --indm[dim];
 
-        Psi0(ind[0], ind[1], ind[2])
-          = bCoeff(j)*Psi0(ind[0], ind[1], ind[2])
-            - cCoeff(j)*(B1(ind[0], ind[1], ind[2])-B1(indm[0], indm[1], indm[2]))/(mu_0*dx);
-        Psi1(ind[0], ind[1], ind[2])
-          = bCoeff(j)*Psi1(ind[0], ind[1], ind[2])
-            + cCoeff(j)*(B0(ind[0], ind[1], ind[2])-B0(indm[0], indm[1], indm[2]))/(mu_0*dx);
+        Psi0[ind]
+          = bCoeff(j)*Psi0[ind]
+            - cCoeff(j)*(B1[ind]-B1[indm])/(mu_0*dx);
+        Psi1[ind]
+          = bCoeff(j)*Psi1[ind]
+            + cCoeff(j)*(B0[ind]-B0[indm])/(mu_0*dx);
+#ifdef HUERTO_THREE_DIM
       }
+#endif
+#ifndef HUERTO_ONE_DIM
+    }
+#endif
+  }
 }
 
 
@@ -434,10 +493,15 @@ void CPMLBorderECurrent::stepScheme(double dt)
 //==========  CPMLBorderHCurrent
 //===============================================================
 
-CPMLBorderHCurrent::CPMLBorderHCurrent( int thickness_, Direction dir_,
-                                        double kappaMax_, double aMax_, double sigmaMax_, double eps_,
-                                        CurrentBlock &borderBlock_)
-  : CPMLBorderCurrent(thickness_,dir_,true,kappaMax_,aMax_,sigmaMax_,eps_,borderBlock_)
+CPMLBorderHCurrent::CPMLBorderHCurrent(int thickness,
+                                       Direction dir,
+                                       double kappaMax,
+                                       double aMax,
+                                       double sigmaMax,
+                                       double eps,
+                                       CurrentBlock &borderBlock)
+  : CPMLBorderCurrent(thickness,dir,true,kappaMax,aMax,sigmaMax,eps,borderBlock),
+    dx(0)
 {}
 
 void CPMLBorderHCurrent::init()
@@ -462,6 +526,7 @@ void CPMLBorderHCurrent::init()
 
       dx = borderBlock.getContext().getDx()[0];
       break;
+#ifndef HUERTO_ONE_DIM
     case north:
     case south:
       pPsi[0] = pJz;
@@ -472,6 +537,8 @@ void CPMLBorderHCurrent::init()
 
       dx = borderBlock.getContext().getDx()[1];
       break;
+#endif
+#ifdef HUERTO_THREE_DIM
     case up:
     case down:
       pPsi[0] = pJx;
@@ -482,6 +549,7 @@ void CPMLBorderHCurrent::init()
 
       dx = borderBlock.getContext().getDx()[2];
       break;
+#endif
   }
 
   makeCoeff();
@@ -505,22 +573,31 @@ void CPMLBorderHCurrent::stepScheme(double dt)
 
   Index ind, indn;
 
-  for (ind[0]=low[0]; ind[0]<=high[0]; ++ind[0])
-    for (ind[1]=low[1]; ind[1]<=high[1]; ++ind[1])
-      for (ind[2]=low[2]; ind[2]<=high[2]; ++ind[2])
-      {
+  for (ind[0]=low[0]; ind[0]<=high[0]; ++ind[0]) {
+#ifndef HUERTO_ONE_DIM
+    for (ind[1]=low[1]; ind[1]<=high[1]; ++ind[1]) {
+#endif
+#ifdef HUERTO_THREE_DIM
+      for (ind[2]=low[2]; ind[2]<=high[2]; ++ind[2]) {
+#endif
         int j = ind[dim];
         Index indp(ind);
         ++indp[dim];
 
-        Psi0(ind[0], ind[1], ind[2])
-          = bCoeff(j)*Psi0(ind[0], ind[1], ind[2])
-            + cCoeff(j)*(E1(indp[0], indp[1], indp[2])-E1(ind[0], ind[1], ind[2]))/dx;
+        Psi0[ind]
+          = bCoeff(j)*Psi0[ind]
+            + cCoeff(j)*(E1[indp]-E1[ind])/dx;
 
-        Psi1(ind[0], ind[1], ind[2])
-          = bCoeff(j)*Psi1(ind[0], ind[1], ind[2])
-            - cCoeff(j)*(E0(indp[0], indp[1], indp[2])-E0(ind[0], ind[1], ind[2]))/dx;
+        Psi1[ind]
+          = bCoeff(j)*Psi1[ind]
+            - cCoeff(j)*(E0[indp]-E0[ind])/dx;
+#ifdef HUERTO_THREE_DIM
       }
+#endif
+#ifndef HUERTO_ONE_DIM
+    }
+#endif
+  }
 }
 
 

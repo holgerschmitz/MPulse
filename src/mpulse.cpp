@@ -7,7 +7,7 @@
 
 #include "diagnostic.hpp"
 #include "fdtd_plrc.hpp"
-//#include "cpml_border.hpp"
+#include "cpml_border.hpp"
 //#include "shortpulseinject.hpp"
 #include "plasmacurrent.hpp"
 
@@ -111,7 +111,7 @@ int main (int argc, char** argv) {
     blocks("FDTD_PLRC").setClass<FDTD_PLRCLin>();
     blocks("FDTD_PLRC_Nonlinear").setClass<FDTD_PLRCNonlin>();
     blocks("FieldDiag").setClass<FieldDiagnostic>();
-//    blocks("CPMLBorder").setClass<CPMLBorder>();
+    blocks("CPMLBorder").setClass<CPMLBorder>();
 //    blocks("ShortPulseInject").setClass<ShortPulseInject>();
     blocks("PlaneWaveSource").setClass<PlaneWaveSource>();
     blocks("PlaneGaussSource").setClass<PlaneGaussSource>();
@@ -122,13 +122,13 @@ int main (int argc, char** argv) {
         ("FDTD_Plain")("FDTD_PLRC")("FDTD_PLRC_Nonlinear")
         ("FieldDiag");
 
-    blocks("FDTD_Plain").addChildren //("CPMLBorder")
+    blocks("FDTD_Plain").addChildren("CPMLBorder")
         ("PlaneWaveSource")("PlaneGaussSource");
-    blocks("FDTD_PLRC").addChildren//("CPMLBorder")
+    blocks("FDTD_PLRC").addChildren("CPMLBorder")
         //("ShortPulseInject")
         ("PlaneWaveSource")("PlaneGaussSource")
         ("PlasmaCurrent");
-    blocks("FDTD_PLRC_Nonlinear").addChildren//("CPMLBorder")
+    blocks("FDTD_PLRC_Nonlinear").addChildren("CPMLBorder")
         //("ShortPulseInject")
         ("PlaneWaveSource")("PlaneGaussSource")
         ("PlasmaCurrent");
