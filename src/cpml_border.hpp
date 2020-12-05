@@ -25,8 +25,13 @@ class CPMLBorder : public CurrentBlock
 class CPMLBorderCurrent : public Current
 {
   public:
-    CPMLBorderCurrent(int thickness, Direction dir, bool isH,
-                      double kappaMax, double aMax, double sigmaMax, double eps,
+    CPMLBorderCurrent(int thickness,
+                      Direction dir,
+                      bool isH,
+                      double kappaMax,
+                      double aMax,
+                      double sigmaMax,
+                      double eps,
                       CurrentBlock &borderBlock);
   protected:
     bool reverse;
@@ -58,9 +63,13 @@ class CPMLBorderCurrent : public Current
 class CPMLBorderECurrent : public CPMLBorderCurrent
 {
   public:
-    CPMLBorderECurrent( int thickness_, Direction dir_,
-                        double kappaMax_, double aMax_, double sigmaMax_, double eps_,
-                        CurrentBlock &borderBlock_);
+    CPMLBorderECurrent(int thickness,
+                       Direction dir,
+                       double kappaMax,
+                       double aMax,
+                       double sigmaMax,
+                       double eps,
+                       CurrentBlock &borderBlock);
 
     void init();
 
@@ -76,9 +85,13 @@ class CPMLBorderECurrent : public CPMLBorderCurrent
 class CPMLBorderHCurrent : public CPMLBorderCurrent
 {
   public:
-    CPMLBorderHCurrent( int thickness_, Direction dir_,
-                        double kappaMax_, double aMax_, double sigmaMax_, double eps_,
-                        CurrentBlock &borderBlock_);
+    CPMLBorderHCurrent(int thickness,
+                       Direction dir,
+                       double kappaMax,
+                       double aMax,
+                       double sigmaMax,
+                       double eps,
+                       CurrentBlock &borderBlock);
 
     void init();
 
