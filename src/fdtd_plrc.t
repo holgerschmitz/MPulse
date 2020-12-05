@@ -42,16 +42,14 @@ void FDTD_PLRCSolver<PLRCImplementation>::stepScheme(double dt)
   (*this->pSigma) = 0;
 
 
-  BOOST_FOREACH(pCurrent current, this->currents)
-  {
+  BOOST_FOREACH(pCurrent current, this->currents) {
     current->stepScheme(dt);
   }
 
   stepD(dt);
 
 
-  BOOST_FOREACH(pCurrent current, this->magCurrents)
-  {
+  BOOST_FOREACH(pCurrent current, this->magCurrents) {
     current->stepScheme(dt);
   }
 
@@ -64,9 +62,7 @@ void FDTD_PLRCSolver<PLRCImplementation>::stepD(double dt)
   Index low = this->pEx->getInnerLo();
   Index high = this->pEx->getInnerHi();
 
-  double dx = this->getContext().getDx()[0];
-  double dy = this->getContext().getDx()[1];
-  double dz = this->getContext().getDx()[2];
+  Vector dx = this->getContext().getDx();
 
   /// value of beta_p for the three Lorentz poles
   double beta[3];
@@ -105,19 +101,30 @@ void FDTD_PLRCSolver<PLRCImplementation>::stepD(double dt)
   this->plrcData.sumChi0 = std::real(sumChi);
   this->plrcData.sumXi0  = std::real(sumXi);
 
-  double jx, jy, jz;
+  Vector j;
   this->sumCurrents();
 
-  for (int i=low[0]; i<=high[0]; ++i)
-    for (int j=low[1]; j<=high[1]; ++j)
-      for (int k=low[2]; k<=high[2]; ++k)
-      {
-        jx = (*this->pJx)(i,j,k);
-        jy = (*this->pJy)(i,j,k);
-        jz = (*this->pJz)(i,j,k);
+  Index pos;
 
-        this->plrcStepD(dt, i, j, k, dx, dy, dz, jx, jy, jz);
+  for (pos[0]=low[0]; pos[0]<=high[0]; ++pos[0]) {
+#ifndef HUERTO_ONE_DIM
+    for (pos[1]=low[1]; pos[1]<=high[1]; ++pos[1]) {
+#endif
+#ifdef HUERTO_THREE_DIM
+      for (pos[2]=low[2]; pos[2]<=high[2]; ++pos[2]) {
+#endif
+        double jx = (*this->pJx)[pos];
+        double jy = (*this->pJy)[pos];
+        double jz = (*this->pJz)[pos];
+
+        this->plrcStepD(dt, pos, dx, jx, jy, jz);
+#ifdef HUERTO_THREE_DIM
       }
+#endif
+#ifndef HUERTO_ONE_DIM
+    }
+#endif
+  }
 
   this->getContext().getSubdivision().exchange(*this->pEx);
   this->getContext().getSubdivision().exchange(*this->pEy);
@@ -158,41 +165,50 @@ void FDTD_PLRCSolver<PLRCImplementation>::initAccumulator(double dt)
 
   }
 
-  for (int i=low[0]; i<=high[0]; ++i)
-    for (int j=low[1]; j<=high[1]; ++j)
-      for (int k=low[2]; k<=high[2]; ++k)
-  {
-    double ex = Ex(i,j,k);
-    double ey = Ey(i,j,k);
-    double ez = Ez(i,j,k);
+  Index pos;
+  for (pos[0]=low[0]; pos[0]<=high[0]; ++pos[0]) {
+#ifndef HUERTO_ONE_DIM
+    for (pos[1]=low[1]; pos[1]<=high[1]; ++pos[1]) {
+#endif
+#ifdef HUERTO_THREE_DIM
+      for (pos[2]=low[2]; pos[2]<=high[2]; ++pos[2]) {
+#endif
+        double ex = Ex[pos];
+        double ey = Ey[pos];
+        double ez = Ez[pos];
 
-    for (int n=0;n<3;++n)
-    {
-      double &pxr = this->pPsiRx[n]->operator()(i,j,k);
-      double &pyr = this->pPsiRy[n]->operator()(i,j,k);
-      double &pzr = this->pPsiRz[n]->operator()(i,j,k);
+        for (int n=0;n<3;++n)
+        {
+          double &pxr = (*this->pPsiRx[n])[pos];
+          double &pyr = (*this->pPsiRy[n])[pos];
+          double &pzr = (*this->pPsiRz[n])[pos];
 
-      double &pxi = this->pPsiIx[n]->operator()(i,j,k);
-      double &pyi = this->pPsiIy[n]->operator()(i,j,k);
-      double &pzi = this->pPsiIz[n]->operator()(i,j,k);
+          double &pxi = (*this->pPsiIx[n])[pos];
+          double &pyi = (*this->pPsiIy[n])[pos];
+          double &pzi = (*this->pPsiIz[n])[pos];
 
-      std::complex<double> px = std::complex<double>(pxr,pxi);
-      std::complex<double> py = std::complex<double>(pyr,pyi);
-      std::complex<double> pz = std::complex<double>(pzr,pzi);
+          std::complex<double> px = std::complex<double>(pxr,pxi);
+          std::complex<double> py = std::complex<double>(pyr,pyi);
+          std::complex<double> pz = std::complex<double>(pzr,pzi);
 
-      px = this->plrcData.dxi0[n]*ex + this->plrcData.Crec[n]*px;
-      py = this->plrcData.dxi0[n]*ey + this->plrcData.Crec[n]*py;
-      pz = this->plrcData.dxi0[n]*ez + this->plrcData.Crec[n]*pz;
+          px = this->plrcData.dxi0[n]*ex + this->plrcData.Crec[n]*px;
+          py = this->plrcData.dxi0[n]*ey + this->plrcData.Crec[n]*py;
+          pz = this->plrcData.dxi0[n]*ez + this->plrcData.Crec[n]*pz;
 
-      pxr = std::real(px);
-      pyr = std::real(py);
-      pzr = std::real(pz);
+          pxr = std::real(px);
+          pyr = std::real(py);
+          pzr = std::real(pz);
 
-      pxi = std::imag(px);
-      pyi = std::imag(py);
-      pzi = std::imag(pz);
-
+          pxi = std::imag(px);
+          pyi = std::imag(py);
+          pzi = std::imag(pz);
+        }
+#ifdef HUERTO_THREE_DIM
+      }
+#endif
+#ifndef HUERTO_ONE_DIM
     }
+#endif
   }
 }
 
@@ -202,23 +218,31 @@ void FDTD_PLRCSolver<PLRCImplementation>::stepB(double dt)
   Index low = this->pBx->getInnerLo();
   Index high = this->pBx->getInnerHi();
 
-  double dx = this->getContext().getDx()[0];
-  double dy = this->getContext().getDx()[1];
-  double dz = this->getContext().getDx()[2];
+  Vector dx = this->getContext().getDx();
 
   double jx, jy, jz;
   this->sumMagCurrents();
 
-  for (int i=low[0]; i<=high[0]; ++i)
-    for (int j=low[1]; j<=high[1]; ++j)
-      for (int k=low[2]; k<=high[2]; ++k)
-      {
-        jx = (*this->pMx)(i,j,k);
-        jy = (*this->pMy)(i,j,k);
-        jz = (*this->pMz)(i,j,k);
+  Index pos;
+  for (pos[0]=low[0]; pos[0]<=high[0]; ++pos[0]) {
+#ifndef HUERTO_ONE_DIM
+    for (pos[1]=low[1]; pos[1]<=high[1]; ++pos[1]) {
+#endif
+#ifdef HUERTO_THREE_DIM
+      for (pos[2]=low[2]; pos[2]<=high[2]; ++pos[2]) {
+#endif
+        jx = (*this->pMx)[pos];
+        jy = (*this->pMy)[pos];
+        jz = (*this->pMz)[pos];
 
-        this->plrcStepB(dt, i, j, k, dx, dy, dz, jx, jy, jz);
+        this->plrcStepB(dt, pos, dx, jx, jy, jz);
+#ifdef HUERTO_THREE_DIM
       }
+#endif
+#ifndef HUERTO_ONE_DIM
+    }
+#endif
+  }
 
   this->getContext().getSubdivision().exchange(*this->pBx);
   this->getContext().getSubdivision().exchange(*this->pBy);
@@ -226,8 +250,7 @@ void FDTD_PLRCSolver<PLRCImplementation>::stepB(double dt)
 }
 
 template<class PLRCImplementation>
-void FDTD_PLRCSolver<PLRCImplementation>::initParameters(schnek::BlockParameters &blockPars)
-{
+void FDTD_PLRCSolver<PLRCImplementation>::initParameters(schnek::BlockParameters &blockPars) {
   PLRCImplementation::initParameters(blockPars);
 
   blockPars.addParameter("eps", &this->eps, 1.0);
@@ -243,45 +266,4 @@ void FDTD_PLRCSolver<PLRCImplementation>::initParameters(schnek::BlockParameters
   blockPars.addParameter("L1Om2", &this->LOm2[0], 1.0);
   blockPars.addParameter("L2Om2", &this->LOm2[1], 1.0);
   blockPars.addParameter("L3Om2", &this->LOm2[2], 1.0);
-
-//  (*pm)["plasma"] = WParameter(
-//      new ParameterRebuild<PlasmaDensity, OptField>(&this->optfields)
-//  );
-//
-//  (*pm)["plasma_current"] = WParameter(
-//      new ParameterRebuild<PlasmaCurrentFactory, CurrentFactory>(&this->currentFactories)
-//  );
-//
-//  (*pm)["cpml_border"] = WParameter(
-//      new ParameterRebuild<CPMLBorder, CurrentFactory>(&this->currentFactories)
-//  );
-//
-//  (*pm)["cpml_border_1d"] = WParameter(
-//      new ParameterRebuild<CPMLBorderOneD, CurrentFactory>(&this->currentFactories)
-//  );
-//
-//  (*pm)["side_inject"] = WParameter(
-//      new ParameterRebuild<SideInject, CurrentFactory>(&this->currentFactories)
-//  );
-//
-//  (*pm)["gauss_inject"] = WParameter(
-//      new ParameterRebuild<GaussInject, CurrentFactory>(&this->currentFactories)
-//  );
-//
-//  (*pm)["short_pulse_inject"] = WParameter(
-//      new ParameterRebuild<ShortPulseInject, CurrentFactory>(&this->currentFactories)
-//  );
-//
-//  (*pm)["focused_pulse_inject"] = WParameter(
-//      new ParameterRebuild<FocusedPulseInject, CurrentFactory>(&this->currentFactories)
-//  );
-//
-//  (*pm)["wave_inject"] = WParameter(
-//      new ParameterRebuild<PlaneWaveSource, CurrentFactory>(&this->currentFactories)
-//  );
-//
-//  (*pm)["plane_gauss_inject"] = WParameter(
-//      new ParameterRebuild<PlaneGaussSource, CurrentFactory>(&this->currentFactories)
-//  );
-
 }

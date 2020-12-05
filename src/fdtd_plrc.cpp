@@ -18,7 +18,7 @@ void FDTD_PLRCCore::registerData()
 {
   schnek::DomainSubdivision<Field> &subdivision = getContext().getSubdivision();
 
-  schnek::Range<double, DIMENSION> domainSize(schnek::Array<double, DIMENSION>(0,0,0), getContext().getSize());
+  Domain domainSize = subdivision.getInnerExtent(getContext().getSize());
   schnek::Array<bool, DIMENSION> stagger;
   stagger = false;
 
@@ -31,12 +31,20 @@ void FDTD_PLRCCore::registerData()
   pSigma = std::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
 
   pKappaEdx = std::make_shared<Grid1d>(schnek::Array<int, 1>(low[0]), schnek::Array<int, 1>(high[0]));
+#ifndef HUERTO_ONE_DIM
   pKappaEdy = std::make_shared<Grid1d>(schnek::Array<int, 1>(low[1]), schnek::Array<int, 1>(high[1]));
+#endif
+#ifdef HUERTO_THREE_DIM
   pKappaEdz = std::make_shared<Grid1d>(schnek::Array<int, 1>(low[2]), schnek::Array<int, 1>(high[2]));
+#endif
 
   pKappaHdx = std::make_shared<Grid1d>(schnek::Array<int, 1>(low[0]), schnek::Array<int, 1>(high[0]));
+#ifndef HUERTO_ONE_DIM
   pKappaHdy = std::make_shared<Grid1d>(schnek::Array<int, 1>(low[1]), schnek::Array<int, 1>(high[1]));
+#endif
+#ifdef HUERTO_THREE_DIM
   pKappaHdz = std::make_shared<Grid1d>(schnek::Array<int, 1>(low[2]), schnek::Array<int, 1>(high[2]));
+#endif
 
   for (int d=0; d<3; d++)
   {
@@ -50,12 +58,20 @@ void FDTD_PLRCCore::registerData()
   }
 
   addData("KappaEdx", pKappaEdx);
+#ifndef HUERTO_ONE_DIM
   addData("KappaEdy", pKappaEdy);
+#endif
+#ifdef HUERTO_THREE_DIM
   addData("KappaEdz", pKappaEdz);
+#endif
 
   addData("KappaHdx", pKappaHdx);
+#ifndef HUERTO_ONE_DIM
   addData("KappaHdy", pKappaHdy);
+#endif
+#ifdef HUERTO_THREE_DIM
   addData("KappaHdz", pKappaHdz);
+#endif
 }
 
 
@@ -94,19 +110,12 @@ void FDTD_PLRCCore::init()
 #include <iostream>
 
 void FDTD_PLRCLinCore::plrcStepD(double dt,
-                                 int i, int j, int k,
-                                 double dx, double dy, double dz,
-                                 double Jx, double Jy, double Jz)
-{
-
-//  for (int l=pKappaEdx->getLow()[0]; l<=pKappaEdx->getHigh()[0]; ++l)
-//  {
-//    std::cout << l << " " << (*pKappaEdx)(l) << std::endl;
-//  }
-
-  double &ex = (*pEx)(i,j,k);
-  double &ey = (*pEy)(i,j,k);
-  double &ez = (*pEz)(i,j,k);
+                                 Index pos,
+                                 Vector dx,
+                                 double Jx, double Jy, double Jz) {
+  double &ex = (*pEx)[pos];
+  double &ey = (*pEy)[pos];
+  double &ez = (*pEz)[pos];
 
 #ifndef NDEBUG
   {
@@ -119,23 +128,13 @@ void FDTD_PLRCLinCore::plrcStepD(double dt,
   }
 #endif
 
-  double kappaEdx = (*pKappaEdx)(i)*dx;
-  double kappaEdy = (*pKappaEdy)(j)*dy;
-  double kappaEdz = (*pKappaEdz)(k)*dz;
-
-//  std::cerr << i << " " << j << " " << k << " " << kappaEdx << " " << kappaEdy << " " << kappaEdz << " " << std::endl;
-
-#ifndef NDEBUG
-  {
-      double test = kappaEdx*kappaEdy*kappaEdz;
-      if ( !((test>0) || (test<1)) || (test==0) )
-      {
-        std::cerr << "Error in Kappa " << kappaEdx << " " << kappaEdy << " " << kappaEdz << "\n";
-        exit(-1);
-      }
-  }
+  double kappaEdx = (*pKappaEdx)(pos[0])*dx[0];
+#ifndef HUERTO_ONE_DIM
+  double kappaEdy = (*pKappaEdy)(pos[1])*dx[1];
 #endif
-
+#ifdef HUERTO_THREE_DIM
+  double kappaEdz = (*pKappaEdz)(pos[2])*dx[2];
+#endif
 
   double Psix = 0;
   double Psiy = 0;
@@ -143,19 +142,19 @@ void FDTD_PLRCLinCore::plrcStepD(double dt,
 
   for (int n=0;n<3;++n)
   {
-    double &pxr = pPsiRx[n]->operator()(i,j,k);
-    double &pyr = pPsiRy[n]->operator()(i,j,k);
-    double &pzr = pPsiRz[n]->operator()(i,j,k);
+    double &pxr = (*pPsiRx[n])[pos];
+    double &pyr = (*pPsiRy[n])[pos];
+    double &pzr = (*pPsiRz[n])[pos];
 
-    double &pxi = pPsiIx[n]->operator()(i,j,k);
-    double &pyi = pPsiIy[n]->operator()(i,j,k);
-    double &pzi = pPsiIz[n]->operator()(i,j,k);
+    double &pxi = (*pPsiIx[n])[pos];
+    double &pyi = (*pPsiIy[n])[pos];
+    double &pzi = (*pPsiIz[n])[pos];
 
     std::complex<double> D = plrcData.dchi0[n]-plrcData.dxi0[n];
 
-    std::complex<double> px = D*ex + std::complex<double>(pxr,pxi);
-    std::complex<double> py = D*ey + std::complex<double>(pyr,pyi);
-    std::complex<double> pz = D*ez + std::complex<double>(pzr,pzi);
+    std::complex<double> px = D*ex + std::complex<double>(pxr, pxi);
+    std::complex<double> py = D*ey + std::complex<double>(pyr, pyi);
+    std::complex<double> pz = D*ez + std::complex<double>(pzr, pzi);
 
     Psix += std::real(px);
     Psiy += std::real(py);
@@ -186,8 +185,7 @@ void FDTD_PLRCLinCore::plrcStepD(double dt,
   }
 #endif
 
-
-  double sigma = 0.5*(*pSigma)(i,j,k)*dt;
+  double sigma = 0.5*(*pSigma)[pos]*dt;
 
   double denomX = eps + (plrcData.sumChi0 - plrcData.sumXi0) + sigma;
   double denomY = eps + (plrcData.sumChi0 - plrcData.sumXi0) + sigma;
@@ -197,22 +195,44 @@ void FDTD_PLRCLinCore::plrcStepD(double dt,
   double numerY = eps - plrcData.sumXi0 - sigma;
   double numerZ = eps - plrcData.sumXi0 - sigma;
 
-//    double E2 = ex*ex + ey*ey + ez*ez;
-
   // after this Dx, Dy and Dz actually contain D - P_L
 
-//  if ((Jx!=0.0) || (Jy!=0.0) || (Jz!=0.0))
-//    std::cerr << i << ' ' << j << ' ' << k << ' ' << Jx << ' ' << Jy << ' ' << Jz << '\n';
+#ifdef HUERTO_ONE_DIM
+  double exn =
+    (numerX*ex + dt*Jx + Psix) / denomX;
 
-//  if (fabs(Jx+Jy+Jz) > 1e-40) std::cerr << "Current " << Jx << " " << Jy << " " << Jz << std::endl;
+  double eyn =
+    (
+      numerY*ey
+      +
+          dt*(
+          - ((*pBz)[pos] - (*pBz)(pos[0]-1))/kappaEdx
+          + Jy
+        )
+        + Psiy
 
+    ) / denomY;
+
+  double ezn =
+    (
+      numerZ*ez
+      + (
+          dt*(
+            ((*pBy)[pos] - (*pBy)(pos[0]-1))/kappaEdx
+          + Jz
+        )
+        + Psiz
+      )
+    ) / denomZ;
+#endif
+
+#ifdef HUERTO_TWO_DIM
   double exn =
     (
       numerX*ex
       + (
           dt*(
-            ((*pBz)(i,j,k) - (*pBz)(i,j-1,k))/kappaEdy
-          - ((*pBy)(i,j,k) - (*pBy)(i,j,k-1))/kappaEdz
+            ((*pBz)[pos] - (*pBz)(pos[0], pos[1]-1))/kappaEdy
           + Jx
         )
         + Psix
@@ -224,8 +244,7 @@ void FDTD_PLRCLinCore::plrcStepD(double dt,
       numerY*ey
       + (
           dt*(
-            ((*pBx)(i,j,k) - (*pBx)(i,j,k-1))/kappaEdz
-          - ((*pBz)(i,j,k) - (*pBz)(i-1,j,k))/kappaEdx
+          - ((*pBz)[pos] - (*pBz)(pos[0]-1, pos[1]))/kappaEdx
           + Jy
         )
         + Psiy
@@ -237,14 +256,55 @@ void FDTD_PLRCLinCore::plrcStepD(double dt,
       numerZ*ez
       + (
           dt*(
-            ((*pBy)(i,j,k) - (*pBy)(i-1,j,k))/kappaEdx
-          - ((*pBx)(i,j,k) - (*pBx)(i,j-1,k))/kappaEdy
+            ((*pBy)[pos] - (*pBy)(pos[0]-1, pos[1]  ))/kappaEdx
+          - ((*pBx)[pos] - (*pBx)(pos[0]  , pos[1]-1))/kappaEdy
           + Jz
         )
         + Psiz
       )
     ) / denomZ;
+#endif
 
+#ifdef HUERTO_THREE_DIM
+  double exn =
+    (
+      numerX*ex
+      + (
+          dt*(
+            ((*pBz)[pos] - (*pBz)(pos[0], pos[1]-1, pos[2]  ))/kappaEdy
+          - ((*pBy)[pos] - (*pBy)(pos[0], pos[1]  , pos[2]-1))/kappaEdz
+          + Jx
+        )
+        + Psix
+      )
+    ) / denomX;
+
+  double eyn =
+    (
+      numerY*ey
+      + (
+          dt*(
+            ((*pBx)[pos] - (*pBx)(pos[0],   pos[1], pos[2]-1))/kappaEdz
+          - ((*pBz)[pos] - (*pBz)(pos[0]-1, pos[1], pos[2]  ))/kappaEdx
+          + Jy
+        )
+        + Psiy
+      )
+    ) / denomY;
+
+  double ezn =
+    (
+      numerZ*ez
+      + (
+          dt*(
+            ((*pBy)[pos] - (*pBy)(pos[0]-1, pos[1],   pos[2]))/kappaEdx
+          - ((*pBx)[pos] - (*pBx)(pos[0]  , pos[1]-1, pos[2]))/kappaEdy
+          + Jz
+        )
+        + Psiz
+      )
+    ) / denomZ;
+#endif
   ex = exn;
   ey = eyn;
   ez = ezn;
@@ -263,35 +323,80 @@ void FDTD_PLRCLinCore::plrcStepD(double dt,
 }
 
 void FDTD_PLRCLinCore::plrcStepB(double dt,
-                                 int i, int j, int k,
-                                 double dx, double dy, double dz,
+                                 Index pos,
+                                 Vector dx,
                                  double Jx, double Jy, double Jz)
 {
+  double kappaHdx = (*pKappaHdx)(pos[0])*dx[0];
+#ifndef HUERTO_ONE_DIM
+  double kappaHdy = (*pKappaHdy)(pos[1])*dx[1];
+#endif
+#ifdef HUERTO_THREE_DIM
+  double kappaHdz = (*pKappaHdz)(pos[2])*dx[2];
+#endif
 
-  double kappaHdx = (*pKappaHdx)(i)*dx;
-  double kappaHdy = (*pKappaHdy)(j)*dy;
-  double kappaHdz = (*pKappaHdz)(k)*dz;
-
-  (*pBx)(i,j,k) = (*pBx)(i,j,k)
+#ifdef HUERTO_ONE_DIM
+  (*pBx)[pos] = (*pBx)[pos]
     + dt*(
-        ((*pEy)(i,j,k+1) - (*pEy)(i,j,k))/kappaHdz
-      - ((*pEz)(i,j+1,k) - (*pEz)(i,j,k))/kappaHdy
      + Jx
     );
 
-  (*pBy)(i,j,k) = (*pBy)(i,j,k)
+  (*pBy)[pos] = (*pBy)[pos]
     + dt*(
-        ((*pEz)(i+1,j,k) - (*pEz)(i,j,k))/kappaHdx
-      - ((*pEx)(i,j,k+1) - (*pEx)(i,j,k))/kappaHdz
+        ((*pEz)(pos[0]+1) - (*pEz)[pos])/kappaHdx
      + Jy
     );
 
-  (*pBz)(i,j,k) = (*pBz)(i,j,k)
+  (*pBz)[pos] = (*pBz)[pos]
     + dt*(
-        ((*pEx)(i,j+1,k) - (*pEx)(i,j,k))/kappaHdy
-      - ((*pEy)(i+1,j,k) - (*pEy)(i,j,k))/kappaHdx
+      - ((*pEy)(pos[0]+1) - (*pEy)[pos])/kappaHdx
      + Jz
     );
+#endif
+
+#ifdef HUERTO_TWO_DIM
+  (*pBx)[pos] = (*pBx)[pos]
+    + dt*(
+      - ((*pEz)(pos[0], pos[1]+1) - (*pEz)[pos])/kappaHdy
+     + Jx
+    );
+
+  (*pBy)[pos] = (*pBy)[pos]
+    + dt*(
+        ((*pEz)(pos[0]+1,pos[1]) - (*pEz)[pos])/kappaHdx
+     + Jy
+    );
+
+  (*pBz)[pos] = (*pBz)[pos]
+    + dt*(
+        ((*pEx)(pos[0],pos[1]+1) - (*pEx)[pos])/kappaHdy
+      - ((*pEy)(pos[0]+1,pos[1]) - (*pEy)[pos])/kappaHdx
+     + Jz
+    );
+#endif
+
+#ifdef HUERTO_THREE_DIM
+  (*pBx)[pos] = (*pBx)[pos]
+    + dt*(
+        ((*pEy)(pos[0], pos[1],  pos[2]+1) - (*pEy)[pos])/kappaHdz
+      - ((*pEz)(pos[0], pos[1]+1,pos[2]) - (*pEz)[pos])/kappaHdy
+     + Jx
+    );
+
+  (*pBy)[pos] = (*pBy)[pos]
+    + dt*(
+        ((*pEz)(pos[0]+1,pos[1],pos[2]) - (*pEz)[pos])/kappaHdx
+      - ((*pEx)(pos[0],pos[1],pos[2]+1) - (*pEx)[pos])/kappaHdz
+     + Jy
+    );
+
+  (*pBz)[pos] = (*pBz)[pos]
+    + dt*(
+        ((*pEx)(pos[0],pos[1]+1,pos[2]) - (*pEx)[pos])/kappaHdy
+      - ((*pEy)(pos[0]+1,pos[1],pos[2]) - (*pEy)[pos])/kappaHdx
+     + Jz
+    );
+#endif
 }
 
 
@@ -300,17 +405,20 @@ void FDTD_PLRCLinCore::plrcStepB(double dt,
 //===============================================================
 
 void FDTD_PLRCNonlinCore::plrcStepD(double dt,
-                                    int i, int j, int k,
-                                    double dx, double dy, double dz,
-                                    double Jx, double Jy, double Jz)
-{
-  double &ex = (*pEx)(i,j,k);
-  double &ey = (*pEy)(i,j,k);
-  double &ez = (*pEz)(i,j,k);
+                                    Index pos,
+                                    Vector dx,
+                                    double Jx, double Jy, double Jz) {
+  double &ex = (*pEx)[pos];
+  double &ey = (*pEy)[pos];
+  double &ez = (*pEz)[pos];
 
-  double kappaEdx = (*pKappaEdx)(i)*dx;
-  double kappaEdy = (*pKappaEdy)(j)*dy;
-  double kappaEdz = (*pKappaEdz)(k)*dz;
+  double kappaEdx = (*pKappaEdx)(pos[0])*dx[0];
+#ifndef HUERTO_ONE_DIM
+  double kappaEdy = (*pKappaEdy)(pos[1])*dx[1];
+#endif
+#ifdef HUERTO_THREE_DIM
+  double kappaEdz = (*pKappaEdz)(pos[2])*dx[2];
+#endif
 
   double Psix = 0;
   double Psiy = 0;
@@ -318,13 +426,13 @@ void FDTD_PLRCNonlinCore::plrcStepD(double dt,
 
   for (int n=0;n<3;++n)
   {
-    double &pxr = pPsiRx[n]->operator()(i,j,k);
-    double &pyr = pPsiRy[n]->operator()(i,j,k);
-    double &pzr = pPsiRz[n]->operator()(i,j,k);
+    double &pxr = (*pPsiRx[n])[pos];
+    double &pyr = (*pPsiRy[n])[pos];
+    double &pzr = (*pPsiRz[n])[pos];
 
-    double &pxi = pPsiIx[n]->operator()(i,j,k);
-    double &pyi = pPsiIy[n]->operator()(i,j,k);
-    double &pzi = pPsiIz[n]->operator()(i,j,k);
+    double &pxi = (*pPsiIx[n])[pos];
+    double &pyi = (*pPsiIy[n])[pos];
+    double &pzi = (*pPsiIz[n])[pos];
 
     std::complex<double> D = plrcData.dchi0[n]-plrcData.dxi0[n];
 
@@ -351,25 +459,22 @@ void FDTD_PLRCNonlinCore::plrcStepD(double dt,
   }
 
 
-  double sigma = 0.5*(*pSigma)(i,j,k)*dt;
+  double sigma = 0.5*(*pSigma)[pos]*dt;
 
   double denom = eps + plrcData.sumChi0 - plrcData.sumXi0 + sigma;
   double numer = eps - plrcData.sumXi0 - sigma;
 
   double E2 = ex*ex + ey*ey + ez*ez;
 
-//    double E2 = ex*ex + ey*ey + ez*ez;
-
   // after this Dx, Dy and Dz actually contain D - P_L
 
 
+#ifdef HUERTO_ONE_DIM
   double cx =
     (
       (numer + chi*E2)*ex
 
       + dt*(
-          ((*pBz)(i,j,k) - (*pBz)(i,j-1,k))/kappaEdy
-        - ((*pBy)(i,j,k) - (*pBy)(i,j,k-1))/kappaEdz
         + Jx
       )
       + Psix
@@ -379,8 +484,7 @@ void FDTD_PLRCNonlinCore::plrcStepD(double dt,
     (
       (numer + chi*E2)*ey
       + dt*(
-          ((*pBx)(i,j,k) - (*pBx)(i,j,k-1))/kappaEdz
-        - ((*pBz)(i,j,k) - (*pBz)(i-1,j,k))/kappaEdx
+        - ((*pBz)[pos] - (*pBz)(pos[0]-1))/kappaEdx
         + Jy
       )
       + Psiy
@@ -390,12 +494,82 @@ void FDTD_PLRCNonlinCore::plrcStepD(double dt,
     (
       (numer + chi*E2)*ez
       + dt*(
-          ((*pBy)(i,j,k) - (*pBy)(i-1,j,k))/kappaEdx
-        - ((*pBx)(i,j,k) - (*pBx)(i,j-1,k))/kappaEdy
+          ((*pBy)[pos] - (*pBy)(pos[0]-1))/kappaEdx
          + Jz
       )
       + Psiz
     ) / denom;
+#endif
+
+#ifdef HUERTO_TWO_DIM
+  double cx =
+    (
+      (numer + chi*E2)*ex
+
+      + dt*(
+          ((*pBz)[pos] - (*pBz)(pos[0],pos[1]-1))/kappaEdy
+        + Jx
+      )
+      + Psix
+    ) / denom;
+
+  double cy =
+    (
+      (numer + chi*E2)*ey
+      + dt*(
+        - ((*pBz)[pos] - (*pBz)(pos[0]-1,pos[1]))/kappaEdx
+        + Jy
+      )
+      + Psiy
+    ) / denom;
+
+  double cz =
+    (
+      (numer + chi*E2)*ez
+      + dt*(
+          ((*pBy)[pos] - (*pBy)(pos[0]-1,pos[1]))/kappaEdx
+        - ((*pBx)[pos] - (*pBx)(pos[0],pos[1]-1))/kappaEdy
+         + Jz
+      )
+      + Psiz
+    ) / denom;
+#endif
+
+#ifdef HUERTO_THREE_DIM
+  double cx =
+    (
+      (numer + chi*E2)*ex
+
+      + dt*(
+          ((*pBz)[pos] - (*pBz)(pos[0],pos[1]-1,pos[2]))/kappaEdy
+        - ((*pBy)[pos] - (*pBy)(pos[0],pos[1],pos[2]-1))/kappaEdz
+        + Jx
+      )
+      + Psix
+    ) / denom;
+
+  double cy =
+    (
+      (numer + chi*E2)*ey
+      + dt*(
+          ((*pBx)[pos] - (*pBx)(pos[0],pos[1],pos[2]-1))/kappaEdz
+        - ((*pBz)[pos] - (*pBz)(pos[0]-1,pos[1],pos[2]))/kappaEdx
+        + Jy
+      )
+      + Psiy
+    ) / denom;
+
+  double cz =
+    (
+      (numer + chi*E2)*ez
+      + dt*(
+          ((*pBy)[pos] - (*pBy)(pos[0]-1,pos[1],pos[2]))/kappaEdx
+        - ((*pBx)[pos] - (*pBx)(pos[0],pos[1]-1,pos[2]))/kappaEdy
+         + Jz
+      )
+      + Psiz
+    ) / denom;
+#endif
 
   double E = sqrt(E2);
   double A = chi/denom;
@@ -425,34 +599,80 @@ void FDTD_PLRCNonlinCore::plrcStepD(double dt,
 }
 
 void FDTD_PLRCNonlinCore::plrcStepB(double dt,
-                                    int i, int j, int k,
-                                    double dx, double dy, double dz,
+                                    Index pos,
+                                    Vector dx,
                                     double Jx, double Jy, double Jz)
 {
-  double kappaHdx = (*pKappaHdx)(i)*dx;
-  double kappaHdy = (*pKappaHdy)(j)*dy;
-  double kappaHdz = (*pKappaHdz)(k)*dz;
+  double kappaHdx = (*pKappaHdx)(pos[0])*dx[0];
+#ifndef HUERTO_ONE_DIM
+  double kappaHdy = (*pKappaHdy)(pos[1])*dx[1];
+#endif
+#ifdef HUERTO_THREE_DIM
+  double kappaHdz = (*pKappaHdz)(pos[2])*dx[2];
+#endif
 
-  (*pBx)(i,j,k) = (*pBx)(i,j,k)
+#ifdef HUERTO_ONE_DIM
+  (*pBx)[pos] = (*pBx)[pos]
     + dt*(
-        ((*pEy)(i,j,k+1) - (*pEy)(i,j,k))/kappaHdz
-      - ((*pEz)(i,j+1,k) - (*pEz)(i,j,k))/kappaHdy
       + Jx
     );
 
-  (*pBy)(i,j,k) = (*pBy)(i,j,k)
+  (*pBy)[pos] = (*pBy)[pos]
     + dt*(
-        ((*pEz)(i+1,j,k) - (*pEz)(i,j,k))/kappaHdx
-      - ((*pEx)(i,j,k+1) - (*pEx)(i,j,k))/kappaHdz
+        ((*pEz)(pos[0]+1) - (*pEz)[pos])/kappaHdx
        + Jy
     );
 
-  (*pBz)(i,j,k) = (*pBz)(i,j,k)
+  (*pBz)[pos] = (*pBz)[pos]
     + dt*(
-        ((*pEx)(i,j+1,k) - (*pEx)(i,j,k))/kappaHdy
-      - ((*pEy)(i+1,j,k) - (*pEy)(i,j,k))/kappaHdx
+      - ((*pEy)(pos[0]+1) - (*pEy)[pos])/kappaHdx
        + Jz
     );
+#endif
+
+#ifdef HUERTO_TWO_DIM
+  (*pBx)[pos] = (*pBx)[pos]
+    + dt*(
+      - ((*pEz)(pos[0],pos[1]+1) - (*pEz)[pos])/kappaHdy
+      + Jx
+    );
+
+  (*pBy)[pos] = (*pBy)[pos]
+    + dt*(
+        ((*pEz)(pos[0]+1,pos[1]) - (*pEz)[pos])/kappaHdx
+       + Jy
+    );
+
+  (*pBz)[pos] = (*pBz)[pos]
+    + dt*(
+        ((*pEx)(pos[0],pos[1]+1) - (*pEx)[pos])/kappaHdy
+      - ((*pEy)(pos[0]+1,pos[1]) - (*pEy)[pos])/kappaHdx
+       + Jz
+    );
+#endif
+
+#ifdef HUERTO_THREE_DIM
+  (*pBx)[pos] = (*pBx)[pos]
+    + dt*(
+        ((*pEy)(pos[0],pos[1],pos[2]+1) - (*pEy)[pos])/kappaHdz
+      - ((*pEz)(pos[0],pos[1]+1,pos[2]) - (*pEz)[pos])/kappaHdy
+      + Jx
+    );
+
+  (*pBy)[pos] = (*pBy)[pos]
+    + dt*(
+        ((*pEz)(pos[0]+1,pos[1],pos[2]) - (*pEz)[pos])/kappaHdx
+      - ((*pEx)(pos[0],pos[1],pos[2]+1) - (*pEx)[pos])/kappaHdz
+       + Jy
+    );
+
+  (*pBz)[pos] = (*pBz)[pos]
+    + dt*(
+        ((*pEx)(pos[0],pos[1]+1,pos[2]) - (*pEx)[pos])/kappaHdy
+      - ((*pEy)(pos[0]+1,pos[1],pos[2]) - (*pEy)[pos])/kappaHdx
+       + Jz
+    );
+#endif
 }
 
 void FDTD_PLRCNonlinCore::initParameters(schnek::BlockParameters &blockPars)
