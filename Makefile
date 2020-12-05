@@ -16,12 +16,13 @@ SOURCES = $(wildcard src/*.cpp) \
   huerto/electromagnetics/current.cpp \
   huerto/electromagnetics/em_fields.cpp \
   huerto/electromagnetics/fdtd/fdtd_plain.cpp \
+  huerto/electromagnetics/source/border.cpp \
+  huerto/electromagnetics/source/incsource.cpp \
+  huerto/electromagnetics/source/plane_wave.cpp \
   huerto/maths/functions/core.cpp
 
 BUILD_DIR = build
 BIN_DIR = bin
-
-OBJECTS = $(addprefix obj/,$(SOURCES:.cpp=.o))
 
 LDFLAGS = -L/usr/lib/x86_64-linux-gnu/hdf5/openmpi/lib -Wl,-rpath,/usr/lib/x86_64-linux-gnu/hdf5/openmpi/lib
 
@@ -51,6 +52,6 @@ $(foreach dimension,$(DIMENSIONS),$(eval $(call PROGRAM_template,$(dimension))))
 
 
 clean:
-	-rm -f $(OBJECTS) core $(FULLTARGET)
+	-rm -f $(ALL_OBJS) core $(FULLTARGET)
 
 

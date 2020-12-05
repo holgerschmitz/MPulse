@@ -27,3 +27,18 @@
 *.exe
 *.out
 *.app
+/bin
+
+# IDE project settings
+.project
+.cproject
+.settings
+.vscode
+
+# Simulation Ouput
+*.h5
+*.vtk
+*.png
+*.mp4
+information.tex
+references.bib

@@ -8,13 +8,13 @@
 #include "diagnostic.hpp"
 #include "fdtd_plrc.hpp"
 #include "cpml_border.hpp"
-#include "sources.hpp"
 #include "shortpulseinject.hpp"
 #include "plasmacurrent.hpp"
 
 #include "../huerto/electromagnetics/em_fields.hpp"
 #include "../huerto/electromagnetics/fieldsolver.hpp"
 #include "../huerto/electromagnetics/fdtd/fdtd_plain.hpp"
+#include "../huerto/electromagnetics/source/plane_wave.hpp"
 #include "../huerto/maths/functions/core.hpp"
 #include "../huerto/constants.hpp"
 
