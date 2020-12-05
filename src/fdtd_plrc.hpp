@@ -1,3 +1,10 @@
+/*
+ * fdtd_plrc.hpp
+ *
+ *  Created on: 27 Oct 2008
+ *      Author: Holger Schmitz
+ */
+
 #ifndef MPULSE_FDTD_PLRC_H
 #define MPULSE_FDTD_PLRC_H
 
@@ -58,6 +65,35 @@ class FDTD_PLRCCore : public FieldSolver,
      */
     pField pSigma;
 
+#ifdef HUERTO_ONE_DIM
+    /**
+     * Stretch factors for the grid cell size of the electric fields; used by CPML
+     * schemes.
+     */
+    pGrid1d pKappaEdx;
+
+    /**
+     * Stretch factors for the grid cell size of the magnetic fields; used by CPML
+     * schemes.
+     */
+    pGrid1d pKappaHdx;
+#endif
+
+#ifdef HUERTO_TWO_DIM
+    /**
+     * Stretch factors for the grid cell size of the electric fields; used by CPML
+     * schemes.
+     */
+    pGrid1d pKappaEdx, pKappaEdy;
+
+    /**
+     * Stretch factors for the grid cell size of the magnetic fields; used by CPML
+     * schemes.
+     */
+    pGrid1d pKappaHdx, pKappaHdy;
+#endif
+
+#ifdef HUERTO_THREE_DIM
     /**
      * Stretch factors for the grid cell size of the electric fields; used by CPML
      * schemes.
@@ -69,6 +105,7 @@ class FDTD_PLRCCore : public FieldSolver,
      * schemes.
      */
     pGrid1d pKappaHdx, pKappaHdy, pKappaHdz;
+#endif
 
     /**
      * Conductivity factor for the electric fields used by CPML schemes
@@ -143,17 +180,18 @@ class FDTD_PLRCLinCore : public FDTD_PLRCCore
      * Advance the electric fields
      */
     void plrcStepD(double dt,
-                   int i, int j, int k,
-                   double dx, double dy, double dz,
+                   Index pos,
+                   Vector dx,
                    double Jx, double Jy, double Jz);
 
     /**
      * Advance the magnetic fields
      */
     void plrcStepB(double dt,
-                   int i, int j, int k,
-                   double dx, double dy, double dz,
+                   Index pos,
+                   Vector dx,
                    double Jx, double Jy, double Jz);
+
 };
 
 /**
@@ -171,16 +209,16 @@ class FDTD_PLRCNonlinCore : public FDTD_PLRCCore
      * Advance the electric fields
      */
     void plrcStepD(double dt,
-                   int i, int j, int k,
-                   double dx, double dy, double dz,
+                   Index pos,
+                   Vector dx,
                    double Jx, double Jy, double Jz);
 
     /**
      * Advance the magnetic fields
      */
     void plrcStepB(double dt,
-                   int i, int j, int k,
-                   double dx, double dy, double dz,
+                   Index pos,
+                   Vector dx,
                    double Jx, double Jy, double Jz);
 
     /**

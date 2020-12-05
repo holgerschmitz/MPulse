@@ -6,7 +6,7 @@
  */
 
 #include "diagnostic.hpp"
-//#include "fdtd_plrc.hpp"
+#include "fdtd_plrc.hpp"
 //#include "cpml_border.hpp"
 //#include "shortpulseinject.hpp"
 #include "plasmacurrent.hpp"
@@ -108,8 +108,8 @@ int main (int argc, char** argv) {
     blocks.registerBlock("mpulse").setClass<MPulse>();
     blocks("EMFields").setClass<EMFields>();
     blocks("FDTD_Plain").setClass<FDTD_Plain>();
-//    blocks("FDTD_PLRC").setClass<FDTD_PLRCLin>();
-//    blocks("FDTD_PLRC_Nonlinear").setClass<FDTD_PLRCNonlin>();
+    blocks("FDTD_PLRC").setClass<FDTD_PLRCLin>();
+    blocks("FDTD_PLRC_Nonlinear").setClass<FDTD_PLRCNonlin>();
     blocks("FieldDiag").setClass<FieldDiagnostic>();
 //    blocks("CPMLBorder").setClass<CPMLBorder>();
 //    blocks("ShortPulseInject").setClass<ShortPulseInject>();
@@ -119,7 +119,7 @@ int main (int argc, char** argv) {
     blocks("PlasmaCurrent").setClass<PlasmaCurrentBlock>();
 
     blocks("mpulse").addChildren("EMFields")
-        ("FDTD_Plain") //("FDTD_PLRC")("FDTD_PLRC_Nonlinear")
+        ("FDTD_Plain")("FDTD_PLRC")("FDTD_PLRC_Nonlinear")
         ("FieldDiag");
 
     blocks("FDTD_Plain").addChildren //("CPMLBorder")
