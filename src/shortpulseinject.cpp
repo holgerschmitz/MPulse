@@ -2,6 +2,7 @@
 #include "specfunc.hpp"
 
 #include <schnek/tools/literature.hpp>
+#include <schnek/util/exceptions.hpp>
 
 #include <cmath>
 
@@ -40,9 +41,15 @@ pCurrent ShortPulseInject::makeHCurrent(int distance, Direction dir)
   return pCurrent(cur);
 }
 
-bool ShortPulseInject::needCurrent(Direction dir_)
+bool ShortPulseInject::needCurrent(Direction dir)
 {
-  return (dir_ == down);
+#ifndef HUERTO_THREE_DIM
+  return false;
+#endif
+
+#ifdef HUERTO_THREE_DIM
+  return (dir == down);
+#endif
 }
 
 void ShortPulseInject::initParameters(schnek::BlockParameters &blockPars)
@@ -65,18 +72,17 @@ void ShortPulseInject::initParameters(schnek::BlockParameters &blockPars)
 //==========  ShortPulseInjectSourceFunc
 //===============================================================
 
-void ShortPulseInjectSourceFunc::setParam(double length_,
-                                          double width_,
-                                          double om0_,
-                                          double TShift_,
-                                          double ZShift_,
-                                          double Phase_,
-                                          double amp_,
-                                          double eps_,
-                                          int distance_)
+void ShortPulseInjectSourceFunc::setParam(double length,
+                                          double width,
+                                          double om0,
+                                          double TShift,
+                                          double ZShift,
+                                          double Phase,
+                                          double amp,
+                                          double eps,
+                                          int distance)
 {
   std::cerr << "ShortPulseInjectSourceFunc::setParam\n";
-
 
   // Grid Spacing and position
 
@@ -84,7 +90,6 @@ void ShortPulseInjectSourceFunc::setParam(double length_,
   DY = context.getDx()[1];
   DZ = context.getDx()[2];
   DT = context.getDt();
-
 
   Index gridLow  = Index(0);
   Index gridHigh = context.getGridSize();
@@ -95,12 +100,12 @@ void ShortPulseInjectSourceFunc::setParam(double length_,
 
   // setting most parameters
 
-  length = length_;
-  width  = width_;
-  om0     = om0_;
+  this->length = length;
+  this->width  = width;
+  this->om0     = om0;
 
-  eps = eps_;
-  dist = distance_;
+  this->eps = eps;
+  this->dist = distance;
 
   lightspeed = sqrt(1/eps);
 
@@ -117,11 +122,11 @@ void ShortPulseInjectSourceFunc::setParam(double length_,
   double Exmax = Efunc(0, 0, 0, 0).real();
 
   // setting the rest of the parameters
-  amp = amp_/Exmax;
-  Phase  = 2*M_PI*Phase_;
+  this->amp = amp/Exmax;
+  this->Phase  = 2*M_PI*Phase;
 
-  TShift  = TShift_;
-  ZShift  = ZShift_;
+  this->TShift  = TShift;
+  this->ZShift  = ZShift;
 }
 
 void ShortPulseInjectSourceFunc
@@ -135,7 +140,20 @@ void ShortPulseInjectSourceFunc::setTime(double time)
   return;
 }
 
-Vector ShortPulseInjectSourceFunc::getEField(int i, int j, int k, double time)
+#ifdef HUERTO_ONE_DIM
+Vector3d ShortPulseInjectSourceFunc::getEField(int i, double time) {
+  SCHNECK_FAIL("Short Pulse Injection not implemented in 1d");
+}
+#endif
+
+#ifdef HUERTO_TWO_DIM
+Vector3d ShortPulseInjectSourceFunc::getEField(int i, int j, double time) {
+  SCHNECK_FAIL("Short Pulse Injection not implemented in 2d");
+}
+#endif
+
+#ifdef HUERTO_THREE_DIM
+Vector3d ShortPulseInjectSourceFunc::getEField(int i, int j, int k, double time)
 {
   double ex=0, ey=0;
   double posxo = (i-centrex)*DX;
@@ -155,10 +173,24 @@ Vector ShortPulseInjectSourceFunc::getEField(int i, int j, int k, double time)
   }
 
   return Vector(ex,ey,0);
-
 }
+#endif
 
-Vector ShortPulseInjectSourceFunc::getHField(int i, int j, int k, double time)
+
+#ifdef HUERTO_ONE_DIM
+Vector3d ShortPulseInjectSourceFunc::getHField(int i, double time) {
+  SCHNECK_FAIL("Short Pulse Injection not implemented in 1d");
+}
+#endif
+
+#ifdef HUERTO_TWO_DIM
+Vector3d ShortPulseInjectSourceFunc::getHField(int i, int j, double time) {
+  SCHNECK_FAIL("Short Pulse Injection not implemented in 2d");
+}
+#endif
+
+#ifdef HUERTO_THREE_DIM
+Vector3d ShortPulseInjectSourceFunc::getHField(int i, int j, int k, double time)
 {
 
   double bx=0, by=0;
@@ -184,7 +216,7 @@ Vector ShortPulseInjectSourceFunc::getHField(int i, int j, int k, double time)
   by = amp*Byc.real();
 
   return Vector(bx,by,0);
-
 }
+#endif
 
 

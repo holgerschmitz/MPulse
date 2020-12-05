@@ -13,9 +13,9 @@
 class ShortPulseInject : public IncidentSource
 {
   protected:
-    pCurrent makeECurrent(int distance_, Direction dir_);
-    pCurrent makeHCurrent(int distance_, Direction dir_);
-    bool needCurrent(Direction dir_);
+    pCurrent makeECurrent(int distance, Direction dir);
+    pCurrent makeHCurrent(int distance, Direction dir);
+    bool needCurrent(Direction dir);
 
     void initParameters(schnek::BlockParameters &blockPars);
     void init();
@@ -38,23 +38,44 @@ class ShortPulseInject : public IncidentSource
 class ShortPulseInjectSourceFunc
 {
   public:
-    ShortPulseInjectSourceFunc(Direction dir_, SimulationContext &context) :
-      dir(dir_), context(context) {};
+    ShortPulseInjectSourceFunc(Direction dir, SimulationContext &context) :
+      dir(dir), context(context) {};
 
-    void setParam(double length_,
-                  double width_,
-                  double om0_,
-                  double TShift_,
-                  double ZShift_,
-                  double Phase_,
-                  double amp_,
-                  double eps_,
-                  int distance_);
+    void setParam(double length,
+                  double width,
+                  double om0,
+                  double TShift,
+                  double ZShift,
+                  double Phase,
+                  double amp,
+                  double eps,
+                  int distance);
 
     void initSourceFunc(pGrid pJx, pGrid pJy, pGrid pJz);
 
-    Vector getEField(int i, int j, int k, double time);
-    Vector getHField(int i, int j, int k, double time);
+#ifdef HUERTO_ONE_DIM
+    Vector3d getEField(int i, double time);
+#endif
+
+#ifdef HUERTO_TWO_DIM
+    Vector3d getEField(int i, int j, double time);
+#endif
+
+#ifdef HUERTO_THREE_DIM
+    Vector3d getEField(int i, int j, int k, double time);
+#endif
+
+#ifdef HUERTO_ONE_DIM
+    Vector3d getHField(int i, double time);
+#endif
+
+#ifdef HUERTO_TWO_DIM
+    Vector3d getHField(int i, int j, double time);
+#endif
+
+#ifdef HUERTO_THREE_DIM
+    Vector3d getHField(int i, int j, int k, double time);
+#endif
 
     void setTime(double Time);
 
