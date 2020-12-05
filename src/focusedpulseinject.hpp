@@ -1,8 +1,9 @@
 #ifndef MPULSE_FOCUSEDPULSEINJECT_H
 #define MPULSE_FOCUSEDPULSEINJECT_H
 
-#include "incsource.hpp"
 #include "mpulse.hpp"
+
+#include "../huerto/electromagnetics/source/incsource.hpp"
 
 #include <schnek/grid.hpp>
 
@@ -154,8 +155,8 @@ class FocusedPulseInject : public IncidentSource
 class FocusedPulseInjectSourceFunc
 {
   public:
-    FocusedPulseInjectSourceFunc(Direction dir_, bool isH_, SimulationContext &context)
-      : dir(dir_), isH(isH_), context(context) {};
+    FocusedPulseInjectSourceFunc(Direction dir_, SimulationContext &context)
+      : dir(dir_), context(context) {};
 
     void setParam(double length_,
                   double width_,
@@ -193,6 +194,8 @@ class FocusedPulseInjectSourceFunc
     int transverse1, transverse2;
 
     Direction dir;
+
+    // @TODO This needs to be initialised
     bool isH;
 
     int dist;

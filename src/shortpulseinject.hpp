@@ -1,7 +1,7 @@
 #ifndef MPULSE_SHORTPULSEINJECT_H
 #define MPULSE_SHORTPULSEINJECT_H
 
-#include "incsource.hpp"
+#include "../huerto/electromagnetics/source/incsource.hpp"
 #include "mpulse.hpp"
 
 #include <fftw3.h>
@@ -38,8 +38,8 @@ class ShortPulseInject : public IncidentSource
 class ShortPulseInjectSourceFunc
 {
   public:
-    ShortPulseInjectSourceFunc(Direction dir_, bool isH_, SimulationContext &context) :
-      dir(dir_), isH(isH_), context(context) {};
+    ShortPulseInjectSourceFunc(Direction dir_, SimulationContext &context) :
+      dir(dir_), context(context) {};
 
     void setParam(double length_,
                   double width_,
@@ -98,7 +98,6 @@ class ShortPulseInjectSourceFunc
     int transverse1, transverse2;
 
     Direction dir;
-    bool isH;
 
     int dist;
     SimulationContext &context;
