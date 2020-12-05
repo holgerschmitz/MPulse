@@ -8,7 +8,7 @@
 #include "diagnostic.hpp"
 #include "fdtd_plrc.hpp"
 #include "cpml_border.hpp"
-//#include "shortpulseinject.hpp"
+#include "shortpulseinject.hpp"
 #include "plasmacurrent.hpp"
 
 #include "../huerto/electromagnetics/em_fields.hpp"
@@ -125,11 +125,11 @@ int main (int argc, char** argv) {
     blocks("FDTD_Plain").addChildren("CPMLBorder")
         ("PlaneWaveSource")("PlaneGaussSource");
     blocks("FDTD_PLRC").addChildren("CPMLBorder")
-        //("ShortPulseInject")
+        ("ShortPulseInject")
         ("PlaneWaveSource")("PlaneGaussSource")
         ("PlasmaCurrent");
     blocks("FDTD_PLRC_Nonlinear").addChildren("CPMLBorder")
-        //("ShortPulseInject")
+        ("ShortPulseInject")
         ("PlaneWaveSource")("PlaneGaussSource")
         ("PlasmaCurrent");
 
