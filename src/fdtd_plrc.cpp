@@ -31,19 +31,25 @@ void FDTD_PLRCCore::registerData()
   pSigma = std::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
 
   pKappaEdx = std::make_shared<Grid1d>(schnek::Array<int, 1>(low[0]), schnek::Array<int, 1>(high[0]));
+  (*pKappaEdx) = 1.0;
 #ifndef HUERTO_ONE_DIM
   pKappaEdy = std::make_shared<Grid1d>(schnek::Array<int, 1>(low[1]), schnek::Array<int, 1>(high[1]));
+  (*pKappaEdy) = 1.0;
 #endif
 #ifdef HUERTO_THREE_DIM
   pKappaEdz = std::make_shared<Grid1d>(schnek::Array<int, 1>(low[2]), schnek::Array<int, 1>(high[2]));
+  (*pKappaEdz) = 1.0;
 #endif
 
   pKappaHdx = std::make_shared<Grid1d>(schnek::Array<int, 1>(low[0]), schnek::Array<int, 1>(high[0]));
+  (*pKappaHdx) = 1.0;
 #ifndef HUERTO_ONE_DIM
   pKappaHdy = std::make_shared<Grid1d>(schnek::Array<int, 1>(low[1]), schnek::Array<int, 1>(high[1]));
+  (*pKappaHdy) = 1.0;
 #endif
 #ifdef HUERTO_THREE_DIM
   pKappaHdz = std::make_shared<Grid1d>(schnek::Array<int, 1>(low[2]), schnek::Array<int, 1>(high[2]));
+  (*pKappaHdz) = 1.0;
 #endif
 
   for (int d=0; d<3; d++)
