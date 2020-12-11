@@ -3,10 +3,11 @@ TARGET_BASE = mpulse
 
 DIMENSIONS = 1 2 3
 
-#OFLAGS  = -g -O0 -Wall
-OFLAGS  = -O3 -Wall -std=c++14
+OFLAGS  = -g -O0 -Wall -std=c++14
+#OFLAGS  = -O3 -Wall -std=c++14
 
-INCLUDE = -I/usr/local/include -I/usr/lib/x86_64-linux-gnu/hdf5/openmpi/include
+INCLUDE = -I/usr/local/include -I/usr/lib/x86_64-linux-gnu/hdf5/mpich/include
+
 CXX     = mpic++
 LINK	 = mpic++
 
@@ -24,7 +25,7 @@ SOURCES = $(wildcard src/*.cpp) \
 BUILD_DIR = build
 BIN_DIR = bin
 
-LDFLAGS = -L/usr/lib/x86_64-linux-gnu/hdf5/openmpi/lib -Wl,-rpath,/usr/lib/x86_64-linux-gnu/hdf5/openmpi/lib
+LDFLAGS = -L/usr/lib/x86_64-linux-gnu/hdf5/mpich/lib -Wl,-rpath,/usr/lib/x86_64-linux-gnu/hdf5/mpich/lib
 
 LOADLIBS = -lhdf5 -lschnek -lfftw3 -lm
 

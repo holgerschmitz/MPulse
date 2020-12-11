@@ -36,8 +36,8 @@
 MPulse::MPulse()
 {}
 
-void MPulse::initParameters(schnek::BlockParameters &parameters)
-{
+void MPulse::initParameters(schnek::BlockParameters &parameters) {
+  SimulationContext::initParameters(parameters);
   parameters.addArrayParameter("N", gridSize, 100);
   parameters.addArrayParameter("L", size);
   parameters.addParameter("tMax", &tMax);
@@ -60,10 +60,16 @@ void MPulse::initFields()
 void MPulse::init()
 {
   globalMax = gridSize - 1;
-  getSubdivision().init(gridSize, 2);
 
-  for (std::size_t i=0; i<DIMENSION; ++i) dx[i] = size[i] / gridSize[i];
-  dt = cflFactor*std::min(dx[0],std::min(dx[1],dx[2]))/clight;
+  subdivision = std::make_shared<schnek::MPICartSubdivision<Field> >();
+  subdivision->init(gridSize, 2);
+
+  double minDx = std::numeric_limits<double>::max();
+  for (std::size_t i=0; i<DIMENSION; ++i) {
+    dx[i] = size[i] / gridSize[i];
+    minDx = std::min(dx[i], minDx);
+  }
+  dt = cflFactor*minDx/clight;
 
   initFields();
 }
@@ -83,7 +89,7 @@ void MPulse::execute()
     schnek::DiagnosticManager::instance().execute();
 
     if (getSubdivision().master()) {
-      schnek::Logger::instance().out() <<"Time "<< time << std::endl;
+      schnek::Logger::instance().out() <<"Time "<< time << " " << dt << std::endl;
     }
 
     for(pFieldSolver f: schnek::BlockContainer<FieldSolver>::childBlocks())
