@@ -18,7 +18,7 @@
 
 void CPMLBorder::init()
 {
-  CurrentBlock::init();
+  schnek::ChildBlock<CurrentBlock>::init();
 
   schnek::LiteratureArticle Roden2000("Roden2000", "Roden, J. A. and Gedney, S. D.",
       "An efficient fdtd implementation of the cfs-pml for arbitrary media",

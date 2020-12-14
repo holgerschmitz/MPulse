@@ -57,18 +57,6 @@ class MPulse : public schnek::Block,
      * The inner grid range of the local simulation domain
      */
     Range innerRange;
-  private:
-
-    /**
-     * Initialises the electromagnetic fields.
-     *
-     * If no #EMField child block was specified, it is created and pre-initialised
-     * here.
-     *
-     * The grids are then obtained from the storage and resized according to the
-     * local grid size determined by #subdivision.
-     */
-    void initFields();
   protected:
 
     /**
