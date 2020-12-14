@@ -46,17 +46,6 @@ void MPulse::initParameters(schnek::BlockParameters &parameters) {
   registerConstants(parameters);
 }
 
-void MPulse::initFields()
-{
-  if (schnek::BlockContainer<EMFields>::childBlocks().empty())
-  {
-    boost::shared_ptr<EMFields> fields(new EMFields(shared_from_this()));
-    Block::addChild(fields);
-    fields->registerData();
-    fields->preInit();
-  }
-}
-
 void MPulse::init()
 {
   globalMax = gridSize - 1;
@@ -70,8 +59,6 @@ void MPulse::init()
     minDx = std::min(dx[i], minDx);
   }
   dt = cflFactor*minDx/clight;
-
-  initFields();
 }
 
 void MPulse::execute()
