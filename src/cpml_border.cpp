@@ -16,9 +16,20 @@
 //==========  CPMLBorder
 //===============================================================
 
-void CPMLBorder::init()
-{
+void CPMLBorder::initParameters(schnek::BlockParameters &blockPars) {
+  CurrentBlock::initParameters(blockPars);
+
+  blockPars.addParameter("d", &thickness, 8);
+  blockPars.addParameter("kappaMax", &kappaMax, 15.0);
+  blockPars.addParameter("aMax", &aMax, 0.0);
+  blockPars.addParameter("sigmaMax", &sigmaMax, 1.0);
+}
+
+
+void CPMLBorder::init() {
   schnek::ChildBlock<CurrentBlock>::init();
+
+  std::cout << "CPMLBorder::init " << thickness << " " << kappaMax << " " << aMax << " " << sigmaMax << std::endl;
 
   schnek::LiteratureArticle Roden2000("Roden2000", "Roden, J. A. and Gedney, S. D.",
       "An efficient fdtd implementation of the cfs-pml for arbitrary media",
@@ -156,6 +167,11 @@ void CPMLBorder::initCoefficients()
 
     if (getBorderExtent(dir, thickness, 1, blow, bhigh, false, getContext()))
     {
+      std::cout << "CPMLBorder kappaE Border Extent: " <<
+          blow[0] << " " << blow[1] << " " << blow[2] << " " <<
+          bhigh[0] << " " << bhigh[1] << " " << bhigh[2] << std::endl;
+
+
       int lowk  = blow[dim];
       int highk = bhigh[dim];
       int kLimit = highk-lowk + 1;
@@ -171,6 +187,10 @@ void CPMLBorder::initCoefficients()
 
     if (getBorderExtent(dir, thickness, 1, blow, bhigh, true, getContext()))
     {
+      std::cout << "CPMLBorder kappaE Border Extent: " <<
+          blow[0] << " " << blow[1] << " " << blow[2] << " " <<
+          bhigh[0] << " " << bhigh[1] << " " << bhigh[2] << std::endl;
+
       int lowk  = blow[dim];
       int highk = bhigh[dim];
       int kLimit = highk-lowk + 1;
@@ -263,16 +283,6 @@ void CPMLBorder::initCoefficients()
   }
 }
 
-void CPMLBorder::initParameters(schnek::BlockParameters &blockPars)
-{
-  CurrentBlock::initParameters(blockPars);
-
-  blockPars.addParameter("d", &this->thickness, 8);
-  blockPars.addParameter("kappaMax", &this->kappaMax, 15.0);
-  blockPars.addParameter("aMax", &this->aMax, 0.25);
-  blockPars.addParameter("sigmaMax", &this->sigmaMax, 3.0);
-}
-
 //===============================================================
 //==========  CPMLBorderCurrent
 //===============================================================
@@ -308,7 +318,7 @@ CPMLBorderCurrent::CPMLBorderCurrent(int thickness, Direction dir, bool isH,
   }
 
 //  double eta = sqrt(mu_0/eps_0);
-  sigmaMax = sigmaMax *clight* 0.8*4 / borderBlock.getContext().getDx()[dim];
+  sigmaMax = 10 * sigmaMax * clight / borderBlock.getContext().getDx()[dim];
 }
 
 void CPMLBorderCurrent::makeCoeff()
@@ -359,6 +369,8 @@ void CPMLBorderCurrent::makeCoeff()
 
   int kLimit = highk-lowk + 1;
 
+  std::cout << "CPMLBorderCurrent::makeCoeff " << sigmaMax << " " <<  kappaMax << " " <<  aMax << " " <<  kLimit  << " " <<  dt << std::endl;
+
   for (int k=0; k<kLimit; ++k)
   {
     double x = 1 - (double(k)-offset)/double(thickness);
@@ -370,11 +382,12 @@ void CPMLBorderCurrent::makeCoeff()
     double kappa = 1 + (kappaMax - 1)*x3;
     double a = aMax*(1-x);
 
-    double b = exp(-(sigma/kappa + a)*dt);
+    double b = exp(-(sigma/kappa + a));
     double c = sigma*(b-1)/(kappa*(sigma+kappa*a));
 
     bCoeff(pos) = b;
     cCoeff(pos) = c;
+    std::cout  << "makeCoeff   " <<  k   << " " << pos << " " <<  x  << " " <<  sigma  << " " <<  kappa  << " " <<  b << " " <<  c << std::endl;
   }
 
 }
@@ -404,6 +417,10 @@ void CPMLBorderECurrent::init()
   pJx = std::make_shared<Grid>(blow, bhigh);
   pJy = std::make_shared<Grid>(blow, bhigh);
   pJz = std::make_shared<Grid>(blow, bhigh);
+
+  (*pJx) = 0.0;
+  (*pJy) = 0.0;
+  (*pJz) = 0.0;
 
   switch (dir)
   {
@@ -513,6 +530,10 @@ void CPMLBorderHCurrent::init()
   pJx = std::make_shared<Grid>(blow, bhigh);
   pJy = std::make_shared<Grid>(blow, bhigh);
   pJz = std::make_shared<Grid>(blow, bhigh);
+
+  (*pJx) = 0.0;
+  (*pJy) = 0.0;
+  (*pJz) = 0.0;
 
   switch (dir)
   {

@@ -131,6 +131,7 @@ int main (int argc, char** argv) {
 
     schnek::Parser P("mpulse", "mpulse", blocks);
     registerCMath(P.getFunctionRegistry());
+    registerCoreFunctions(P.getFunctionRegistry());
 
     //P.getFunctionRegistry().registerFunction("random",randomRange);
 
