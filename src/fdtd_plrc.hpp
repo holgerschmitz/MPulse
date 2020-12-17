@@ -30,6 +30,8 @@ class Storage;
  * currents and "magnetic currents". The latter are current-like fields
  * that enter the Faraday equation much like the electric current enters the
  * Ampere equation. These can be used to provide absorbing boundary layers.
+ *
+ * @todo The PLRC solver still needs to be tested
  */
 class FDTD_PLRCCore : public FieldSolver,
                       public CurrentContainer,
