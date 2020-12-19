@@ -125,24 +125,6 @@ void CPMLBorder::initCoefficients()
   retrieveData("KappaHdz", pKappaHdk[2]);
 #endif
 
-//  std::cerr << "Field Size Edx " << pKappaEdk[0]->getLo()[0] << ", "
-//                                 << pKappaEdk[0]->getHi()[0] <<std::endl;
-//
-//  std::cerr << "Field Size Edy " << pKappaEdk[1]->getLo()[0] << ", "
-//                                 << pKappaEdk[1]->getHi()[0] <<std::endl;
-//
-//  std::cerr << "Field Size Edz " << pKappaEdk[2]->getLo()[0] << ", "
-//                                 << pKappaEdk[2]->getHi()[0] <<std::endl;
-//
-//  std::cerr << "Field Size Hdx " << pKappaHdk[0]->getLo()[0] << ", "
-//                                 << pKappaHdk[0]->getHi()[0] <<std::endl;
-//
-//  std::cerr << "Field Size Hdy " << pKappaHdk[1]->getLo()[0] << ", "
-//                                 << pKappaHdk[1]->getHi()[0] <<std::endl;
-//
-//  std::cerr << "Field Size Hdz " << pKappaHdk[2]->getLo()[0] << ", "
-//                                 << pKappaHdk[2]->getHi()[0] <<std::endl;
-
   for (size_t dim = 0; dim<DIMENSION; ++dim)
   {
     std::cerr << "Dim " << dim << std::endl;
@@ -165,7 +147,7 @@ void CPMLBorder::initCoefficients()
 #endif
     }
 
-    if (getBorderExtent(dir, thickness, 1, blow, bhigh, false, getContext()))
+    if (getBorderExtent(dir, thickness, 1, blow, bhigh, false, getContext(), false))
     {
       std::cout << "CPMLBorder kappaE Border Extent: " <<
           blow[0] << " " << blow[1] << " " << blow[2] << " " <<
@@ -182,12 +164,13 @@ void CPMLBorder::initCoefficients()
         double x3 = x*x*x;
 
         (*pKappaEdk[dim])(lowk+k) = 1 + (this->kappaMax - 1)*x3;
+        std::cout << "CPMLBorder kappaE Init: " << k << " " << lowk << " " << x3 << std::endl;
       }
     }
 
-    if (getBorderExtent(dir, thickness, 1, blow, bhigh, true, getContext()))
+    if (getBorderExtent(dir, thickness, 1, blow, bhigh, true, getContext(), false))
     {
-      std::cout << "CPMLBorder kappaE Border Extent: " <<
+      std::cout << "CPMLBorder kappaH Border Extent: " <<
           blow[0] << " " << blow[1] << " " << blow[2] << " " <<
           bhigh[0] << " " << bhigh[1] << " " << bhigh[2] << std::endl;
 
@@ -197,10 +180,11 @@ void CPMLBorder::initCoefficients()
 
       for (int k=0; k<kLimit; ++k)
       {
-        double x = 1 - (double(k) + 0.5)/double(thickness);
+        double x = 1 - (double(k) - 0.5)/double(thickness);
         double x3 = x*x*x;
 
         (*pKappaHdk[dim])(lowk+k) = 1 + (this->kappaMax - 1)*x3;
+        std::cout << "CPMLBorder kappaH Init: " << k << " " << lowk << " " << x3 << std::endl;
       }
     }
 
@@ -215,7 +199,7 @@ void CPMLBorder::initCoefficients()
 #endif
     }
 
-    if (getBorderExtent(dir, thickness, 1, blow, bhigh, false, getContext()))
+    if (getBorderExtent(dir, thickness, 1, blow, bhigh, false, getContext(), false))
     {
       int lowk  = blow[dim];
       int highk = bhigh[dim];
@@ -227,10 +211,11 @@ void CPMLBorder::initCoefficients()
         double x3 = x*x*x;
 
         (*pKappaEdk[dim])(highk-k) = 1 + (this->kappaMax - 1)*x3;
+        std::cout << "CPMLBorder kappaE Init: " << k << " " << highk << " " << x3 << std::endl;
       }
     }
 
-    if (getBorderExtent(dir, thickness, 1, blow, bhigh, true, getContext()))
+    if (getBorderExtent(dir, thickness, 1, blow, bhigh, true, getContext(), false))
     {
       int lowk  = blow[dim];
       int highk = bhigh[dim];
@@ -242,6 +227,7 @@ void CPMLBorder::initCoefficients()
         double x3 = x*x*x;
 
         (*pKappaHdk[dim])(highk-k) = 1 + (this->kappaMax - 1)*x3;
+        std::cout << "CPMLBorder kappaH Init: " << k << " " << highk << " " << x3 << std::endl;
       }
     }
 
@@ -412,7 +398,7 @@ void CPMLBorderECurrent::init()
 {
   Index blow, bhigh;
 
-  if (!getBorderExtent(dir, thickness, 1, blow, bhigh, false, borderBlock.getContext())) return;
+  if (!getBorderExtent(dir, thickness, 1, blow, bhigh, false, borderBlock.getContext(), false)) return;
 
   pJx = std::make_shared<Grid>(blow, bhigh);
   pJy = std::make_shared<Grid>(blow, bhigh);
@@ -525,7 +511,7 @@ void CPMLBorderHCurrent::init()
 {
   Index blow, bhigh;
 
-  if (!getBorderExtent(dir, thickness, 1, blow, bhigh, true, borderBlock.getContext())) return;
+  if (!getBorderExtent(dir, thickness, 1, blow, bhigh, true, borderBlock.getContext(), false)) return;
 
   pJx = std::make_shared<Grid>(blow, bhigh);
   pJy = std::make_shared<Grid>(blow, bhigh);
