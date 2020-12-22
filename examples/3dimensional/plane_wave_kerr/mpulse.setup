@@ -23,7 +23,7 @@ cflFactor = 1.0/sqrt(3.0);
 
 float dt = cflFactor*dx/clight;
 
-tMax = 10*lambda/clight;
+tMax = 400*lambda/clight;
 
 EMFields {
   float u = x;
@@ -48,7 +48,7 @@ FDTD_Kerr {
   chi = 0.005;
 }
 
-float outDt = 1*0.99999*dt;
+float outDt = 40*0.99999*dt;
 
 FieldDiag Ex {
   file = "Ex_#t.h5";
