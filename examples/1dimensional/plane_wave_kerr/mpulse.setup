@@ -1,0 +1,75 @@
+// Nonlinearity changes the refractive index
+// For circularly polarised light
+// n = n_0 ( 1 + 1/2 chi E^2)
+// where E is the amplitude of the wave
+
+float lambda = 1e-6;
+float dx = 0.05*lambda;
+
+Nx = 100;
+
+Lx = dx*Nx;
+
+// plasma and laser parameters
+
+cflFactor = 1;
+
+float dt = cflFactor*dx/clight;
+
+tMax = 80*Lx/clight;
+
+EMFields {  
+  float xm = (x - Lx/2);
+  float amps = sin(2*pi*x/lambda);
+  float ampc = cos(2*pi*x/lambda);
+  
+  Ex = 0.0;
+  Ey = amps;
+  Ez = ampc;
+
+  Bx = 0.0;
+  By = -ampc/clight;
+  Bz = amps/clight;
+}
+
+FDTD_Kerr {
+  chi = 0.005;
+}
+
+float outDt = 40*0.99999*dt;
+
+FieldDiag Ex {
+  file = "Ex_#t.h5";
+  field = "Ex";
+  deltaTime = outDt;
+}
+
+FieldDiag Ey {
+  file = "Ey_#t.h5";
+  field = "Ey";
+  deltaTime = outDt;
+}
+
+FieldDiag Ez {
+  file = "Ez_#t.h5";
+  field = "Ez";
+  deltaTime = outDt;
+}
+
+FieldDiag Bx {
+  file = "Bx_#t.h5";
+  field = "Bx";
+  deltaTime = outDt;
+}
+
+FieldDiag By {
+  file = "By_#t.h5";
+  field = "By";
+  deltaTime = outDt;
+}
+
+FieldDiag Bz {
+  file = "Bz_#t.h5";
+  field = "Bz";
+  deltaTime = outDt;
+}
