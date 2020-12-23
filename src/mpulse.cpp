@@ -16,6 +16,7 @@
 #include "../huerto/electromagnetics/fieldsolver.hpp"
 #include "../huerto/electromagnetics/fdtd/fdtd_plain.hpp"
 #include "../huerto/electromagnetics/source/plane_wave.hpp"
+#include "../huerto/electromagnetics/source/beam.hpp"
 #include "../huerto/maths/functions/core.hpp"
 #include "../huerto/constants.hpp"
 
@@ -110,6 +111,9 @@ int main (int argc, char** argv) {
 //    blocks("ShortPulseInject").setClass<ShortPulseInject>();
     blocks("PlaneWaveSource").setClass<PlaneWaveSource>();
     blocks("PlaneGaussSource").setClass<PlaneGaussSource>();
+#ifndef HUERTO_ONE_DIM
+    blocks("GaussBeam").setClass<GaussBeamSource>();
+#endif
 
     blocks("PlasmaCurrent").setClass<PlasmaCurrentBlock>();
 
@@ -118,14 +122,27 @@ int main (int argc, char** argv) {
         ("FieldDiag");
 
     blocks("FDTD_Plain").addChildren("CPMLBorder")
+#ifndef HUERTO_ONE_DIM
+        ("GaussBeam")
+#endif
         ("PlaneWaveSource")("PlaneGaussSource");
+
     blocks("FDTD_Kerr").addChildren("CPMLBorder")
+#ifndef HUERTO_ONE_DIM
+        ("GaussBeam")
+#endif
         ("PlaneWaveSource")("PlaneGaussSource");
     blocks("FDTD_PLRC").addChildren("CPMLBorder")
+#ifndef HUERTO_ONE_DIM
+        ("GaussBeam")
+#endif
         ("ShortPulseInject")
         ("PlaneWaveSource")("PlaneGaussSource")
         ("PlasmaCurrent");
     blocks("FDTD_PLRC_Nonlinear").addChildren("CPMLBorder")
+#ifndef HUERTO_ONE_DIM
+        ("GaussBeam")
+#endif
         ("ShortPulseInject")
         ("PlaneWaveSource")("PlaneGaussSource")
         ("PlasmaCurrent");
