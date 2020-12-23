@@ -20,6 +20,7 @@ SOURCES = $(wildcard src/*.cpp) \
   huerto/electromagnetics/source/border.cpp \
   huerto/electromagnetics/source/incsource.cpp \
   huerto/electromagnetics/source/plane_wave.cpp \
+  huerto/electromagnetics/source/beam.cpp \
   huerto/maths/functions/core.cpp
 
 BUILD_DIR = build
