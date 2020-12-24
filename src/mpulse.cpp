@@ -112,7 +112,7 @@ int main (int argc, char** argv) {
     blocks("PlaneWaveSource").setClass<PlaneWaveSource>();
     blocks("PlaneGaussSource").setClass<PlaneGaussSource>();
 #ifndef HUERTO_ONE_DIM
-    blocks("GaussBeam").setClass<GaussBeamSource>();
+    blocks("GaussBeamSource").setClass<GaussBeamSource>();
 #endif
 
     blocks("PlasmaCurrent").setClass<PlasmaCurrentBlock>();
@@ -123,25 +123,25 @@ int main (int argc, char** argv) {
 
     blocks("FDTD_Plain").addChildren("CPMLBorder")
 #ifndef HUERTO_ONE_DIM
-        ("GaussBeam")
+        ("GaussBeamSource")
 #endif
         ("PlaneWaveSource")("PlaneGaussSource");
 
     blocks("FDTD_Kerr").addChildren("CPMLBorder")
 #ifndef HUERTO_ONE_DIM
-        ("GaussBeam")
+        ("GaussBeamSource")
 #endif
         ("PlaneWaveSource")("PlaneGaussSource");
     blocks("FDTD_PLRC").addChildren("CPMLBorder")
 #ifndef HUERTO_ONE_DIM
-        ("GaussBeam")
+        ("GaussBeamSource")
 #endif
         ("ShortPulseInject")
         ("PlaneWaveSource")("PlaneGaussSource")
         ("PlasmaCurrent");
     blocks("FDTD_PLRC_Nonlinear").addChildren("CPMLBorder")
 #ifndef HUERTO_ONE_DIM
-        ("GaussBeam")
+        ("GaussBeamSource")
 #endif
         ("ShortPulseInject")
         ("PlaneWaveSource")("PlaneGaussSource")

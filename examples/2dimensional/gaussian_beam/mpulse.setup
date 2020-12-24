@@ -1,0 +1,82 @@
+
+
+float lambda = 1e-6;
+float dx = 0.05*lambda;
+
+Nx = 2000;
+Ny = 2000;
+
+Lx = dx*Nx;
+Ly = dx*Ny;
+
+
+// plasma and laser parameters
+
+cflFactor = 1.0/sqrt(2.0);
+
+float dt = cflFactor*dx/clight;
+float phi = 0.25*pi;
+
+tMax = 2*Lx/clight;
+
+EMFields {  }
+
+FDTD_Plain {  
+  GaussBeamSource {
+    d = 100;
+    rise = 10*lambda;
+    waist = 10*lambda;
+
+    originx = 0.5*Lx;
+    originy = 0.5*Ly;
+    
+    kx = 2*pi/lambda * cos(phi);
+    ky = 2*pi/lambda * sin(phi);
+  
+    Hx = 0.0; // -sin(phi);
+    Hy = 0.0; // cos(phi);
+    Hz = 1.0;
+
+    offset = 0.75*Lx + 4.0*rise;
+  }
+}
+
+float outDt = 50*dt;
+
+FieldDiag Ex {
+  file = "Ex_#t.h5";
+  field = "Ex";
+  deltaTime = outDt;
+}
+
+FieldDiag Ey {
+  file = "Ey_#t.h5";
+  field = "Ey";
+  deltaTime = outDt;
+}
+
+FieldDiag Ez {
+  file = "Ez_#t.h5";
+  field = "Ez";
+  deltaTime = outDt;
+}
+
+
+FieldDiag Bx {
+  file = "Bx_#t.h5";
+  field = "Bx";
+  deltaTime = outDt;
+}
+
+FieldDiag By {
+  file = "By_#t.h5";
+  field = "By";
+  deltaTime = outDt;
+}
+
+FieldDiag Bz {
+  file = "Bz_#t.h5";
+  field = "Bz";
+  deltaTime = outDt;
+}
+
