@@ -106,7 +106,8 @@ int main (int argc, char** argv) {
     blocks("FDTD_Kerr").setClass<FDTD_Kerr>();
     blocks("FDTD_PLRC").setClass<FDTD_PLRCLin>();
     blocks("FDTD_PLRC_Nonlinear").setClass<FDTD_PLRCNonlin>();
-    blocks("FieldDiag").setClass<FieldDiagnostic>();
+    blocks("FieldDiag").setClass<MPulseFieldDiagnostic>();
+    blocks("SliceDiag").setClass<SliceDiagnostic>();
     blocks("CPMLBorder").setClass<CPMLBorder>();
 //    blocks("ShortPulseInject").setClass<ShortPulseInject>();
     blocks("PlaneWaveSource").setClass<PlaneWaveSource>();
@@ -119,7 +120,7 @@ int main (int argc, char** argv) {
 
     blocks("mpulse").addChildren("EMFields")
         ("FDTD_Plain")("FDTD_Kerr")("FDTD_PLRC")("FDTD_PLRC_Nonlinear")
-        ("FieldDiag");
+        ("FieldDiag")("SliceDiag");
 
     blocks("FDTD_Plain").addChildren("CPMLBorder")
 #ifndef HUERTO_ONE_DIM
