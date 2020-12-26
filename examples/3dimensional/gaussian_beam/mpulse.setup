@@ -1,23 +1,25 @@
 
-
 float lambda = 1e-6;
 float dx = 0.05*lambda;
 
 Nx = 400;
 Ny = 400;
+Nz = 400;
 
 Lx = dx*Nx;
 Ly = dx*Ny;
-
+Lz = dx*Nz;
 
 // plasma and laser parameters
 
-cflFactor = 1.0/sqrt(2.0);
+cflFactor = 1.0/sqrt(3.0);
 
 float dt = cflFactor*dx/clight;
-float phi = 0.0*pi;
 
-tMax = 3*Lx/clight + 40.0*lambda;
+tMax = 3*Lx/clight + 20.0*lambda;
+
+float phi = 0.0;
+float theta = 0.0;
 
 EMFields {  }
 
@@ -26,12 +28,14 @@ FDTD_Plain {
     d = 20;
     rise = 10*lambda;
     waist = 5*lambda;
-
+    
     originx = 0.5*Lx;
     originy = 0.5*Ly;
+    originz = 0.5*Lz;
     
-    kx = 2*pi/lambda * cos(phi);
-    ky = 2*pi/lambda * sin(phi);
+    kx = 2*pi/lambda * cos(phi) * cos(theta);
+    ky = 2*pi/lambda * sin(phi) * cos(theta);
+    kz = 2*pi/lambda * sin(theta);
   
     Hx = 0.0; // -sin(phi);
     Hy = 0.0; // cos(phi);
@@ -41,13 +45,13 @@ FDTD_Plain {
   }
   CPMLBorder { 
     d = 10;
-    sigmaMax = 8.7;
+    sigmaMax = 7.0;
     kappaMax = 11.0;
     aMax = 0.0;
   }
 }
 
-float outDt = 50*dt;
+float outDt = 100*dt;
 
 FieldDiag Ex {
   file = "Ex_#t.h5";
@@ -85,4 +89,3 @@ FieldDiag Bz {
   field = "Bz";
   deltaTime = outDt;
 }
-
