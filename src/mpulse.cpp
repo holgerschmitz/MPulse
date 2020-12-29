@@ -48,8 +48,7 @@ void MPulse::initParameters(schnek::BlockParameters &parameters) {
   registerConstants(parameters);
 }
 
-void MPulse::init()
-{
+void MPulse::init() {
   globalMax = gridSize - 1;
 
   subdivision = std::make_shared<schnek::MPICartSubdivision<Field> >();
@@ -61,6 +60,9 @@ void MPulse::init()
     minDx = std::min(dx[i], minDx);
   }
   dt = cflFactor*minDx/clight;
+
+  SimulationContext::init();
+  SimulationTaskRunner::init(this);
 }
 
 void MPulse::execute()
@@ -73,8 +75,8 @@ void MPulse::execute()
   time = 0.0;
   schnek::DiagnosticManager::instance().setPhysicalTime(&time);
 
-  while (time<=tMax)
-  {
+  while (time<=tMax) {
+    executeTasks("pre-diagnostic");
     schnek::DiagnosticManager::instance().execute();
 
     if (getSubdivision().master()) {
