@@ -11,6 +11,7 @@
 #include "types.hpp"
 
 #include "../huerto/simulation/simulation_context.hpp"
+#include "../huerto/simulation/task.hpp"
 
 #include <schnek/grid.hpp>
 #include <schnek/variables.hpp>
@@ -36,7 +37,8 @@ class MPulse : public schnek::Block,
                public schnek::BlockContainer<FieldSolver>,
                public schnek::BlockContainer<EMFields>,
                public boost::enable_shared_from_this<MPulse>,
-               public SimulationContext
+               public SimulationContext,
+               public SimulationTaskRunner
 {
   private:
     /**
