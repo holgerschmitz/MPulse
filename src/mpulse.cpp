@@ -73,7 +73,9 @@ void MPulse::execute()
   }
 
   time = 0.0;
+  timeStep = 0;
   schnek::DiagnosticManager::instance().setPhysicalTime(&time);
+  schnek::DiagnosticManager::instance().setTimeCounter(&timeStep);
 
   while (time<=tMax) {
     executeTasks("pre-diagnostic");
@@ -89,6 +91,7 @@ void MPulse::execute()
     }
 
     time += dt;
+    ++timeStep;
   }
 
   schnek::DiagnosticManager::instance().execute();
