@@ -1,0 +1,66 @@
+
+
+float lambda = 1e-6;
+float dx = 0.05*lambda;
+
+Nx = 2000;
+Ny = 2000;
+
+Lx = dx*Nx;
+Ly = dx*Ny;
+
+
+// plasma and laser parameters
+
+cflFactor = 1.0/sqrt(2.0);
+
+float dt = cflFactor*dx/clight;
+float phi = 0.25*pi;
+
+tMax = 2*Lx/clight;
+
+EMFields {  }
+
+FDTD_Plain {  
+  GaussBeamSource {
+    d = 15;
+    rise = 10*lambda;
+    waist = 10*lambda;
+
+    originx = 0.5*Lx;
+    originy = 0.5*Ly;
+    
+    kx = 2*pi/lambda * cos(phi);
+    ky = 2*pi/lambda * sin(phi);
+  
+    Hx = 0.0; // -sin(phi);
+    Hy = 0.0; // cos(phi);
+    Hz = 1.0;
+
+    offset = 0.75*Lx + 4.0*rise;
+  }
+
+  CPMLBorder { 
+    d = 10;
+    sigmaMax = 8.7;
+    kappaMax = 11.0;
+    aMax = 0.0;
+  }
+}
+
+float outDt = 1000*dt;
+
+SliceDiag BzSlice {
+  file = "Bz_slice_#t.h5";
+  field = "Bz";
+  interval = 1000;
+  dim = 0;
+  pos = 1000;
+}
+
+FieldDiag Bz {
+  file = "Bz_#t.h5";
+  field = "Bz";
+  deltaTime = outDt;
+}
+
