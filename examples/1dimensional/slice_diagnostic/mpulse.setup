@@ -1,0 +1,48 @@
+
+float lambda = 1e-6;
+float dx = 0.05*lambda;
+
+Nx = 400;
+
+Lx = dx*Nx;
+
+
+// plasma and laser parameters
+
+cflFactor = 1.0;
+
+float dt = dx/clight;
+
+tMax = 3*Lx/clight;
+
+EMFields {  }
+
+FDTD_Plain {  
+  PlaneWaveSource {
+    d = 15;
+    originx = -Lx;
+    ramp = 10;
+    
+    kx = 2*pi/lambda;
+  
+    Hx = 0.0;
+    Hy = 0.0;
+    Hz = 1.0;
+  }
+  CPMLBorder { 
+    d = 10;
+    sigmaMax = 12.5;
+    kappaMax = 11.0;
+    aMax = 0.0;
+  }
+}
+
+float outDt = 10*dt;
+
+SliceDiag Bz {
+  file = "Bz_#t.h5";
+  field = "Bz";
+  interval = 1000;
+  dim = 0;
+  pos = 30;
+}

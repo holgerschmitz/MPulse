@@ -62,7 +62,7 @@ void MPulse::init() {
   dt = cflFactor*minDx/clight;
 
   SimulationContext::init();
-  SimulationTaskRunner::init(this);
+  SimulationTaskRunner::init(getChildren());
 }
 
 void MPulse::execute()
@@ -94,6 +94,8 @@ void MPulse::execute()
     ++timeStep;
   }
 
+  timeStep = -1;
+  executeTasks("pre-diagnostic");
   schnek::DiagnosticManager::instance().execute();
 }
 
