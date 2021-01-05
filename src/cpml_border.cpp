@@ -29,8 +29,6 @@ void CPMLBorder::initParameters(schnek::BlockParameters &blockPars) {
 void CPMLBorder::init() {
   schnek::ChildBlock<CurrentBlock>::init();
 
-  std::cout << "CPMLBorder::init " << thickness << " " << kappaMax << " " << aMax << " " << sigmaMax << std::endl;
-
   schnek::LiteratureArticle Roden2000("Roden2000", "Roden, J. A. and Gedney, S. D.",
       "An efficient fdtd implementation of the cfs-pml for arbitrary media",
       "Microwave and Optical Technology Letters", "2000", "27", "334--339");
@@ -147,44 +145,29 @@ void CPMLBorder::initCoefficients()
 #endif
     }
 
-    if (getBorderExtent(dir, thickness, 1, blow, bhigh, false, getContext(), false))
-    {
-      std::cout << "CPMLBorder kappaE Border Extent: " <<
-          blow[0] << " " << blow[1] << " " << blow[2] << " " <<
-          bhigh[0] << " " << bhigh[1] << " " << bhigh[2] << std::endl;
-
-
+    if (getBorderExtent(dir, thickness, 1, blow, bhigh, false, getContext(), false)) {
       int lowk  = blow[dim];
       int highk = bhigh[dim];
       int kLimit = highk-lowk + 1;
 
-      for (int k=0; k<kLimit; ++k)
-      {
+      for (int k=0; k<kLimit; ++k) {
         double x = 1 - double(k)/double(thickness);
         double x3 = x*x*x;
 
         (*pKappaEdk[dim])(lowk+k) = 1 + (this->kappaMax - 1)*x3;
-        std::cout << "CPMLBorder kappaE Init: " << k << " " << lowk << " " << x3 << std::endl;
       }
     }
 
-    if (getBorderExtent(dir, thickness, 1, blow, bhigh, true, getContext(), false))
-    {
-      std::cout << "CPMLBorder kappaH Border Extent: " <<
-          blow[0] << " " << blow[1] << " " << blow[2] << " " <<
-          bhigh[0] << " " << bhigh[1] << " " << bhigh[2] << std::endl;
-
+    if (getBorderExtent(dir, thickness, 1, blow, bhigh, true, getContext(), false)) {
       int lowk  = blow[dim];
       int highk = bhigh[dim];
       int kLimit = highk-lowk + 1;
 
-      for (int k=0; k<kLimit; ++k)
-      {
+      for (int k=0; k<kLimit; ++k) {
         double x = 1 - (double(k) - 0.5)/double(thickness);
         double x3 = x*x*x;
 
         (*pKappaHdk[dim])(lowk+k) = 1 + (this->kappaMax - 1)*x3;
-        std::cout << "CPMLBorder kappaH Init: " << k << " " << lowk << " " << x3 << std::endl;
       }
     }
 
@@ -199,35 +182,29 @@ void CPMLBorder::initCoefficients()
 #endif
     }
 
-    if (getBorderExtent(dir, thickness, 1, blow, bhigh, false, getContext(), false))
-    {
+    if (getBorderExtent(dir, thickness, 1, blow, bhigh, false, getContext(), false)) {
       int lowk  = blow[dim];
       int highk = bhigh[dim];
       int kLimit = highk-lowk + 1;
 
-      for (int k=0; k<kLimit; ++k)
-      {
+      for (int k=0; k<kLimit; ++k) {
         double x = 1 - double(k)/double(thickness);
         double x3 = x*x*x;
 
         (*pKappaEdk[dim])(highk-k) = 1 + (this->kappaMax - 1)*x3;
-        std::cout << "CPMLBorder kappaE Init: " << k << " " << highk << " " << x3 << std::endl;
       }
     }
 
-    if (getBorderExtent(dir, thickness, 1, blow, bhigh, true, getContext(), false))
-    {
+    if (getBorderExtent(dir, thickness, 1, blow, bhigh, true, getContext(), false)) {
       int lowk  = blow[dim];
       int highk = bhigh[dim];
       int kLimit = highk-lowk + 1;
 
-      for (int k=0; k<kLimit; ++k)
-      {
+      for (int k=0; k<kLimit; ++k) {
         double x = 1 - (double(k) - 0.5)/double(thickness);
         double x3 = x*x*x;
 
         (*pKappaHdk[dim])(highk-k) = 1 + (this->kappaMax - 1)*x3;
-        std::cout << "CPMLBorder kappaH Init: " << k << " " << highk << " " << x3 << std::endl;
       }
     }
 
@@ -355,10 +332,7 @@ void CPMLBorderCurrent::makeCoeff()
 
   int kLimit = highk-lowk + 1;
 
-  std::cout << "CPMLBorderCurrent::makeCoeff " << sigmaMax << " " <<  kappaMax << " " <<  aMax << " " <<  kLimit  << " " <<  dt << std::endl;
-
-  for (int k=0; k<kLimit; ++k)
-  {
+  for (int k=0; k<kLimit; ++k) {
     double x = 1 - (double(k)-offset)/double(thickness);
     double x3 = x*x*x;
 
@@ -373,7 +347,6 @@ void CPMLBorderCurrent::makeCoeff()
 
     bCoeff(pos) = b;
     cCoeff(pos) = c;
-    std::cout  << "makeCoeff   " <<  k   << " " << pos << " " <<  x  << " " <<  sigma  << " " <<  kappa  << " " <<  b << " " <<  c << std::endl;
   }
 
 }
