@@ -210,6 +210,13 @@ void FDTD_Kerr::stepD(double dt)
     double E = sqrt(E2);
     double D = sqrt(Dx*Dx + Dy*Dy + Dz*Dz);
 
+    if (D == 0.0) {
+      Ex(i) = 0.0;
+      Ey(i) = 0.0;
+      Ez(i) = 0.0;
+      return; 
+    }
+
     // Newton iteration
     double Eold;
     do {
@@ -351,6 +358,12 @@ void FDTD_Kerr::stepD(double dt)
     double E = sqrt(E2);
     double D = sqrt(Dx*Dx + Dy*Dy + Dz*Dz);
 
+    if (D == 0.0) {
+      Ex(i,j) = 0.0;
+      Ey(i,j) = 0.0;
+      Ez(i,j) = 0.0;
+      return; 
+    }
     // Newton iteration
     double Eold;
     do {
@@ -509,6 +522,13 @@ void FDTD_Kerr::stepD(double dt)
 
     double E = sqrt(E2);
     double D = sqrt(Dx*Dx + Dy*Dy + Dz*Dz);
+
+    if (D == 0.0) {
+      Ex(i,j,k) = 0.0;
+      Ey(i,j,k) = 0.0;
+      Ez(i,j,k) = 0.0;
+      return; 
+    }
 
     // Newton iteration
     double Eold;
