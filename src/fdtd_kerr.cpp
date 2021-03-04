@@ -214,7 +214,7 @@ void FDTD_Kerr::stepD(double dt)
       Ex(i) = 0.0;
       Ey(i) = 0.0;
       Ez(i) = 0.0;
-      return; 
+      continue; 
     }
 
     // Newton iteration
@@ -316,13 +316,13 @@ void FDTD_Kerr::stepD(double dt)
     double kappaEdx = rKappaEdx(i)*dx[0];
     double kappaEdy = rKappaEdy(j)*dx[1];
 
-//    if (jx != 0.0 || jy != 0.0 || jz != 0.0) {
-//      std::cout << "FDTD stepD " << i << " " << j << " "
-//          << "(" << Ex(i, j) << ", " << Ey(i, j) << ", " << Ez(i, j) << ") "
-//          << "(" << Bx(i, j) << ", " << By(i, j) << ", " << Bz(i, j) << ") "
-//          << "(" << jx << ", " << jy << ", " << jz << ")  "
-//          << kappaEdx << std::endl;
-//    }
+  //  if (jx != 0.0 || jy != 0.0 || jz != 0.0) {
+  //    std::cout << "FDTD stepD " << i << " " << j << " "
+  //        << "(" << Ex(i, j) << ", " << Ey(i, j) << ", " << Ez(i, j) << ") "
+  //        << "(" << Bx(i, j) << ", " << By(i, j) << ", " << Bz(i, j) << ") "
+  //        << "(" << jx << ", " << jy << ", " << jz << ")  "
+  //        << kappaEdx << std::endl;
+  //  }
 
     double ex = Ex(i,j);
     double ey = Ey(i,j);
@@ -362,7 +362,7 @@ void FDTD_Kerr::stepD(double dt)
       Ex(i,j) = 0.0;
       Ey(i,j) = 0.0;
       Ez(i,j) = 0.0;
-      return; 
+      continue; 
     }
     // Newton iteration
     double Eold;
@@ -527,7 +527,7 @@ void FDTD_Kerr::stepD(double dt)
       Ex(i,j,k) = 0.0;
       Ey(i,j,k) = 0.0;
       Ez(i,j,k) = 0.0;
-      return; 
+      continue; 
     }
 
     // Newton iteration
