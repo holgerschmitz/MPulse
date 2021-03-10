@@ -111,6 +111,7 @@ int main (int argc, char** argv) {
     blocks("EMFields").setClass<EMFields>();
     blocks("FDTD_Plain").setClass<FDTD_Plain>();
     blocks("FDTD_Kerr").setClass<FDTD_Kerr>();
+    blocks("FDTD_KerrAverage").setClass<FDTD_KerrAverage>();
     blocks("FDTD_PLRC").setClass<FDTD_PLRCLin>();
     blocks("FDTD_PLRC_Nonlinear").setClass<FDTD_PLRCNonlin>();
     blocks("FieldDiag").setClass<MPulseFieldDiagnostic>();
@@ -126,7 +127,7 @@ int main (int argc, char** argv) {
     blocks("PlasmaCurrent").setClass<PlasmaCurrentBlock>();
 
     blocks("mpulse").addChildren("EMFields")
-        ("FDTD_Plain")("FDTD_Kerr")("FDTD_PLRC")("FDTD_PLRC_Nonlinear")
+        ("FDTD_Plain")("FDTD_Kerr")("FDTD_KerrAverage")("FDTD_PLRC")("FDTD_PLRC_Nonlinear")
         ("FieldDiag")("SliceDiag");
 
     blocks("FDTD_Plain").addChildren("CPMLBorder")
