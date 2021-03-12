@@ -141,6 +141,14 @@ int main (int argc, char** argv) {
         ("GaussBeamSource")
 #endif
         ("PlaneWaveSource")("PlaneGaussSource");
+
+    blocks("FDTD_KerrAverage").addChildren("CPMLBorder")
+#ifndef HUERTO_ONE_DIM
+        ("GaussBeamSource")
+#endif
+        ("PlaneWaveSource")("PlaneGaussSource");
+
+
     blocks("FDTD_PLRC").addChildren("CPMLBorder")
 #ifndef HUERTO_ONE_DIM
         ("GaussBeamSource")
@@ -148,6 +156,8 @@ int main (int argc, char** argv) {
         ("ShortPulseInject")
         ("PlaneWaveSource")("PlaneGaussSource")
         ("PlasmaCurrent");
+
+
     blocks("FDTD_PLRC_Nonlinear").addChildren("CPMLBorder")
 #ifndef HUERTO_ONE_DIM
         ("GaussBeamSource")
