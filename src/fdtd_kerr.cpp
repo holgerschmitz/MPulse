@@ -673,6 +673,10 @@ void FDTD_KerrAverage::registerData() {
   pE2xAverage = std::make_shared<Field>();
   pE2yAverage = std::make_shared<Field>();
   pE2zAverage = std::make_shared<Field>();
+
+  addData("E2x", pE2xAverage);
+  addData("E2y", pE2yAverage);
+  addData("E2z", pE2zAverage);
 }
 
 void FDTD_KerrAverage::init() {
@@ -689,6 +693,10 @@ void FDTD_KerrAverage::init() {
   pE2xAverage->resize(lowIn, highIn, domainSize, exStaggerYee, 2);
   pE2yAverage->resize(lowIn, highIn, domainSize, eyStaggerYee, 2);
   pE2zAverage->resize(lowIn, highIn, domainSize, ezStaggerYee, 2);
+
+  (*pE2xAverage) = 0.0;
+  (*pE2yAverage) = 0.0;
+  (*pE2zAverage) = 0.0;
 
 #ifdef HUERTO_ONE_DIM
   pKappaEdx->resize(schnek::Array<int, 1>(low[0]), schnek::Array<int, 1>(high[0]));
@@ -925,7 +933,7 @@ void FDTD_KerrAverage::stepD(double dt) {
 
   Vector dx = getContext().getDx();
   
-  const double eta = dt/tAverage;
+  double eta = dt/tAverage;
 
   sumCurrents();
 
