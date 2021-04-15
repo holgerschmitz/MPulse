@@ -15,9 +15,9 @@ Ly = dx*Ny;
 cflFactor = 1.0/sqrt(2.0);
 
 float dt = cflFactor*dx/clight;
-float phi = 0.0*pi;
+float phi = 0.25*pi;
 
-tMax = 3*Lx/clight + 40.0*lambda;
+tMax = (3*Lx + 40.0*lambda)/clight;
 
 EMFields {  }
 
@@ -25,7 +25,7 @@ FDTD_Plain {
   GaussBeamSource {
     d = 20;
     rise = 10*lambda;
-    waist = 5*lambda;
+    waist = 1.2*lambda;
 
     originx = 0.5*Lx;
     originy = 0.5*Ly;

@@ -8,7 +8,6 @@
 #include "diagnostic.hpp"
 #include "fdtd_kerr.hpp"
 #include "fdtd_plrc.hpp"
-#include "cpml_border.hpp"
 #include "shortpulseinject.hpp"
 #include "plasmacurrent.hpp"
 
@@ -17,6 +16,7 @@
 #include "../huerto/electromagnetics/fdtd/fdtd_plain.hpp"
 #include "../huerto/electromagnetics/source/plane_wave.hpp"
 #include "../huerto/electromagnetics/source/beam.hpp"
+#include "../huerto/electromagnetics/pml/cpml_border.hpp"
 #include "../huerto/maths/functions/core.hpp"
 #include "../huerto/constants.hpp"
 
