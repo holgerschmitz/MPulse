@@ -154,6 +154,9 @@ class FDTD_KerrAverage : public FieldSolver,
      */
     pField pE2xAverage, pE2yAverage, pE2zAverage;
 
+    schnek::pParameter E2Parameter;
+    double E2Init;
+
     /**
      * Value of the nonlinearity \f$\chi^{(3)}\f$ in \f$\mathrm{V}^{-2} \mathrm{m}^2\f$
      */
