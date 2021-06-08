@@ -625,7 +625,7 @@ void FDTD_Kerr::stepB(double dt)
 
 void FDTD_KerrAverage::initParameters(schnek::BlockParameters &blockPars)
 {
-  blockPars.addParameter("T", &tAverage);
+  blockPars.addParameter("T", &tAverage, -1.0);
   blockPars.addParameter("chi", &chi, 0.0);
   blockPars.addParameter("eps", &eps, 1.0);
   E2Parameter = blockPars.addParameter("E2", &E2Init , 0.0);
@@ -816,7 +816,7 @@ void FDTD_KerrAverage::stepD(double dt) {
 
   Vector dx = getContext().getDx();
   
-  const double eta = dt/tAverage;
+  const double eta = tAverage > 0.0 ? dt/tAverage : 0.0;
 
   sumCurrents();
 
@@ -944,7 +944,7 @@ void FDTD_KerrAverage::stepD(double dt) {
 
   Vector dx = getContext().getDx();
   
-  double eta = dt/tAverage;
+  const double eta = tAverage > 0.0 ? dt/tAverage : 0.0;
 
   sumCurrents();
 
@@ -1104,7 +1104,7 @@ void FDTD_KerrAverage::stepD(double dt) {
 
   Vector dx = getContext().getDx();
 
-  const double eta = dt/tAverage;
+  const double eta = tAverage > 0.0 ? dt/tAverage : 0.0;
 
   sumCurrents();
 
