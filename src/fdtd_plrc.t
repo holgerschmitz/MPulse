@@ -153,11 +153,13 @@ void FDTD_PLRCSolver<PLRCImplementation>::initAccumulator(double dt)
 
   for (int n=0;n<3;++n)
   {
+    // Kelley & Luebbers Eq (21)
     beta[n] = sqrt(this->LOm2[n] - this->LDelta[n]*this->LDelta[n]);
     gamma[n] = this->LEps[n]*this->LOm2[n]/beta[n];
     phasor[n] = this->LDelta[n] - I*beta[n];
     this->plrcData.Crec[n] = exp(-phasor[n]*dt);
 
+    // Kelley & Luebbers Eq (23)
     xi0[n] = I*gamma[n] *(this->plrcData.Crec[n]*(phasor[n]*dt + 1.0) - 1.0)
               / (phasor[n]*phasor[n]*dt);
 
