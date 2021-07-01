@@ -9,6 +9,7 @@
 
 #include <schnek/grid.hpp>
 #include <schnek/tools/literature.hpp>
+#include <schnek/tools/fieldtools.hpp>
 
 #include <boost/make_shared.hpp>
 
@@ -624,9 +625,10 @@ void FDTD_Kerr::stepB(double dt)
 
 void FDTD_KerrAverage::initParameters(schnek::BlockParameters &blockPars)
 {
-  blockPars.addParameter("T", &tAverage);
+  blockPars.addParameter("T", &tAverage, -1.0);
   blockPars.addParameter("chi", &chi, 0.0);
   blockPars.addParameter("eps", &eps, 1.0);
+  E2Parameter = blockPars.addParameter("E2", &E2Init , 0.0);
 }
 
 void FDTD_KerrAverage::registerData() {
@@ -673,6 +675,10 @@ void FDTD_KerrAverage::registerData() {
   pE2xAverage = std::make_shared<Field>();
   pE2yAverage = std::make_shared<Field>();
   pE2zAverage = std::make_shared<Field>();
+
+  addData("E2x", pE2xAverage);
+  addData("E2y", pE2yAverage);
+  addData("E2z", pE2zAverage);
 }
 
 void FDTD_KerrAverage::init() {
@@ -689,6 +695,19 @@ void FDTD_KerrAverage::init() {
   pE2xAverage->resize(lowIn, highIn, domainSize, exStaggerYee, 2);
   pE2yAverage->resize(lowIn, highIn, domainSize, eyStaggerYee, 2);
   pE2zAverage->resize(lowIn, highIn, domainSize, ezStaggerYee, 2);
+
+  schnek::pBlockVariables blockVars = getVariables();
+  schnek::pDependencyMap depMap(new schnek::DependencyMap(blockVars));
+
+  schnek::DependencyUpdater updater(depMap);
+
+  Vector &x = getContext().getX();
+  schnek::Array<schnek::pParameter, DIMENSION> x_parameters = getContext().getXParameter();
+  updater.addIndependentArray(x_parameters);
+
+  schnek::fill_field(*pE2xAverage, x, E2Init, updater, E2Parameter);
+  schnek::fill_field(*pE2yAverage, x, E2Init, updater, E2Parameter);
+  schnek::fill_field(*pE2zAverage, x, E2Init, updater, E2Parameter);
 
 #ifdef HUERTO_ONE_DIM
   pKappaEdx->resize(schnek::Array<int, 1>(low[0]), schnek::Array<int, 1>(high[0]));
@@ -797,7 +816,7 @@ void FDTD_KerrAverage::stepD(double dt) {
 
   Vector dx = getContext().getDx();
   
-  const double eta = dt/tAverage;
+  const double eta = tAverage > 0.0 ? dt/tAverage : 0.0;
 
   sumCurrents();
 
@@ -925,7 +944,7 @@ void FDTD_KerrAverage::stepD(double dt) {
 
   Vector dx = getContext().getDx();
   
-  const double eta = dt/tAverage;
+  const double eta = tAverage > 0.0 ? dt/tAverage : 0.0;
 
   sumCurrents();
 
@@ -1085,7 +1104,7 @@ void FDTD_KerrAverage::stepD(double dt) {
 
   Vector dx = getContext().getDx();
 
-  const double eta = dt/tAverage;
+  const double eta = tAverage > 0.0 ? dt/tAverage : 0.0;
 
   sumCurrents();
 
