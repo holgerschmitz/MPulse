@@ -201,7 +201,7 @@ void FDTD_Kerr::stepD(double dt)
           clight2*(
           - (Bz(i) - Bz(i-1))/kappaEdx
           )
-        + jy/eps_0
+        - jy/eps_0
       );
 
     double Dz = (eps + chi*E2)*ez
@@ -209,7 +209,7 @@ void FDTD_Kerr::stepD(double dt)
           clight2*(
             (By(i) - By(i-1))/kappaEdx
           )
-        + jz/eps_0
+        - jz/eps_0
       );
     double E = sqrt(E2);
     double D = sqrt(Dx*Dx + Dy*Dy + Dz*Dz);
@@ -339,7 +339,7 @@ void FDTD_Kerr::stepD(double dt)
           clight2*(
             (Bz(i,j) - Bz(i,j-1))/kappaEdy
           )
-        + jx/eps_0
+        - jx/eps_0
       );
 
     double Dy = (eps + chi*E2)*ey
@@ -347,7 +347,7 @@ void FDTD_Kerr::stepD(double dt)
           clight2*(
           - (Bz(i,j) - Bz(i-1,j))/kappaEdx
           )
-        + jy/eps_0
+        - jy/eps_0
       );
 
     double Dz = (eps + chi*E2)*ez
@@ -356,7 +356,7 @@ void FDTD_Kerr::stepD(double dt)
             (By(i,j) - By(i-1,j))/kappaEdx
           - (Bx(i,j) - Bx(i,j-1))/kappaEdy
           )
-        + jz/eps_0
+        - jz/eps_0
       );
 
     double E = sqrt(E2);
@@ -503,7 +503,7 @@ void FDTD_Kerr::stepD(double dt)
             (Bz(i,j,k) - Bz(i,j-1,k))/kappaEdy
           - (By(i,j,k) - By(i,j,k-1))/kappaEdz
           )
-        + jx/eps_0
+        - jx/eps_0
       );
 
     double Dy = (eps + chi*E2)*ey
@@ -512,7 +512,7 @@ void FDTD_Kerr::stepD(double dt)
             (Bx(i,j,k) - Bx(i,j,k-1))/kappaEdz
           - (Bz(i,j,k) - Bz(i-1,j,k))/kappaEdx
           )
-        + jy/eps_0
+        - jy/eps_0
       );
 
     double Dz = (eps + chi*E2)*ez
@@ -521,7 +521,7 @@ void FDTD_Kerr::stepD(double dt)
             (By(i,j,k) - By(i-1,j,k))/kappaEdx
           - (Bx(i,j,k) - Bx(i,j-1,k))/kappaEdy
           )
-        + jz/eps_0
+        - jz/eps_0
       );
 
     double E = sqrt(E2);
@@ -823,14 +823,14 @@ void FDTD_KerrAverage::stepD(double dt) {
         clight2*(
         - (Bz(i) - Bz(i-1))/kappaEdx
         )
-      + jy/eps_0
+      - jy/eps_0
     )/(eps + chi*e2yAvg);
 
     ez = ez + dt*(
         clight2*(
           (By(i) - By(i-1))/kappaEdx
         )
-      + jz/eps_0
+      - jz/eps_0
     )/(eps + chi*e2zAvg);
 
 
@@ -951,14 +951,14 @@ void FDTD_KerrAverage::stepD(double dt) {
         clight2*(
           (Bz(i,j) - Bz(i,j-1))/kappaEdy
         )
-      + jx/eps_0
+      - jx/eps_0
     )/(eps + chi*e2xAvg);
 
     ey = ey + dt*(
         clight2*(
         - (Bz(i,j) - Bz(i-1,j))/kappaEdx
         )
-      + jy/eps_0
+      - jy/eps_0
     )/(eps + chi*e2yAvg);
 
     ez = ez + dt*(
@@ -966,7 +966,7 @@ void FDTD_KerrAverage::stepD(double dt) {
           (By(i,j) - By(i-1,j))/kappaEdx
         - (Bx(i,j) - Bx(i,j-1))/kappaEdy
         )
-      + jz/eps_0
+      - jz/eps_0
     )/(eps + chi*e2zAvg);
 
     double eyax = 0.25*(ey + Ey(i+1, j) + Ey(i, j-1) + Ey(i, j-1));
@@ -1115,7 +1115,7 @@ void FDTD_KerrAverage::stepD(double dt) {
             (Bz(i,j,k) - Bz(i,j-1,k))/kappaEdy
           - (By(i,j,k) - By(i,j,k-1))/kappaEdz
           )
-        + jx/eps_0
+        - jx/eps_0
       )/(eps + chi*e2xAvg);
 
     ey = ey
@@ -1124,7 +1124,7 @@ void FDTD_KerrAverage::stepD(double dt) {
             (Bx(i,j,k) - Bx(i,j,k-1))/kappaEdz
           - (Bz(i,j,k) - Bz(i-1,j,k))/kappaEdx
           )
-        + jy/eps_0
+        - jy/eps_0
       )/(eps + chi*e2yAvg);
 
     ez = ez
@@ -1133,7 +1133,7 @@ void FDTD_KerrAverage::stepD(double dt) {
             (By(i,j,k) - By(i-1,j,k))/kappaEdx
           - (Bx(i,j,k) - Bx(i,j-1,k))/kappaEdy
           )
-        + jz/eps_0
+        - jz/eps_0
       )/(eps + chi*e2zAvg);
 
     double eyax = 0.25*(ey + Ey(i+1, j, k) + Ey(i, j-1, k) + Ey(i+1, j-1, k));
