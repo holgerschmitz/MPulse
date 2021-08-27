@@ -22,6 +22,7 @@ SOURCES = $(wildcard src/*.cpp) \
   huerto/electromagnetics/source/plane_wave.cpp \
   huerto/electromagnetics/source/beam.cpp \
   huerto/electromagnetics/pml/cpml_border.cpp \
+  huerto/maths/random.cpp \
   huerto/maths/functions/core.cpp \
   huerto/simulation/task.cpp
 
