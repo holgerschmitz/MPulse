@@ -54,13 +54,13 @@ class FDTD_PLRCCore : public FieldSolver,
      * References to the local grid of the electric field components,
      * \f$\mathbf{E}\f$
      */
-    pField pEx, pEy, pEz;
+    Field *pEx, *pEy, *pEz;
 
     /**
      * References to the local grid of the magnetic field components,
      * \f$\mathbf{E}\f$
      */
-    pField pBx, pBy, pBz;
+    Field *pBx, *pBy, *pBz;
 
     /**
      * Electrical conductivity of the medium
@@ -172,7 +172,6 @@ class FDTD_PLRCCore : public FieldSolver,
  * electric fields are integrated according to equations 9.19 and 9.20 in
  * Taflove and Hagness, Computational Electrodynamics 3rd edition, Artech House,
  * Boston, London, 2005
- *
  */
 class FDTD_PLRCLinCore : public FDTD_PLRCCore
 {

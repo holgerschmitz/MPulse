@@ -1,6 +1,8 @@
 
 #include "fdtd_plrc.hpp"
 
+#include "../huerto/constants.hpp"
+
 #include <schnek/tools/literature.hpp>
 
 #include <cmath>
@@ -156,12 +158,15 @@ void FDTD_PLRCLinCore::plrcStepD(double dt,
     double &pyi = (*pPsiIy[n])[pos];
     double &pzi = (*pPsiIz[n])[pos];
 
+    // The following lines contain Kelley & Luebbers Eq (28)
+    // split into two parts
     std::complex<double> D = plrcData.dchi0[n]-plrcData.dxi0[n];
 
     std::complex<double> px = D*ex + std::complex<double>(pxr, pxi);
     std::complex<double> py = D*ey + std::complex<double>(pyr, pyi);
     std::complex<double> pz = D*ez + std::complex<double>(pzr, pzi);
 
+    // This intermediate result is needed to update the fields
     Psix += std::real(px);
     Psiy += std::real(py);
     Psiz += std::real(pz);
@@ -201,8 +206,6 @@ void FDTD_PLRCLinCore::plrcStepD(double dt,
   double numerY = eps - plrcData.sumXi0 - sigma;
   double numerZ = eps - plrcData.sumXi0 - sigma;
 
-  // after this Dx, Dy and Dz actually contain D - P_L
-
 #ifdef HUERTO_ONE_DIM
   double exn =
     (numerX*ex + dt*Jx + Psix) / denomX;
@@ -211,9 +214,11 @@ void FDTD_PLRCLinCore::plrcStepD(double dt,
     (
       numerY*ey
       +
-          dt*(
-          - ((*pBz)[pos] - (*pBz)(pos[0]-1))/kappaEdx
-          + Jy
+        dt*(
+          clight2*(
+            - ((*pBz)[pos] - (*pBz)(pos[0]-1))/kappaEdx
+          )
+          - Jy/eps_0
         )
         + Psiy
 
@@ -224,8 +229,10 @@ void FDTD_PLRCLinCore::plrcStepD(double dt,
       numerZ*ez
       + (
           dt*(
-            ((*pBy)[pos] - (*pBy)(pos[0]-1))/kappaEdx
-          + Jz
+            clight2*(
+              ((*pBy)[pos] - (*pBy)(pos[0]-1))/kappaEdx
+            )
+          - Jz/eps_0
         )
         + Psiz
       )
@@ -238,8 +245,10 @@ void FDTD_PLRCLinCore::plrcStepD(double dt,
       numerX*ex
       + (
           dt*(
-            ((*pBz)[pos] - (*pBz)(pos[0], pos[1]-1))/kappaEdy
-          + Jx
+            clight2*(
+              ((*pBz)[pos] - (*pBz)(pos[0], pos[1]-1))/kappaEdy
+            )
+          - Jx/eps_0
         )
         + Psix
       )
@@ -250,8 +259,10 @@ void FDTD_PLRCLinCore::plrcStepD(double dt,
       numerY*ey
       + (
           dt*(
-          - ((*pBz)[pos] - (*pBz)(pos[0]-1, pos[1]))/kappaEdx
-          + Jy
+            clight2*(
+              - ((*pBz)[pos] - (*pBz)(pos[0]-1, pos[1]))/kappaEdx
+            )
+          - Jy/eps_0
         )
         + Psiy
       )
@@ -262,9 +273,11 @@ void FDTD_PLRCLinCore::plrcStepD(double dt,
       numerZ*ez
       + (
           dt*(
-            ((*pBy)[pos] - (*pBy)(pos[0]-1, pos[1]  ))/kappaEdx
-          - ((*pBx)[pos] - (*pBx)(pos[0]  , pos[1]-1))/kappaEdy
-          + Jz
+              clight2*(
+                  ((*pBy)[pos] - (*pBy)(pos[0]-1, pos[1]  ))/kappaEdx
+                - ((*pBx)[pos] - (*pBx)(pos[0]  , pos[1]-1))/kappaEdy
+              )
+          - Jz/eps_0
         )
         + Psiz
       )
@@ -277,9 +290,11 @@ void FDTD_PLRCLinCore::plrcStepD(double dt,
       numerX*ex
       + (
           dt*(
-            ((*pBz)[pos] - (*pBz)(pos[0], pos[1]-1, pos[2]  ))/kappaEdy
-          - ((*pBy)[pos] - (*pBy)(pos[0], pos[1]  , pos[2]-1))/kappaEdz
-          + Jx
+            clight2*(
+                ((*pBz)[pos] - (*pBz)(pos[0], pos[1]-1, pos[2]  ))/kappaEdy
+              - ((*pBy)[pos] - (*pBy)(pos[0], pos[1]  , pos[2]-1))/kappaEdz
+            )
+          - Jx/eps_0
         )
         + Psix
       )
@@ -290,9 +305,11 @@ void FDTD_PLRCLinCore::plrcStepD(double dt,
       numerY*ey
       + (
           dt*(
-            ((*pBx)[pos] - (*pBx)(pos[0],   pos[1], pos[2]-1))/kappaEdz
-          - ((*pBz)[pos] - (*pBz)(pos[0]-1, pos[1], pos[2]  ))/kappaEdx
-          + Jy
+            clight2*(
+                ((*pBx)[pos] - (*pBx)(pos[0],   pos[1], pos[2]-1))/kappaEdz
+              - ((*pBz)[pos] - (*pBz)(pos[0]-1, pos[1], pos[2]  ))/kappaEdx
+            )
+          - Jy/eps_0
         )
         + Psiy
       )
@@ -303,9 +320,11 @@ void FDTD_PLRCLinCore::plrcStepD(double dt,
       numerZ*ez
       + (
           dt*(
-            ((*pBy)[pos] - (*pBy)(pos[0]-1, pos[1],   pos[2]))/kappaEdx
-          - ((*pBx)[pos] - (*pBx)(pos[0]  , pos[1]-1, pos[2]))/kappaEdy
-          + Jz
+            clight2*(
+                ((*pBy)[pos] - (*pBy)(pos[0]-1, pos[1],   pos[2]))/kappaEdx
+              - ((*pBx)[pos] - (*pBx)(pos[0]  , pos[1]-1, pos[2]))/kappaEdy
+            )
+          - Jz/eps_0
         )
         + Psiz
       )
@@ -481,7 +500,7 @@ void FDTD_PLRCNonlinCore::plrcStepD(double dt,
       (numer + chi*E2)*ex
 
       + dt*(
-        + Jx
+        - Jx/eps_0
       )
       + Psix
     ) / denom;
@@ -490,8 +509,10 @@ void FDTD_PLRCNonlinCore::plrcStepD(double dt,
     (
       (numer + chi*E2)*ey
       + dt*(
-        - ((*pBz)[pos] - (*pBz)(pos[0]-1))/kappaEdx
-        + Jy
+        clight2*(
+          - ((*pBz)[pos] - (*pBz)(pos[0]-1))/kappaEdx
+        )
+        - Jy/eps_0
       )
       + Psiy
     ) / denom;
@@ -500,8 +521,10 @@ void FDTD_PLRCNonlinCore::plrcStepD(double dt,
     (
       (numer + chi*E2)*ez
       + dt*(
+        clight2*(
           ((*pBy)[pos] - (*pBy)(pos[0]-1))/kappaEdx
-         + Jz
+        )
+        - Jz/eps_0
       )
       + Psiz
     ) / denom;
@@ -513,8 +536,10 @@ void FDTD_PLRCNonlinCore::plrcStepD(double dt,
       (numer + chi*E2)*ex
 
       + dt*(
+        clight2*(
           ((*pBz)[pos] - (*pBz)(pos[0],pos[1]-1))/kappaEdy
-        + Jx
+        )
+        - Jx/eps_0
       )
       + Psix
     ) / denom;
@@ -523,8 +548,10 @@ void FDTD_PLRCNonlinCore::plrcStepD(double dt,
     (
       (numer + chi*E2)*ey
       + dt*(
-        - ((*pBz)[pos] - (*pBz)(pos[0]-1,pos[1]))/kappaEdx
-        + Jy
+        clight2*(
+          - ((*pBz)[pos] - (*pBz)(pos[0]-1,pos[1]))/kappaEdx
+        )
+        - Jy/eps_0
       )
       + Psiy
     ) / denom;
@@ -533,9 +560,11 @@ void FDTD_PLRCNonlinCore::plrcStepD(double dt,
     (
       (numer + chi*E2)*ez
       + dt*(
-          ((*pBy)[pos] - (*pBy)(pos[0]-1,pos[1]))/kappaEdx
-        - ((*pBx)[pos] - (*pBx)(pos[0],pos[1]-1))/kappaEdy
-         + Jz
+        clight2*(
+            ((*pBy)[pos] - (*pBy)(pos[0]-1,pos[1]))/kappaEdx
+          - ((*pBx)[pos] - (*pBx)(pos[0],pos[1]-1))/kappaEdy
+        )
+        - Jz/eps_0
       )
       + Psiz
     ) / denom;
@@ -547,9 +576,11 @@ void FDTD_PLRCNonlinCore::plrcStepD(double dt,
       (numer + chi*E2)*ex
 
       + dt*(
-          ((*pBz)[pos] - (*pBz)(pos[0],pos[1]-1,pos[2]))/kappaEdy
-        - ((*pBy)[pos] - (*pBy)(pos[0],pos[1],pos[2]-1))/kappaEdz
-        + Jx
+        clight2*(
+            ((*pBz)[pos] - (*pBz)(pos[0],pos[1]-1,pos[2]))/kappaEdy
+          - ((*pBy)[pos] - (*pBy)(pos[0],pos[1],pos[2]-1))/kappaEdz
+        )
+        - Jx/eps_0
       )
       + Psix
     ) / denom;
@@ -558,9 +589,11 @@ void FDTD_PLRCNonlinCore::plrcStepD(double dt,
     (
       (numer + chi*E2)*ey
       + dt*(
-          ((*pBx)[pos] - (*pBx)(pos[0],pos[1],pos[2]-1))/kappaEdz
-        - ((*pBz)[pos] - (*pBz)(pos[0]-1,pos[1],pos[2]))/kappaEdx
-        + Jy
+        clight2*(
+            ((*pBx)[pos] - (*pBx)(pos[0],pos[1],pos[2]-1))/kappaEdz
+          - ((*pBz)[pos] - (*pBz)(pos[0]-1,pos[1],pos[2]))/kappaEdx
+        )
+        - Jy/eps_0
       )
       + Psiy
     ) / denom;
@@ -569,9 +602,11 @@ void FDTD_PLRCNonlinCore::plrcStepD(double dt,
     (
       (numer + chi*E2)*ez
       + dt*(
-          ((*pBy)[pos] - (*pBy)(pos[0]-1,pos[1],pos[2]))/kappaEdx
-        - ((*pBx)[pos] - (*pBx)(pos[0],pos[1]-1,pos[2]))/kappaEdy
-         + Jz
+        clight2*(
+            ((*pBy)[pos] - (*pBy)(pos[0]-1,pos[1],pos[2]))/kappaEdx
+          - ((*pBx)[pos] - (*pBx)(pos[0],pos[1]-1,pos[2]))/kappaEdy
+        )
+        - Jz /eps_0
       )
       + Psiz
     ) / denom;

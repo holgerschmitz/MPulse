@@ -15,9 +15,9 @@ Ly = dx*Ny;
 cflFactor = 1.0/sqrt(2.0);
 
 float dt = cflFactor*dx/clight;
-float phi = 0.25*pi;
+float phi = pi/20; //0.25*pi;
 
-tMax = (3*Lx + 40.0*lambda)/clight;
+tMax = 3e-13; //(3*Lx + 40.0*lambda)/clight;
 
 EMFields {  }
 
@@ -28,7 +28,7 @@ FDTD_Plain {
     waist = 1.2*lambda;
 
     originx = 0.5*Lx;
-    originy = 0.5*Ly;
+    originy = 0.5*Ly + sin(pi/20)*Lx;
     
     kx = 2*pi/lambda * cos(phi);
     ky = 2*pi/lambda * sin(phi);
@@ -47,7 +47,7 @@ FDTD_Plain {
   }
 }
 
-float outDt = 50*dt;
+float outDt = 1e-15;
 
 FieldDiag Ex {
   file = "Ex_#t.h5";
