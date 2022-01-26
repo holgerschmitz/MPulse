@@ -59,6 +59,11 @@ class MPulse : public schnek::Block,
      * The inner grid range of the local simulation domain
      */
     Range innerRange;
+
+    /**
+     * If true, then don't do an inital half time step to bring E and B field in sync.
+     */
+    bool ignore_initial_time_stagger;
   protected:
 
     /**

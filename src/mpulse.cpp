@@ -44,6 +44,7 @@ void MPulse::initParameters(schnek::BlockParameters &parameters) {
   parameters.addArrayParameter("L", size);
   parameters.addParameter("tMax", &tMax);
   parameters.addParameter("cflFactor", &cflFactor, 0.99);
+  parameters.addParameter("ignore_initial_time_stagger", (int*)(&ignore_initial_time_stagger), 0);
 
   registerConstants(parameters);
 }
@@ -67,9 +68,12 @@ void MPulse::init() {
 
 void MPulse::execute()
 {
-  for(pFieldSolver f: schnek::BlockContainer<FieldSolver>::childBlocks())
+  if (!ignore_initial_time_stagger)
   {
-    f->stepSchemeInit(dt);
+    for(pFieldSolver f: schnek::BlockContainer<FieldSolver>::childBlocks())
+    {
+      f->stepSchemeInit(dt);
+    }
   }
 
   time = 0.0;
@@ -128,7 +132,8 @@ int main (int argc, char** argv) {
 
     blocks("mpulse").addChildren("EMFields")
         ("FDTD_Plain")("FDTD_Kerr")("FDTD_KerrAverage")("FDTD_PLRC")("FDTD_PLRC_Nonlinear")
-        ("FieldDiag")("SliceDiag");
+        ("FieldDiag")("SliceDiag")
+        ("ignore_initial_time_stagger");
 
     blocks("FDTD_Plain").addChildren("CPMLBorder")
 #ifndef HUERTO_ONE_DIM
