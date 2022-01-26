@@ -18,51 +18,33 @@
 
 void FDTD_PLRCCore::registerData()
 {
-  schnek::DomainSubdivision<Field> &subdivision = getContext().getSubdivision();
+  pSigma = std::make_shared<Field>();
 
-  Domain domainSize = subdivision.getInnerExtent(getContext().getSize());
-  schnek::Array<bool, DIMENSION> stagger;
-  stagger = false;
-
-  Index low  = subdivision.getLo();
-  Index high = subdivision.getHi();
-
-  Index lowIn  = subdivision.getInnerLo();
-  Index highIn = subdivision.getInnerHi();
-
-  pSigma = std::make_shared<Field>(lowIn, highIn, domainSize, stagger, 2);
-
-  pKappaEdx = std::make_shared<Grid1d>(schnek::Array<int, 1>(low[0]), schnek::Array<int, 1>(high[0]));
-  (*pKappaEdx) = 1.0;
+  pKappaEdx = std::make_shared<Grid1d>();
 #ifndef HUERTO_ONE_DIM
-  pKappaEdy = std::make_shared<Grid1d>(schnek::Array<int, 1>(low[1]), schnek::Array<int, 1>(high[1]));
-  (*pKappaEdy) = 1.0;
+  pKappaEdy = std::make_shared<Grid1d>();
 #endif
 #ifdef HUERTO_THREE_DIM
-  pKappaEdz = std::make_shared<Grid1d>(schnek::Array<int, 1>(low[2]), schnek::Array<int, 1>(high[2]));
-  (*pKappaEdz) = 1.0;
+  pKappaEdz = std::make_shared<Grid1d>();
 #endif
 
-  pKappaHdx = std::make_shared<Grid1d>(schnek::Array<int, 1>(low[0]), schnek::Array<int, 1>(high[0]));
-  (*pKappaHdx) = 1.0;
+  pKappaHdx = std::make_shared<Grid1d>();
 #ifndef HUERTO_ONE_DIM
-  pKappaHdy = std::make_shared<Grid1d>(schnek::Array<int, 1>(low[1]), schnek::Array<int, 1>(high[1]));
-  (*pKappaHdy) = 1.0;
+  pKappaHdy = std::make_shared<Grid1d>();
 #endif
 #ifdef HUERTO_THREE_DIM
-  pKappaHdz = std::make_shared<Grid1d>(schnek::Array<int, 1>(low[2]), schnek::Array<int, 1>(high[2]));
-  (*pKappaHdz) = 1.0;
+  pKappaHdz = std::make_shared<Grid1d>();
 #endif
 
   for (int d=0; d<3; d++)
   {
-    pPsiRx[d] = std::make_unique<Field>(lowIn, highIn, domainSize, stagger, 2);
-    pPsiRy[d] = std::make_unique<Field>(lowIn, highIn, domainSize, stagger, 2);
-    pPsiRz[d] = std::make_unique<Field>(lowIn, highIn, domainSize, stagger, 2);
+    pPsiRx[d] = std::make_unique<Field>();
+    pPsiRy[d] = std::make_unique<Field>();
+    pPsiRz[d] = std::make_unique<Field>();
 
-    pPsiIx[d] = std::make_unique<Field>(lowIn, highIn, domainSize, stagger, 2);
-    pPsiIy[d] = std::make_unique<Field>(lowIn, highIn, domainSize, stagger, 2);
-    pPsiIz[d] = std::make_unique<Field>(lowIn, highIn, domainSize, stagger, 2);
+    pPsiIx[d] = std::make_unique<Field>();
+    pPsiIy[d] = std::make_unique<Field>();
+    pPsiIz[d] = std::make_unique<Field>();
   }
 
   addData("KappaEdx", pKappaEdx);
@@ -85,14 +67,21 @@ void FDTD_PLRCCore::registerData()
 
 void FDTD_PLRCCore::init()
 {
-  retrieveData("Ex", pEx);
-  retrieveData("Ey", pEy);
-  retrieveData("Ez", pEz);
+  FieldSolver::init();
 
-  retrieveData("Bx", pBx);
-  retrieveData("By", pBy);
-  retrieveData("Bz", pBz);
+  auto retriever = [this](std::string param) {
+    pField pF;
+    retrieveData(param, pF);
+    return pF.get();
+  };
 
+  pEx = retriever("Ex");
+  pEy = retriever("Ey");
+  pEz = retriever("Ez");
+
+  pBx = retriever("Bx");
+  pBy = retriever("By");
+  pBz = retriever("Bz");
 
   for(pCurrentBlock current: schnek::BlockContainer<CurrentBlock>::childBlocks())
   {
@@ -109,6 +98,51 @@ void FDTD_PLRCCore::init()
       "Piecewise Linear Recursive Convolution for dispersive media",
       Kelley1996);
 
+  schnek::DomainSubdivision<Field> &subdivision = getContext().getSubdivision();
+  Domain domainSize = subdivision.getInnerExtent(getContext().getSize());
+  schnek::Array<bool, DIMENSION> stagger;
+  stagger = false;
+
+  Index low  = subdivision.getLo();
+  Index high = subdivision.getHi();
+
+  Index lowIn  = subdivision.getInnerLo();
+  Index highIn = subdivision.getInnerHi();
+
+  pSigma->resize(lowIn, highIn, domainSize, stagger, 2);
+
+  pKappaEdx->resize(schnek::Array<int, 1>(low[0]), schnek::Array<int, 1>(high[0]));
+  (*pKappaEdx) = 1.0;
+#ifndef HUERTO_ONE_DIM
+  pKappaEdy->resize(schnek::Array<int, 1>(low[1]), schnek::Array<int, 1>(high[1]));
+  (*pKappaEdy) = 1.0;
+#endif
+#ifdef HUERTO_THREE_DIM
+  pKappaEdz->resize(schnek::Array<int, 1>(low[2]), schnek::Array<int, 1>(high[2]));
+  (*pKappaEdz) = 1.0;
+#endif
+
+  pKappaHdx->resize(schnek::Array<int, 1>(low[0]), schnek::Array<int, 1>(high[0]));
+  (*pKappaHdx) = 1.0;
+#ifndef HUERTO_ONE_DIM
+  pKappaHdy->resize(schnek::Array<int, 1>(low[1]), schnek::Array<int, 1>(high[1]));
+  (*pKappaHdy) = 1.0;
+#endif
+#ifdef HUERTO_THREE_DIM
+  pKappaHdz->resize(schnek::Array<int, 1>(low[2]), schnek::Array<int, 1>(high[2]));
+  (*pKappaHdz) = 1.0;
+#endif
+
+  for (int d=0; d<3; d++)
+  {
+    pPsiRx[d]->resize(lowIn, highIn, domainSize, stagger, 2);
+    pPsiRy[d]->resize(lowIn, highIn, domainSize, stagger, 2);
+    pPsiRz[d]->resize(lowIn, highIn, domainSize, stagger, 2);
+
+    pPsiIx[d]->resize(lowIn, highIn, domainSize, stagger, 2);
+    pPsiIy[d]->resize(lowIn, highIn, domainSize, stagger, 2);
+    pPsiIz[d]->resize(lowIn, highIn, domainSize, stagger, 2);
+  }
 }
 
 //===============================================================

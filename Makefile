@@ -3,8 +3,8 @@ TARGET_BASE = mpulse
 
 DIMENSIONS = 1 2 3
 
-#OFLAGS  = -g -O0 -Wall -std=c++14
-OFLAGS  = -O3 -Wall -std=c++14
+OFLAGS  = -g -O0 -Wall -std=c++14
+# OFLAGS  = -O3 -Wall -std=c++14
 
 INCLUDE = -I/usr/local/include $(HDF_INCLUDE)
 
@@ -22,6 +22,7 @@ SOURCES = $(wildcard src/*.cpp) \
   huerto/electromagnetics/source/plane_wave.cpp \
   huerto/electromagnetics/source/beam.cpp \
   huerto/electromagnetics/pml/cpml_border.cpp \
+  huerto/maths/random.cpp \
   huerto/maths/functions/core.cpp \
   huerto/simulation/task.cpp
 

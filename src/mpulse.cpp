@@ -10,6 +10,7 @@
 #include "fdtd_plrc.hpp"
 #include "shortpulseinject.hpp"
 #include "plasmacurrent.hpp"
+#include "maths.hpp"
 
 #include "../huerto/electromagnetics/em_fields.hpp"
 #include "../huerto/electromagnetics/fieldsolver.hpp"
@@ -173,7 +174,7 @@ int main (int argc, char** argv) {
     registerCMath(P.getFunctionRegistry());
     registerCoreFunctions(P.getFunctionRegistry());
 
-    //P.getFunctionRegistry().registerFunction("random",randomRange);
+    P.getFunctionRegistry().registerFunction("random",parserFunc::random);
 
     schnek::pBlock application = P.parse(in);
 

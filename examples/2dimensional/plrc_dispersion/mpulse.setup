@@ -1,0 +1,102 @@
+float lambda = 1e-6;
+float dx = 0.05*lambda;
+float length = 5.0;
+
+Nx = 1000;
+Ny = 1000;
+
+float NKY = 0.0;
+float NKX = 50.0;
+float phi = atan2(NKY,NKX);
+
+float LL = NKX*lambda/cos(phi);
+
+Lx = LL;
+Ly = LL;
+
+// plasma and laser parameters
+
+cflFactor = 1.0/sqrt(2.0);
+
+float dt = cflFactor*dx/clight;
+
+tMax = 2*Lx/clight;
+
+
+EMFields {
+  float xm = (x - Lx/2);
+  float ym = (y - Ly/2);
+  float s = cos(phi)*xm + sin(phi)*ym;
+  float amp = sin(2*pi*s/lambda);
+  
+  Ex = -sin(phi)*amp;
+  Ey =  cos(phi)*amp;
+  Ez = 0.0;
+
+  Bx = 0.0;
+  By = 0.0;
+  Bz = amp/clight;
+}
+
+FDTD_PLRC {
+  float SellmeierB1 = 1.03961212;
+  float SellmeierB2	= 0.231792344;
+  float SellmeierB3	= 1.01046945;
+  float SellmeierC1 = 6.00069867e-3 * 1e-12;
+  float SellmeierC2	= 2.00179144e-2 * 1e-12;
+  float SellmeierC3	= 1.03560653e2  * 1e-12;
+
+  L1eps = SellmeierB1;
+  L2eps = SellmeierB2;
+  L3eps = SellmeierB3;
+
+  L1Om2 = 4*pi*pi*clight*clight/SellmeierC1;
+  L2Om2 = 4*pi*pi*clight*clight/SellmeierC2;
+  L3Om2 = 4*pi*pi*clight*clight/SellmeierC3;
+}
+
+float outDt = tMax/20;
+
+FieldDiag Ex {
+  file = "Ex_#t.h5";
+  field = "Ex";
+  deltaTime = outDt;
+}
+
+FieldDiag Ey {
+  file = "Ey_#t.h5";
+  field = "Ey";
+  deltaTime = outDt;
+}
+
+FieldDiag Ez {
+  file = "Ez_#t.h5";
+  field = "Ez";
+  deltaTime = outDt;
+}
+
+FieldDiag Bx {
+  file = "Bx_#t.h5";
+  field = "Bx";
+  deltaTime = outDt;
+}
+
+FieldDiag By {
+  file = "By_#t.h5";
+  field = "By";
+  deltaTime = outDt;
+}
+
+FieldDiag Bz {
+  file = "Bz_#t.h5";
+  field = "Bz";
+  deltaTime = outDt;
+}
+
+SliceDiag EzSlice {
+  file = "Ez_slice_#t.h5";
+  field = "Ez";
+  interval = 1000;
+  dim = 0;
+  pos = 500;
+}
