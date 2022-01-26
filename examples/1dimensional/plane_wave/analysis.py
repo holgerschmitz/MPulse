@@ -13,6 +13,8 @@ dx = 0.05*l0
 cflFactor = 0.99
 dt = cflFactor*dx/clight
 omega = 2*math.pi*clight/l0
+# todo, we can make the analysis better by using the numerical dispersion relation
+
 
 time = np.arange(0, 201, 1)
 Bz_err = 0.0*time

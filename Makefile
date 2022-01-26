@@ -24,7 +24,6 @@ SOURCES = $(wildcard src/*.cpp) \
   huerto/electromagnetics/pml/cpml_border.cpp \
   huerto/maths/random.cpp \
   huerto/maths/functions/core.cpp \
-  huerto/maths/random.cpp \
   huerto/simulation/task.cpp
 
 BUILD_DIR = build
