@@ -35,13 +35,13 @@ void PlasmaCurrent::init()
   plasmaBlock.retrieveData("Rho", pRho);
 
 
-  pJx = std::make_shared<Grid>(lowIn, highIn);
-  pJy = std::make_shared<Grid>(lowIn, highIn);
-  pJz = std::make_shared<Grid>(lowIn, highIn);
+  Jx.resize(lowIn, highIn);
+  Jy.resize(lowIn, highIn);
+  Jz.resize(lowIn, highIn);
 
-  plasmaBlock.addData("PlasmaJx", pJx);
-  plasmaBlock.addData("PlasmaJy", pJy);
-  plasmaBlock.addData("PlasmaJz", pJz);
+  plasmaBlock.addData("PlasmaJx", Jx);
+  plasmaBlock.addData("PlasmaJy", Jy);
+  plasmaBlock.addData("PlasmaJz", Jz);
 
 }
 
@@ -52,10 +52,6 @@ void PlasmaCurrent::stepScheme(double dt)
   Field &Ez = *pEz;
 
   Field &Rho = *pRho;
-
-  Grid &Jx = *pJx;
-  Grid &Jy = *pJy;
-  Grid &Jz = *pJz;
 
   Index low = Jx.getLo();
   Index high = Jx.getHi();

@@ -51,7 +51,7 @@ class ShortPulseInjectSourceFunc
                   double eps,
                   int distance);
 
-    void initSourceFunc(pGrid pJx, pGrid pJy, pGrid pJz);
+    void initSourceFunc(Grid Jx, Grid Jy, Grid Jz);
 
 #ifdef HUERTO_ONE_DIM
     Vector3d getEField(int i, double time);

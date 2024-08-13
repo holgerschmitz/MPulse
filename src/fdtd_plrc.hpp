@@ -5,6 +5,8 @@
  *      Author: Holger Schmitz
  */
 
+#ifdef DISABLED_CODE
+
 #ifndef MPULSE_FDTD_PLRC_H
 #define MPULSE_FDTD_PLRC_H
 
@@ -306,5 +308,7 @@ typedef FDTD_PLRCSolver<FDTD_PLRCLinCore> FDTD_PLRCLin;
 typedef FDTD_PLRCSolver<FDTD_PLRCNonlinCore> FDTD_PLRCNonlin;
 
 #include "fdtd_plrc.t"
+
+#endif
 
 #endif

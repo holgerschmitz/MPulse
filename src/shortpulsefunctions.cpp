@@ -42,18 +42,18 @@ ShortPulseInjectSourceFunc::Complex
   Complex I(0,1), I2(0,2), I4(0,4), nI(0,-1);
   Complex q(z,ZRl);
   Complex rT = ZRl/q;
-  Complex rT4T = rT*T4;
+  // Complex rT4T = rT*T4;
   Complex rpiT = sqrt(M_PI)*rT;
   Complex rpT = -ZRl/(q*q);
   
   Complex eiphi = exp(2*I*p);
 
-  Complex eph2T = exp(2.*I*(p + 2.*tb));
+  // Complex eph2T = exp(2.*I*(p + 2.*tb));
 
   Complex tpT = t - z/c - r2/(2.*c*q);
   Complex tpT2 = tpT*tpT;
-  Complex tpT3 = tpT*tpT2;
-  Complex tpT4 = tpT*tpT3;
+  // Complex tpT3 = tpT*tpT2;
+  // Complex tpT4 = tpT*tpT3;
   
   Complex tpzT = - 1/c - r2/(2.*c*q*q);
   
@@ -116,12 +116,12 @@ ShortPulseInjectSourceFunc::Complex
   Complex rppT = 2.*ZRl/(q*q*q);
 
   Complex eiphi = exp(2*I*p);
-  Complex eph2T = exp(2.*I*(p + 2.*tb));
+  // Complex eph2T = exp(2.*I*(p + 2.*tb));
 
   Complex tpT = t - z/c - r2/(2.*c*q);
   Complex tpT2 = tpT*tpT;
-  Complex tpT3 = tpT*tpT2;
-  Complex tpT4 = tpT*tpT3;
+  // Complex tpT3 = tpT*tpT2;
+  // Complex tpT4 = tpT*tpT3;
   
   Complex tpzT = - 1/c + r2/(2.*c*q*q);
   Complex tpzT2 = tpzT*tpzT;
@@ -129,7 +129,7 @@ ShortPulseInjectSourceFunc::Complex
   Complex tpyT = -y/(c*q);
   Complex tpxyT = 0.0;
   Complex tpxxT = -1./(c*q);
-  Complex tpyyT = -1./(c*q);
+  // Complex tpyyT = -1./(c*q);
   Complex tpzzT = -r2/(c*q*q*q);
   Complex tpxT2 = tpxT*tpxT;
   Complex tpyT2 = tpyT*tpyT;

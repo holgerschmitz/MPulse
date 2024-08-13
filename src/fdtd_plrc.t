@@ -25,12 +25,12 @@ void FDTD_PLRCSolver<PLRCImplementation>::stepSchemeInit(double dt)
 
   stepB(0.5*dt);
 
-  BOOST_FOREACH(pCurrent current, this->currents)
+  for (pCurrent current: this->currents)
   {
     current->stepSchemeInit(dt);
   }
 
-  BOOST_FOREACH(pCurrent current, this->magCurrents)
+  for (pCurrent current: this->magCurrents)
   {
     current->stepSchemeInit(dt);
   }
@@ -42,14 +42,14 @@ void FDTD_PLRCSolver<PLRCImplementation>::stepScheme(double dt)
   (*this->pSigma) = 0;
 
 
-  BOOST_FOREACH(pCurrent current, this->currents) {
+  for (pCurrent current: this->currents) {
     current->stepScheme(dt);
   }
 
   stepD(dt);
 
 
-  BOOST_FOREACH(pCurrent current, this->magCurrents) {
+  for (pCurrent current: this->magCurrents) {
     current->stepScheme(dt);
   }
 
@@ -113,9 +113,9 @@ void FDTD_PLRCSolver<PLRCImplementation>::stepD(double dt)
 #ifdef HUERTO_THREE_DIM
       for (pos[2]=low[2]; pos[2]<=high[2]; ++pos[2]) {
 #endif
-        double jx = (*this->pJx)[pos];
-        double jy = (*this->pJy)[pos];
-        double jz = (*this->pJz)[pos];
+        double jx = Jx[pos];
+        double jy = Jy[pos];
+        double jz = Jz[pos];
 
         this->plrcStepD(dt, pos, dx, jx, jy, jz);
 #ifdef HUERTO_THREE_DIM
@@ -233,9 +233,9 @@ void FDTD_PLRCSolver<PLRCImplementation>::stepB(double dt)
 #ifdef HUERTO_THREE_DIM
       for (pos[2]=low[2]; pos[2]<=high[2]; ++pos[2]) {
 #endif
-        jx = (*this->pMx)[pos];
-        jy = (*this->pMy)[pos];
-        jz = (*this->pMz)[pos];
+        jx = Mx[pos];
+        jy = My[pos];
+        jz = Mz[pos];
 
         this->plrcStepB(dt, pos, dx, jx, jy, jz);
 #ifdef HUERTO_THREE_DIM

@@ -13,8 +13,8 @@
 #include "../huerto/diagnostic/field_diagnostic.hpp"
 #include "../huerto/diagnostic/slice_diagnostic.hpp"
 
-typedef FieldDiagnostic<Field, pField, schnek::DeltaTimeDiagnostic> MPulseFieldDiagnostic;
-typedef GridSliceDiagnostic<Grid, pGrid, schnek::IntervalDiagnostic> SliceDiagnostic;
+typedef FieldDiagnostic<Field, schnek::DeltaTimeDiagnostic> MPulseFieldDiagnostic;
+typedef GridSliceDiagnostic<Grid, schnek::IntervalDiagnostic> SliceDiagnostic;
 
 
 #endif /* SRC_DIAGNOSTIC_HPP_ */

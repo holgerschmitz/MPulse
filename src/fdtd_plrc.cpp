@@ -1,4 +1,6 @@
 
+#ifdef DISABLED_CODE
+
 #include "fdtd_plrc.hpp"
 
 #include "../huerto/constants.hpp"
@@ -735,3 +737,4 @@ void FDTD_PLRCNonlinCore::init()
       Schmitz2012);
 }
 
+#endif

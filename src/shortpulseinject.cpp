@@ -85,18 +85,20 @@ void ShortPulseInjectSourceFunc::setParam(double length,
   std::cerr << "ShortPulseInjectSourceFunc::setParam\n";
 
   // Grid Spacing and position
-
-  DX = context.getDx()[0];
-  DY = context.getDx()[1];
-  DZ = context.getDx()[2];
-  DT = context.getDt();
-
   Index gridLow  = Index(0);
   Index gridHigh = context.getGridSize();
 
+  DX = context.getDx()[0];
   centrex = 0.5*double(gridHigh[0] + gridLow[0]);
+#ifndef HUERTO_ONE_DIM
+  DY = context.getDx()[1];
   centrey = 0.5*double(gridHigh[1] + gridLow[1]);
+#endif
+#ifdef HUERTO_THREE_DIM
+  DZ = context.getDx()[2];
   centrez = 0.5*double(gridHigh[2] + gridLow[2]);
+#endif
+  DT = context.getDt();
 
   // setting most parameters
 
@@ -130,7 +132,7 @@ void ShortPulseInjectSourceFunc::setParam(double length,
 }
 
 void ShortPulseInjectSourceFunc
-    ::initSourceFunc(pGrid pJx, pGrid pJy, pGrid pJz)
+    ::initSourceFunc(Grid Jx, Grid Jy, Grid Jz)
 {
 }
 

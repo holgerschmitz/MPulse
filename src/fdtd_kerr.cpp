@@ -119,7 +119,7 @@ void FDTD_Kerr::init() {
   retrieveData("By", pBy);
   retrieveData("Bz", pBz);
 
-  BOOST_FOREACH(pCurrentBlock current, schnek::BlockContainer<CurrentBlock>::childBlocks())
+  for (pCurrentBlock current: schnek::BlockContainer<CurrentBlock>::childBlocks())
   {
     current->initCurrents(*this);
   }
@@ -138,24 +138,24 @@ void FDTD_Kerr::init() {
 void FDTD_Kerr::stepSchemeInit(double dt) {
   stepB(0.5*dt);
 
-  BOOST_FOREACH(pCurrent current, this->currents) {
+  for (pCurrent current: this->currents) {
     current->stepSchemeInit(dt);
   }
 
-  BOOST_FOREACH(pCurrent current, this->magCurrents) {
+  for (pCurrent current: this->magCurrents) {
     current->stepSchemeInit(dt);
   }
 }
 
 void FDTD_Kerr::stepScheme(double dt)
 {
-  BOOST_FOREACH(pCurrent current, this->currents) {
+  for (pCurrent current: this->currents) {
     current->stepScheme(dt);
   }
 
   stepD(dt);
 
-  BOOST_FOREACH(pCurrent current, this->magCurrents) {
+  for (pCurrent current: this->magCurrents) {
     current->stepScheme(dt);
   }
 
@@ -183,9 +183,9 @@ void FDTD_Kerr::stepD(double dt)
 
   for (int i=low[0]; i<=high[0]; ++i)
   {
-    double jx = (*this->pJx)(i);
-    double jy = (*this->pJy)(i);
-    double jz = (*this->pJz)(i);
+    double jx = Jx(i);
+    double jy = Jy(i);
+    double jz = Jz(i);
 
     double kappaEdx = rKappaEdx(i)*dx[0];
 
@@ -263,8 +263,8 @@ void FDTD_Kerr::stepB(double dt)
   sumMagCurrents();
 
   for (int i=low[0]; i<=high[0]; ++i) {
-    double jy = (*this->pMy)(i);
-    double jz = (*this->pMz)(i);
+    double jy = My(i);
+    double jz = Mz(i);
 
     double kappaHdx = rKappaHdx(i)*dx[0];
 
@@ -314,9 +314,9 @@ void FDTD_Kerr::stepD(double dt)
   for (int i=low[0]; i<=high[0]; ++i)
     for (int j=low[1]; j<=high[1]; ++j)
   {
-    double jx = (*this->pJx)(i,j);
-    double jy = (*this->pJy)(i,j);
-    double jz = (*this->pJz)(i,j);
+    double jx = Jx(i,j);
+    double jy = Jy(i,j);
+    double jz = Jz(i,j);
 
     double kappaEdx = rKappaEdx(i)*dx[0];
     double kappaEdy = rKappaEdy(j)*dx[1];
@@ -413,9 +413,9 @@ void FDTD_Kerr::stepB(double dt)
   for (int i=low[0]; i<=high[0]; ++i)
     for (int j=low[1]; j<=high[1]; ++j)
   {
-    double jx = (*this->pMx)(i,j);
-    double jy = (*this->pMy)(i,j);
-    double jz = (*this->pMz)(i,j);
+    double jx = Mx(i,j);
+    double jy = My(i,j);
+    double jz = Mz(i,j);
 
     double kappaHdx = rKappaHdx(i)*dx[0];
     double kappaHdy = rKappaHdy(j)*dx[1];
@@ -484,9 +484,9 @@ void FDTD_Kerr::stepD(double dt)
     for (int j=low[1]; j<=high[1]; ++j)
       for (int k=low[2]; k<=high[2]; ++k)
   {
-    double jx = (*this->pJx)(i,j,k);
-    double jy = (*this->pJy)(i,j,k);
-    double jz = (*this->pJz)(i,j,k);
+    double jx = Jx(i,j,k);
+    double jy = Jy(i,j,k);
+    double jz = Jz(i,j,k);
 
     double kappaEdx = rKappaEdx(i)*dx[0];
     double kappaEdy = rKappaEdy(j)*dx[1];
@@ -581,9 +581,9 @@ void FDTD_Kerr::stepB(double dt)
     for (int j=low[1]; j<=high[1]; ++j)
       for (int k=low[2]; k<=high[2]; ++k)
   {
-    double jx = (*this->pMx)(i,j,k);
-    double jy = (*this->pMy)(i,j,k);
-    double jz = (*this->pMz)(i,j,k);
+    double jx = Mx(i,j,k);
+    double jy = My(i,j,k);
+    double jz = Mz(i,j,k);
 
     double kappaHdx = rKappaHdx(i)*dx[0];
     double kappaHdy = rKappaHdy(j)*dx[1];
@@ -753,7 +753,7 @@ void FDTD_KerrAverage::init() {
   retrieveData("By", pBy);
   retrieveData("Bz", pBz);
 
-  BOOST_FOREACH(pCurrentBlock current, schnek::BlockContainer<CurrentBlock>::childBlocks())
+  for (pCurrentBlock current: schnek::BlockContainer<CurrentBlock>::childBlocks())
   {
     current->initCurrents(*this);
   }
@@ -772,24 +772,24 @@ void FDTD_KerrAverage::init() {
 void FDTD_KerrAverage::stepSchemeInit(double dt) {
   stepB(0.5*dt);
 
-  BOOST_FOREACH(pCurrent current, this->currents) {
+  for (pCurrent current: this->currents) {
     current->stepSchemeInit(dt);
   }
 
-  BOOST_FOREACH(pCurrent current, this->magCurrents) {
+  for (pCurrent current: this->magCurrents) {
     current->stepSchemeInit(dt);
   }
 }
 
 void FDTD_KerrAverage::stepScheme(double dt)
 {
-  BOOST_FOREACH(pCurrent current, this->currents) {
+  for (pCurrent current: this->currents) {
     current->stepScheme(dt);
   }
 
   stepD(dt);
 
-  BOOST_FOREACH(pCurrent current, this->magCurrents) {
+  for (pCurrent current: this->magCurrents) {
     current->stepScheme(dt);
   }
 
@@ -822,9 +822,9 @@ void FDTD_KerrAverage::stepD(double dt) {
 
   for (int i=low[0]; i<=high[0]; ++i)
   {
-    double jx = (*this->pJx)(i);
-    double jy = (*this->pJy)(i);
-    double jz = (*this->pJz)(i);
+    double jx = Jx(i);
+    double jy = Jy(i);
+    double jz = Jz(i);
 
     double kappaEdx = rKappaEdx(i)*dx[0];
 
@@ -895,8 +895,8 @@ void FDTD_KerrAverage::stepB(double dt)
   sumMagCurrents();
 
   for (int i=low[0]; i<=high[0]; ++i) {
-    double jy = (*this->pMy)(i);
-    double jz = (*this->pMz)(i);
+    double jy = My(i);
+    double jz = Mz(i);
 
     double kappaHdx = rKappaHdx(i)*dx[0];
 
@@ -951,9 +951,9 @@ void FDTD_KerrAverage::stepD(double dt) {
   for (int i=low[0]; i<=high[0]; ++i)
     for (int j=low[1]; j<=high[1]; ++j)
   {
-    double jx = (*this->pJx)(i, j);
-    double jy = (*this->pJy)(i, j);
-    double jz = (*this->pJz)(i, j);
+    double jx = Jx(i, j);
+    double jy = Jy(i, j);
+    double jz = Jz(i, j);
 
     double kappaEdx = rKappaEdx(i)*dx[0];
     double kappaEdy = rKappaEdy(j)*dx[1];
@@ -1037,9 +1037,9 @@ void FDTD_KerrAverage::stepB(double dt)
   for (int i=low[0]; i<=high[0]; ++i)
     for (int j=low[1]; j<=high[1]; ++j)
   {
-    double jx = (*this->pMx)(i,j);
-    double jy = (*this->pMy)(i,j);
-    double jz = (*this->pMz)(i,j);
+    double jx = Mx(i,j);
+    double jy = My(i,j);
+    double jz = Mz(i,j);
 
     double kappaHdx = rKappaHdx(i)*dx[0];
     double kappaHdy = rKappaHdy(j)*dx[1];
@@ -1112,9 +1112,9 @@ void FDTD_KerrAverage::stepD(double dt) {
     for (int j=low[1]; j<=high[1]; ++j)
       for (int k=low[2]; k<=high[2]; ++k)
   {
-    double jx = (*this->pJx)(i,j,k);
-    double jy = (*this->pJy)(i,j,k);
-    double jz = (*this->pJz)(i,j,k);
+    double jx = Jx(i,j,k);
+    double jy = Jy(i,j,k);
+    double jz = Jz(i,j,k);
 
     double kappaEdx = rKappaEdx(i)*dx[0];
     double kappaEdy = rKappaEdy(j)*dx[1];
@@ -1206,9 +1206,9 @@ void FDTD_KerrAverage::stepB(double dt)
     for (int j=low[1]; j<=high[1]; ++j)
       for (int k=low[2]; k<=high[2]; ++k)
   {
-    double jx = (*this->pMx)(i,j,k);
-    double jy = (*this->pMy)(i,j,k);
-    double jz = (*this->pMz)(i,j,k);
+    double jx = Mx(i,j,k);
+    double jy = My(i,j,k);
+    double jz = Mz(i,j,k);
 
     double kappaHdx = rKappaHdx(i)*dx[0];
     double kappaHdy = rKappaHdy(j)*dx[1];

@@ -7,7 +7,7 @@
 
 #include "diagnostic.hpp"
 #include "fdtd_kerr.hpp"
-#include "fdtd_plrc.hpp"
+// include "fdtd_plrc.hpp"
 #include "shortpulseinject.hpp"
 #include "plasmacurrent.hpp"
 
@@ -116,12 +116,12 @@ int main (int argc, char** argv) {
     blocks("FDTD_Plain").setClass<FDTD_Plain>();
     blocks("FDTD_Kerr").setClass<FDTD_Kerr>();
     blocks("FDTD_KerrAverage").setClass<FDTD_KerrAverage>();
-    blocks("FDTD_PLRC").setClass<FDTD_PLRCLin>();
-    blocks("FDTD_PLRC_Nonlinear").setClass<FDTD_PLRCNonlin>();
+    // blocks("FDTD_PLRC").setClass<FDTD_PLRCLin>();
+    // blocks("FDTD_PLRC_Nonlinear").setClass<FDTD_PLRCNonlin>();
     blocks("FieldDiag").setClass<MPulseFieldDiagnostic>();
     blocks("SliceDiag").setClass<SliceDiagnostic>();
     blocks("CPMLBorder").setClass<CPMLBorder>();
-//    blocks("ShortPulseInject").setClass<ShortPulseInject>();
+    blocks("ShortPulseInject").setClass<ShortPulseInject>();
     blocks("PlaneWaveSource").setClass<PlaneWaveSource>();
     blocks("PlaneGaussSource").setClass<PlaneGaussSource>();
 #ifndef HUERTO_ONE_DIM
