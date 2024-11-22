@@ -10,11 +10,19 @@ class PlasmaCurrentBlock : public CurrentBlock
   protected:
     void initParameters(schnek::BlockParameters &blockPars);
 
-    /// e/m for the charge carriers
-    double em;
-    /// ion mass
-    double mi;
-    /// ion charge number Z
+    /**
+     * charge for the charge carriers
+     * 
+     * Default: q_e = 1.602176634e-19
+     */
+    double charge;
+    /**
+     * mass of the charge carriers
+     * 
+     * Default: m_e = 9.1093837015e-31
+     */
+    double mass;
+    /// charge number Z
     double Z;
     /// friction coefficient
     double gamma;
@@ -25,17 +33,17 @@ class PlasmaCurrent : public Current
   protected:
     CurrentBlock &plasmaBlock;
 
-    pField pEx;
-    pField pEy;
-    pField pEz;
+    Field Ex;
+    Field Ey;
+    Field Ez;
 
-    pField pRho;
+    Field Rho;
 
-    /// e/m for the charge carriers
-    double em;
-    /// ion mass
-    double mi;
-    /// ion charge number Z
+    /// charge of the charge carriers
+    double charge;
+    /// mass of the charge carriers
+    double mass;
+    /// charge number Z
     double Z;
     /// friction coefficient
     double gamma;

@@ -10,6 +10,7 @@
 // include "fdtd_plrc.hpp"
 #include "shortpulseinject.hpp"
 #include "plasmacurrent.hpp"
+#include "plasmadensity.hpp"
 
 #include "../huerto/electromagnetics/em_fields.hpp"
 #include "../huerto/electromagnetics/fieldsolver.hpp"
@@ -129,25 +130,30 @@ int main (int argc, char** argv) {
 #endif
 
     blocks("PlasmaCurrent").setClass<PlasmaCurrentBlock>();
+    blocks("PlasmaDensity").setClass<PlasmaDensity>();
 
     blocks("mpulse").addChildren("EMFields")
         ("FDTD_Plain")("FDTD_Kerr")("FDTD_KerrAverage")("FDTD_PLRC")("FDTD_PLRC_Nonlinear")
         ("FieldDiag")("SliceDiag")
+        ("PlasmaDensity")
         ("ignore_initial_time_stagger");
 
     blocks("FDTD_Plain").addChildren("CPMLBorder")
+        ("PlasmaCurrent")
 #ifndef HUERTO_ONE_DIM
         ("GaussBeamSource")
 #endif
         ("PlaneWaveSource")("PlaneGaussSource");
 
     blocks("FDTD_Kerr").addChildren("CPMLBorder")
+        ("PlasmaCurrent")
 #ifndef HUERTO_ONE_DIM
         ("GaussBeamSource")
 #endif
         ("PlaneWaveSource")("PlaneGaussSource");
 
     blocks("FDTD_KerrAverage").addChildren("CPMLBorder")
+        ("PlasmaCurrent")
 #ifndef HUERTO_ONE_DIM
         ("GaussBeamSource")
 #endif
@@ -155,6 +161,7 @@ int main (int argc, char** argv) {
 
 
     blocks("FDTD_PLRC").addChildren("CPMLBorder")
+        ("PlasmaCurrent")
 #ifndef HUERTO_ONE_DIM
         ("GaussBeamSource")
 #endif

@@ -8,17 +8,19 @@ void PlasmaCurrentBlock::initParameters(schnek::BlockParameters &blockPars)
 {
   CurrentBlock::initParameters(blockPars);
 
-  blockPars.addParameter("em",&em,1.0);
-  blockPars.addParameter("gamma",&gamma,0.01);
+  blockPars.addParameter("charge", &charge, 1.602176634e-19);
+  blockPars.addParameter("mass", &mass, 9.1093837015e-31);
+  blockPars.addParameter("gamma", &gamma, 0.01);
+  blockPars.addParameter("Z", &Z, 1.0);
 }
 
 void PlasmaCurrentBlock::initCurrents(CurrentContainer &container)
 {
-  container.addCurrent(std::make_shared<PlasmaCurrent>(em, gamma, Z, gamma, boost::ref(*this)));
+  container.addCurrent(std::make_shared<PlasmaCurrent>(charge, mass, Z, gamma, boost::ref(*this)));
 }
 
-PlasmaCurrent::PlasmaCurrent(double em_, double mi_, double Z_, double gamma_, CurrentBlock &plasmaBlock_)
-  : plasmaBlock(plasmaBlock_), em(em_), mi(mi_), Z(Z_), gamma(gamma_)
+PlasmaCurrent::PlasmaCurrent(double charge_, double mass_, double Z_, double gamma_, CurrentBlock &plasmaBlock_)
+  : plasmaBlock(plasmaBlock_), charge(charge_), mass(mass_), Z(Z_), gamma(gamma_)
 {}
 
 void PlasmaCurrent::init()
@@ -28,11 +30,11 @@ void PlasmaCurrent::init()
   Index lowIn  = subdivision.getInnerLo();
   Index highIn = subdivision.getInnerHi();
 
-  plasmaBlock.retrieveData("Ex", pEx);
-  plasmaBlock.retrieveData("Ey", pEy);
-  plasmaBlock.retrieveData("Ez", pEz);
+  plasmaBlock.retrieveData("Ex", Ex);
+  plasmaBlock.retrieveData("Ey", Ey);
+  plasmaBlock.retrieveData("Ez", Ez);
 
-  plasmaBlock.retrieveData("Rho", pRho);
+  plasmaBlock.retrieveData("Rho", Rho);
 
 
   Jx.resize(lowIn, highIn);
@@ -47,18 +49,12 @@ void PlasmaCurrent::init()
 
 void PlasmaCurrent::stepScheme(double dt)
 {
-  Field &Ex = *pEx;
-  Field &Ey = *pEy;
-  Field &Ez = *pEz;
-
-  Field &Rho = *pRho;
-
   Index low = Jx.getLo();
   Index high = Jx.getHi();
 
   const double gdtn = 1-0.5*gamma*dt;
   const double gdtd = 1+0.5*gamma*dt;
-  const double emdt = dt*Z*em/mi;
+  const double emdt = dt*Z*charge/mass;
 
 #ifdef HUERTO_ONE_DIM
   for (int i=low[0]; i<high[0]; ++i) {
