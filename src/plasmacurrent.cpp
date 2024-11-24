@@ -54,7 +54,7 @@ void PlasmaCurrent::stepScheme(double dt)
 
   const double gdtn = 1-0.5*gamma*dt;
   const double gdtd = 1+0.5*gamma*dt;
-  const double emdt = dt*Z*charge/mass;
+  const double emdt = dt*Z*Z*charge*charge/mass;
 
 #ifdef HUERTO_ONE_DIM
   for (int i=low[0]; i<high[0]; ++i) {
@@ -63,9 +63,9 @@ void PlasmaCurrent::stepScheme(double dt)
     double &jz = Jz(i);
     double rho = Rho(i);
 
-    jx = (jx*gdtn - emdt*Ex(i)*rho)/gdtd;
-    jy = (jy*gdtn - emdt*Ey(i)*rho)/gdtd;
-    jz = (jz*gdtn - emdt*Ez(i)*rho)/gdtd;
+    jx = (jx*gdtn + emdt*Ex(i)*rho)/gdtd;
+    jy = (jy*gdtn + emdt*Ey(i)*rho)/gdtd;
+    jz = (jz*gdtn + emdt*Ez(i)*rho)/gdtd;
   }
 #endif
 
@@ -77,9 +77,9 @@ void PlasmaCurrent::stepScheme(double dt)
       double &jz = Jz(i,j);
       double rho = Rho(i,j);
 
-      jx = (jx*gdtn - emdt*Ex(i,j)*rho)/gdtd;
-      jy = (jy*gdtn - emdt*Ey(i,j)*rho)/gdtd;
-      jz = (jz*gdtn - emdt*Ez(i,j)*rho)/gdtd;
+      jx = (jx*gdtn + emdt*Ex(i,j)*rho)/gdtd;
+      jy = (jy*gdtn + emdt*Ey(i,j)*rho)/gdtd;
+      jz = (jz*gdtn + emdt*Ez(i,j)*rho)/gdtd;
     }
   }
 #endif
@@ -93,9 +93,9 @@ void PlasmaCurrent::stepScheme(double dt)
         double &jz = Jz(i,j,k);
         double rho = Rho(i,j,k);
 
-        jx = (jx*gdtn - emdt*Ex(i,j,k)*rho)/gdtd;
-        jy = (jy*gdtn - emdt*Ey(i,j,k)*rho)/gdtd;
-        jz = (jz*gdtn - emdt*Ez(i,j,k)*rho)/gdtd;
+        jx = (jx*gdtn + emdt*Ex(i,j,k)*rho)/gdtd;
+        jy = (jy*gdtn + emdt*Ey(i,j,k)*rho)/gdtd;
+        jz = (jz*gdtn + emdt*Ez(i,j,k)*rho)/gdtd;
       }
     }
   }

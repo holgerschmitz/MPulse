@@ -1,7 +1,7 @@
 /*
- * em_fields.cpp
+ * plasmadensity.cpp
  *
- *  Created on: 20 Apr 2018
+ *  Created on: 22 Nov 2024
  *      Author: Holger Schmitz
  */
 
