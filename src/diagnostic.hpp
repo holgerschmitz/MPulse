@@ -14,6 +14,7 @@
 #include "../huerto/diagnostic/slice_diagnostic.hpp"
 
 typedef FieldDiagnostic<Field, schnek::DeltaTimeDiagnostic> MPulseFieldDiagnostic;
+typedef FieldDiagnostic<Grid, schnek::DeltaTimeDiagnostic> MPulseGridDiagnostic;
 typedef GridSliceDiagnostic<Grid, schnek::IntervalDiagnostic> SliceDiagnostic;
 
 

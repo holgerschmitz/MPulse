@@ -3,12 +3,15 @@
 
 #include "../huerto/electromagnetics/current.hpp"
 
+class PlasmaCurrent;
+
 class PlasmaCurrentBlock : public CurrentBlock
 {
   public:
     void initCurrents(CurrentContainer &container);
   protected:
     void initParameters(schnek::BlockParameters &blockPars);
+    void registerData();
 
     /**
      * charge for the charge carriers
@@ -26,6 +29,9 @@ class PlasmaCurrentBlock : public CurrentBlock
     double Z;
     /// friction coefficient
     double gamma;
+    
+    /// plasma current density
+    std::shared_ptr<PlasmaCurrent> plasmaCurrent;
 };
 
 class PlasmaCurrent : public Current
@@ -51,6 +57,7 @@ class PlasmaCurrent : public Current
   public:
     PlasmaCurrent(double em_, double mi_, double Z_, double gamma_, CurrentBlock &plasmaBlock_);
 
+    void registerData();
     void init();
 
     void stepSchemeInit(double dt) {}

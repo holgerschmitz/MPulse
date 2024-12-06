@@ -3,7 +3,7 @@ TARGET_BASE = mpulse
 
 DIMENSIONS = 1 2 3
 
-#OFLAGS  = -g -O0 -Wall -std=c++14
+#OFLAGS  = -g -O0 -Wall -std=c++17
 OFLAGS  = -O3 -Wall -std=c++17
 
 INCLUDE = -I/usr/local/include -I/home/vol07/scarf237/arch/amd/include

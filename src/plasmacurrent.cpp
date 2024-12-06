@@ -14,14 +14,25 @@ void PlasmaCurrentBlock::initParameters(schnek::BlockParameters &blockPars)
   blockPars.addParameter("Z", &Z, 1.0);
 }
 
+void PlasmaCurrentBlock::registerData() {
+  plasmaCurrent = std::make_shared<PlasmaCurrent>(charge, mass, Z, gamma, boost::ref(*this));
+  plasmaCurrent->registerData();
+}
+
 void PlasmaCurrentBlock::initCurrents(CurrentContainer &container)
 {
-  container.addCurrent(std::make_shared<PlasmaCurrent>(charge, mass, Z, gamma, boost::ref(*this)));
+  container.addCurrent(plasmaCurrent);
 }
 
 PlasmaCurrent::PlasmaCurrent(double charge_, double mass_, double Z_, double gamma_, CurrentBlock &plasmaBlock_)
   : plasmaBlock(plasmaBlock_), charge(charge_), mass(mass_), Z(Z_), gamma(gamma_)
 {}
+
+void PlasmaCurrent::registerData() {
+  plasmaBlock.addData("PlasmaJx", Jx);
+  plasmaBlock.addData("PlasmaJy", Jy);
+  plasmaBlock.addData("PlasmaJz", Jz);
+}
 
 void PlasmaCurrent::init()
 {
@@ -40,11 +51,6 @@ void PlasmaCurrent::init()
   Jx.resize(lowIn, highIn);
   Jy.resize(lowIn, highIn);
   Jz.resize(lowIn, highIn);
-
-  plasmaBlock.addData("PlasmaJx", Jx);
-  plasmaBlock.addData("PlasmaJy", Jy);
-  plasmaBlock.addData("PlasmaJz", Jz);
-
 }
 
 void PlasmaCurrent::stepScheme(double dt)

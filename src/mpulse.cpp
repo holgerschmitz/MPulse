@@ -120,6 +120,7 @@ int main (int argc, char** argv) {
     // blocks("FDTD_PLRC").setClass<FDTD_PLRCLin>();
     // blocks("FDTD_PLRC_Nonlinear").setClass<FDTD_PLRCNonlin>();
     blocks("FieldDiag").setClass<MPulseFieldDiagnostic>();
+    blocks("GridDiag").setClass<MPulseGridDiagnostic>();
     blocks("SliceDiag").setClass<SliceDiagnostic>();
     blocks("CPMLBorder").setClass<CPMLBorder>();
     blocks("ShortPulseInject").setClass<ShortPulseInject>();
@@ -134,7 +135,7 @@ int main (int argc, char** argv) {
 
     blocks("mpulse").addChildren("EMFields")
         ("FDTD_Plain")("FDTD_Kerr")("FDTD_KerrAverage")("FDTD_PLRC")("FDTD_PLRC_Nonlinear")
-        ("FieldDiag")("SliceDiag")
+        ("FieldDiag")("GridDiag")("SliceDiag")
         ("PlasmaDensity")
         ("ignore_initial_time_stagger");
 
