@@ -22,7 +22,7 @@ void PlasmaDensity::initParameters(schnek::BlockParameters &parameters)
 }
 
 void PlasmaDensity::registerData() {
-  addData("Rho", Rho.field);
+  addData(fieldName, Rho.field);
 }
 
 void PlasmaDensity::fillValues() {
@@ -50,4 +50,17 @@ void PlasmaDensity::init() {
   Stagger stagger(false);
   Rho.field.resize(lowIn, highIn, domainSize, stagger, 2);
   fillValues();
+}
+
+void NeutralDensity::initParameters(schnek::BlockParameters &parameters)
+{
+  // Required to call the parent class method to initialize the parameters
+  PlasmaDensity::initParameters(parameters);
+  parameters.addParameter("A", &A, 1.0);
+}
+
+void NeutralDensity::registerData() {
+  // Required to call the parent class method to register the data
+  PlasmaDensity::registerData();
+  addData("A", A);
 }

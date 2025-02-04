@@ -5,9 +5,12 @@
  *      Author: Holger Schmitz
  */
 
+#include "mpulse.hpp"
 #include "diagnostic.hpp"
 #include "fdtd_kerr.hpp"
 // include "fdtd_plrc.hpp"
+#include "mpiionization.hpp"
+#include "fieldionization.hpp"
 #include "shortpulseinject.hpp"
 #include "plasmacurrent.hpp"
 #include "plasmadensity.hpp"
@@ -94,6 +97,7 @@ void MPulse::execute()
     {
       f->stepScheme(dt);
     }
+    executeTasks("ionization");
 
     time += dt;
     ++timeStep;
@@ -132,12 +136,17 @@ int main (int argc, char** argv) {
 
     blocks("PlasmaCurrent").setClass<PlasmaCurrentBlock>();
     blocks("PlasmaDensity").setClass<PlasmaDensity>();
+    blocks("NeutralDensity").setClass<NeutralDensity>();
+
+    blocks("MPIIonization").setClass<MPIIonization>();
+    blocks("FieldIonization").setClass<FieldIonization>();
 
     blocks("mpulse").addChildren("EMFields")
         ("FDTD_Plain")("FDTD_Kerr")("FDTD_KerrAverage")("FDTD_PLRC")("FDTD_PLRC_Nonlinear")
         ("FieldDiag")("GridDiag")("SliceDiag")
-        ("PlasmaDensity")
-        ("ignore_initial_time_stagger");
+        ("PlasmaDensity")("NeutralDensity")
+        ("ignore_initial_time_stagger")
+        ("MPIIonization")("FieldIonization");
 
     blocks("FDTD_Plain").addChildren("CPMLBorder")
         ("PlasmaCurrent")
