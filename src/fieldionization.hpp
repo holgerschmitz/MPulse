@@ -25,7 +25,6 @@ class FieldIonization :
     double Uion;
     double Wion;
     double neff;
-    double rat;
   private:
     double computeIonizationRate(double E);
   protected:
