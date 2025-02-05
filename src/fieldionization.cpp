@@ -15,7 +15,7 @@ void FieldIonization::initParameters(schnek::BlockParameters &blockPars)
   blockPars.addParameter("Uion", &Uion, 1.0);
   blockPars.addParameter("Wion", &Wion, 1.0);
   blockPars.addParameter("neff", &neff, 1.0);
-  blockPars.addParameter("rat", &rat, 1.0);
+  
 }
 
 void FieldIonization::init()
@@ -87,6 +87,6 @@ void FieldIonization::execute()
     double Ri = computeIonizationRate(E); // Ionization rate
     double R = Ri * 0.5 * dt;
 
-    rho = (rho * (1 - R) + Ri * rat * dt) / (1 + R);
+    rho = (rho * (1 - R) + Ri * neut * dt) / (1 + R);
   }
 }
