@@ -13,8 +13,6 @@
 #include <schnek/diagnostic/diagnostic.hpp>
 #include <schnek/diagnostic/hdfdiagnostic.hpp>
 
-#include <boost/ref.hpp>
-
 #include <set>
 
 using namespace schnek;

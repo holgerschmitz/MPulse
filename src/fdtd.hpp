@@ -24,9 +24,9 @@ class FieldSolver : public ChildBlock<FieldSolver> {
     void stepD(double dt);
     void stepB(double dt);
   protected:
-    void initParameters(BlockParameters &parameters);
-    void registerData();
-    void init();
+    void initParameters(BlockParameters &parameters) override;
+    void registerData() override;
+    void init() override;
   public:
     void stepSchemeInit(double dt);
     void stepScheme(double dt);

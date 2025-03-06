@@ -13,9 +13,6 @@
 #include <schnek/tools/fieldtools.hpp>
 #include <schnek/tools/literature.hpp>
 
-#include <boost/foreach.hpp>
-#include <boost/make_shared.hpp>
-
 #include <mpi.h>
 
 #include <fstream>
@@ -41,7 +38,7 @@ void SimulationBlock::initParameters(BlockParameters &parameters) {
 
 void SimulationBlock::preInit() {
   globalMax = gridSize-1;
-  for (int i=0; i<2; ++i) dx[i] = size[i] / gridSize[i];
+  dx[0] = size[0] / gridSize[0];
 
   subdivision.init(gridSize, ghostCells);
   ::subdivision = &subdivision;
@@ -51,8 +48,8 @@ void SimulationBlock::preInit() {
 
   Range<double, 1> physRange = subdivision.getInnerExtent(size);
 
-  Field<double, 1> *Ex, *Ey, *Ez;
-  Field<double, 1> *Bx, *By, *Bz;
+  Field<double, 1> Ex, Ey, Ez;
+  Field<double, 1> Bx, By, Bz;
 
   Array<bool, 1> exStaggerYee(true);
   Array<bool, 1> eyStaggerYee(false);
@@ -70,13 +67,13 @@ void SimulationBlock::preInit() {
   retrieveData("By", By);
   retrieveData("Bz", Bz);
 
-  Ex->resize(lo, hi, physRange, exStaggerYee, ghostCells);
-  Ey->resize(lo, hi, physRange, eyStaggerYee, ghostCells);
-  Ez->resize(lo, hi, physRange, ezStaggerYee, ghostCells);
+  Ex.resize(lo, hi, physRange, exStaggerYee, ghostCells);
+  Ey.resize(lo, hi, physRange, eyStaggerYee, ghostCells);
+  Ez.resize(lo, hi, physRange, ezStaggerYee, ghostCells);
 
-  Bx->resize(lo, hi, physRange, bxStaggerYee, ghostCells);
-  By->resize(lo, hi, physRange, byStaggerYee, ghostCells);
-  Bz->resize(lo, hi, physRange, bzStaggerYee, ghostCells);
+  Bx.resize(lo, hi, physRange, bxStaggerYee, ghostCells);
+  By.resize(lo, hi, physRange, byStaggerYee, ghostCells);
+  Bz.resize(lo, hi, physRange, bzStaggerYee, ghostCells);
 
 }
 
@@ -89,7 +86,7 @@ void SimulationBlock::execute() {
   double minDx = dx[0];
   dt = cflFactor*minDx/clight;
 
-  BOOST_FOREACH(boost::shared_ptr<FieldSolver> f, childBlocks()) {
+  for (auto f: childBlocks()) {
     f->stepSchemeInit(dt);
   }
 
@@ -97,7 +94,7 @@ void SimulationBlock::execute() {
     if (subdivision.master())
       std::cout <<"Time "<< time << std::endl;
 
-    BOOST_FOREACH(boost::shared_ptr<FieldSolver> f, childBlocks()) {
+    for(auto f: childBlocks()) {
       f->stepScheme(dt);
     }
 
