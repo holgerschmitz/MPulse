@@ -1,0 +1,26 @@
+float lambda = 1e-6;
+float dx = 0.05*lambda;
+
+
+Nx = 400;
+Lx = dx*Nx;
+tMax = 3*Lx/clight;
+
+cflFactor = 0.995;
+
+
+float dt = cflFactor*dx/clight;
+float outDt = 200*dt;
+
+
+FDTD {
+  eps_rel = 1.0;
+  Ey = sin(2*pi*x/Lx);
+  Bz = Ey/clight;
+}
+
+// Diagnostic {
+//   file = "Ey_#t.h5";
+//   field = "Ey";
+//   deltaTime = outDt;
+// }
