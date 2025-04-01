@@ -50,14 +50,26 @@ void FieldIonization::execute()
   Index low = Electrons.getLo();
   Index high = Electrons.getHi();
 
+  Range::LimitType low1D(low[0]);
+  Range::LimitType high1D(high[0]);
+  Range range(low1D, high1D);
+
 #ifdef HUERTO_ONE_DIM
-  for (int i=low[0]; i<=high[0]; ++i)
+  // for (int i=low[0]; i<=high[0]; ++i)
+  // {
+  //   double ex = Ex(i);
+  //   double ey = Ey(i);
+  //   double ez = Ez(i);
+  //   double &rho = Electrons(i);
+  //   double &neut = Neutrals(i);
+  // }
+  for (auto &pos : range)
   {
-    double ex = Ex(i);
-    double ey = Ey(i);
-    double ez = Ez(i);
-    double &rho = Electrons(i);
-    double &neut = Neutrals(i);
+    double ex = Ex[pos];
+    double ey = Ey[pos];
+    double ez = Ez[pos];
+    double &rho = Electrons[pos];
+    double &neut = Neutrals[pos];
 #endif
 
 #ifdef HUERTO_TWO_DIM

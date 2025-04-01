@@ -6,7 +6,7 @@ DIMENSIONS = 1 2 3
 #OFLAGS  = -g -O0 -Wall -std=c++17
 OFLAGS  = -O3 -Wall -std=c++17
 
-INCLUDE = -I/usr/local/include -I/home/vol07/scarf237/arch/amd/include
+INCLUDE = -I/usr/local/include -I/work4/scd/scarf1354/work/proj2/resources/include
 
 CXX     = mpiCC
 LINK	 = mpiCC
@@ -29,7 +29,10 @@ SOURCES = $(wildcard src/*.cpp) \
 BUILD_DIR = build
 BIN_DIR = bin
 
-LDFLAGS = $(HDF_LDFLAGS) -L/home/vol07/scarf237/arch/amd/lib
+# LDFLAGS = $(HDF_LDFLAGS) -L/work4/scd/scarf1354/work/proj2/resources/lib
+
+LDFLAGS = $(HDF_LDFLAGS) -L/work4/scd/scarf1354/work/proj2/resources/lib -Wl,-rpath,/work4/scd/scarf1354/work/proj2/resources/lib
+
 
 LOADLIBS = -lhdf5 -lschnek -lfftw3 -lm
 
