@@ -7,6 +7,7 @@
 
 #include "fieldionization.hpp"
 
+
 #include "../huerto/maths/functions/core.hpp"
 
 void FieldIonization::initParameters(schnek::BlockParameters &blockPars)
@@ -19,8 +20,11 @@ void FieldIonization::initParameters(schnek::BlockParameters &blockPars)
 }
 
 void FieldIonization::init()
-{
+{ 
+  std::cout << "FieldIonization::init called" << std::endl;
+
   SimulationEntity::init(this);
+  
   retrieveData("Ex", Ex);
   retrieveData("Ey", Ey);
   retrieveData("Ez", Ez);
@@ -45,24 +49,20 @@ double FieldIonization::computeIonizationRate(double E)
 }
 
 void FieldIonization::execute()
-{
+{ 
+  std::cout << "FieldIonization::execute called" << std::endl;
+
   double dt = getContext().getDt();
   Index low = Electrons.getLo();
   Index high = Electrons.getHi();
+  
+  #ifdef HUERTO_ONE_DIM
+  Range1d::LimitType low1D(low[0]);
+  Range1d::LimitType high1D(high[0]);
+  Range1d range(low1D, high1D);
+  
+  std::cout<<"FieldIonization: 1D Range"<<std::endl;
 
-  Range::LimitType low1D(low[0]);
-  Range::LimitType high1D(high[0]);
-  Range range(low1D, high1D);
-
-#ifdef HUERTO_ONE_DIM
-  // for (int i=low[0]; i<=high[0]; ++i)
-  // {
-  //   double ex = Ex(i);
-  //   double ey = Ey(i);
-  //   double ez = Ez(i);
-  //   double &rho = Electrons(i);
-  //   double &neut = Neutrals(i);
-  // }
   for (auto &pos : range)
   {
     double ex = Ex[pos];
@@ -73,26 +73,35 @@ void FieldIonization::execute()
 #endif
 
 #ifdef HUERTO_TWO_DIM
-  for (int i=low[0]; i<=high[0]; ++i)
-    for (int j=low[1]; j<=high[1]; ++j)
+  Range2d::LimitType low2D(low[0], low[1]);
+  Range2d::LimitType high2D(high[0], high[1]);
+  Range2d range(low2D, high2D);  
+  
+  std::cout<<"2D Range"<<std::endl;
+
+  for (auto &pos : range)
   {
-    double ex = Ex(i,j);
-    double ey = Ey(i,j);
-    double ez = Ez(i,j);
-    double &rho = Electrons(i,j);
-    double &neut = Neutrals(i,j);
+    double ex = Ex[pos];
+    double ey = Ey[pos];
+    double ez = Ez[pos];
+    double &rho = Electrons[pos];
+    double &neut = Neutrals[pos];
 #endif
 
 #ifdef HUERTO_THREE_DIM
-  for (int i=low[0]; i<=high[0]; ++i)
-    for (int j=low[1]; j<=high[1]; ++j)
-      for (int k=low[2]; k<=high[2]; ++k)
+  Range3d::LimitType low3D(low[0], low[1], low[2]);
+  Range3d::LimitType high3D(high[0], high[1], high[2]);
+  Range3d range(low3D, high3D);  
+  
+  std::cout<<"3D Range"<<std::endl;
+
+  for (auto &pos : range)
   {
-    double ex = Ex(i,j,k);
-    double ey = Ey(i,j,k);
-    double ez = Ez(i,j,k);
-    double &rho = Electrons(i,j,k);
-    double &neut = Neutrals(i,j,k);
+    double ex = Ex[pos];
+    double ey = Ey[pos];
+    double ez = Ez[pos];
+    double &rho = Electrons[pos];
+    double &neut = Neutrals[pos];
 #endif
     double E = sqrt(ex * ex + ey * ey + ez * ez); // Electric field magnitude
 

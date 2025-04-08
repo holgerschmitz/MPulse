@@ -1,0 +1,96 @@
+
+
+float lambda = 1e-6;
+float dx = 0.05*lambda;
+float n0 = 5e26;
+
+Nx = 400;
+
+Lx = dx*Nx;
+
+// plasma and laser parameters
+
+cflFactor = 0.1/sqrt(2.0);
+
+float dt = cflFactor*dx/clight;
+float phi = 0.5;
+float xs = (x - dx*Nx/2)/lambda;
+float r2 = xs*xs + ys*ys;
+
+tMax = 3*Lx/clight;
+
+EMFields {  }
+
+PlasmaDensity {
+  float r2n = r2 / 25;
+  Rho = n0*exp( - r2n*r2n*r2n*r2n );
+}
+
+FDTD_Plain {  
+  PlaneGaussSource {
+    length = 10*lambda;
+    
+    originx = -Lx;
+    originy = 0.0;
+    
+    kx = 2*pi/lambda * cos(phi);
+    ky = 2*pi/lambda * sin(phi);
+  
+    Hx = -sin(phi);
+    Hy = cos(phi);
+    Hz = 0.0;
+  }
+
+  PlasmaCurrent {
+    charge = 1.602176634e-19;
+    mass = 9.1093837015e-31;
+    Z = 1.0;
+    gamma = 1/(100*1e-15);  // damping 1/100fs
+  }
+  CPMLBorder { 
+    d = 10;
+    sigmaMax = 8.7;
+    kappaMax = 11.0;
+    aMax = 0.0;
+  }
+}
+
+float outDt = 200*dt;
+
+FieldDiag Ex {
+  file = "Ex_#t.h5";
+  field = "Ex";
+  deltaTime = outDt;
+}
+
+FieldDiag Ey {
+  file = "Ey_#t.h5";
+  field = "Ey";
+  deltaTime = outDt;
+}
+
+FieldDiag Ez {
+  file = "Ez_#t.h5";
+  field = "Ez";
+  deltaTime = outDt;
+}
+
+
+FieldDiag Bx {
+  file = "Bx_#t.h5";
+  field = "Bx";
+  deltaTime = outDt;
+}
+
+FieldDiag By {
+  file = "By_#t.h5";
+  field = "By";
+  deltaTime = outDt;
+}
+
+FieldDiag Bz {
+  file = "Bz_#t.h5";
+  field = "Bz";
+  deltaTime = outDt;
+}
+

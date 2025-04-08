@@ -112,6 +112,9 @@ int main (int argc, char** argv) {
 
   MPI_Init(&argc, &argv);
 
+  int mpi_rank;
+  MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
+
   try
   {
     schnek::BlockClasses blocks;
@@ -247,8 +250,12 @@ int main (int argc, char** argv) {
     return -1;
   }
 
+  std::cout<<"Rank : "<<mpi_rank<<std::endl;
+
   MPI_Finalize();
 
+  std::cout<<"Program Ends"<<std::endl;
+  
   return 0;
 }
 

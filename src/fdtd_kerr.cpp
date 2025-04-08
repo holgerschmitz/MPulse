@@ -71,6 +71,8 @@ void FDTD_Kerr::registerData() {
 void FDTD_Kerr::init() {
   SimulationEntity::init(this);
 
+  std::cout << "FDTD_Kerr::init called" << std::endl;
+
   schnek::DomainSubdivision<Field> &subdivision = getContext().getSubdivision();
   Index low  = subdivision.getLo();
   Index high = subdivision.getHi();
@@ -180,7 +182,7 @@ void FDTD_Kerr::stepD(double dt)
   Vector dx = getContext().getDx();
 
   sumCurrents();
-
+  
   for (int i=low[0]; i<=high[0]; ++i)
   {
     double jx = Jx(i);

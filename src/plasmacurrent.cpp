@@ -3,6 +3,11 @@
 #include "../huerto/electromagnetics/fieldsolver.hpp"
 
 #include <memory>
+#include <chrono>
+
+std::chrono::duration<double> total_time1(0);
+std::chrono::duration<double> total_time2(0);
+int iteration_count = 0;
 
 void PlasmaCurrentBlock::initParameters(schnek::BlockParameters &blockPars)
 {
@@ -38,6 +43,8 @@ void PlasmaCurrent::init()
 {
   schnek::DomainSubdivision<Field> &subdivision = plasmaBlock.getContext().getSubdivision();
 
+  std::cout << "PlasmaCurrent::init called" << std::endl;
+
   Index lowIn  = subdivision.getInnerLo();
   Index highIn = subdivision.getInnerHi();
 
@@ -63,19 +70,32 @@ void PlasmaCurrent::stepScheme(double dt)
   const double emdt = dt*Z*Z*charge*charge/mass;
 
 #ifdef HUERTO_ONE_DIM
-  for (int i=low[0]; i<high[0]; ++i) {
-    double &jx = Jx(i);
-    double &jy = Jy(i);
-    double &jz = Jz(i);
-    double rho = Rho(i);
+  Range1d::LimitType low1D(low[0]), high1D(high[0]);
+  Range1d range(low1D, high1D);
 
-    jx = (jx*gdtn + emdt*Ex(i)*rho)/gdtd;
-    jy = (jy*gdtn + emdt*Ey(i)*rho)/gdtd;
-    jz = (jz*gdtn + emdt*Ez(i)*rho)/gdtd;
+  // std::cout<<"PlasmaCurrent:stepScheme 1D Range"<<std::endl;
+
+  for (auto &pos : range) {
+    double &jx = Jx[pos];
+    double &jy = Jy[pos];
+    double &jz = Jz[pos];
+    double rho = Rho[pos];
+
+    jx = (jx*gdtn + emdt*Ex[pos]*rho)/gdtd;
+    jy = (jy*gdtn + emdt*Ey[pos]*rho)/gdtd;
+    jz = (jz*gdtn + emdt*Ez[pos]*rho)/gdtd;
   }
 #endif
 
 #ifdef HUERTO_TWO_DIM
+  Range2d::LimitType low2D(low[0], low[1]), high2D(high[0], high[1]);
+  Range2d range(low2D, high2D);
+
+  iteration_count++;
+
+  // Case 1
+  auto start = std::chrono::high_resolution_clock::now();
+
   for (int i=low[0]; i<high[0]; ++i) {
     for (int j=low[1]; j<high[1]; ++j) {
       double &jx = Jx(i,j);
@@ -88,9 +108,42 @@ void PlasmaCurrent::stepScheme(double dt)
       jz = (jz*gdtn + emdt*Ez(i,j)*rho)/gdtd;
     }
   }
+
+  auto end = std::chrono::high_resolution_clock::now();
+  
+  std::chrono::duration<double> duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+  total_time1 += duration;
+
+  // Case 2
+  start = std::chrono::high_resolution_clock::now();
+
+  for (auto &pos : range) {
+      double &jx = Jx[pos];
+      double &jy = Jy[pos];
+      double &jz = Jz[pos];
+      double rho = Rho[pos];
+
+      jx = (jx*gdtn + emdt*Ex[pos]*rho)/gdtd;
+      jy = (jy*gdtn + emdt*Ey[pos]*rho)/gdtd;
+      jz = (jz*gdtn + emdt*Ez[pos]*rho)/gdtd;
+  }
+
+  end = std::chrono::high_resolution_clock::now();
+  
+  duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+  total_time2 += duration;
+
+  if (iteration_count % 100 == 0){
+    std::cout << "Total execution time (1): " << total_time1.count() << " ms" << std::endl;
+    std::cout << "Total execution time (2): " << total_time2.count() << " ms" << std::endl;
+    iteration_count = 0;
+  }
+
 #endif
 
 #ifdef HUERTO_THREE_DIM
+  std::cout<<"PlasmaCurrent:stepScheme 3D Range"<<std::endl;
+
   for (int i=low[0]; i<high[0]; ++i) {
     for (int j=low[1]; j<high[1]; ++j) {
       for (int k=low[2]; k<high[2]; ++k) {

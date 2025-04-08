@@ -18,7 +18,9 @@ void MPIIonization::initParameters(schnek::BlockParameters &blockPars)
 }
 
 void MPIIonization::init()
-{
+{ 
+  std::cout << "MPIIonization::init called" << std::endl;
+
   SimulationEntity::init(this);
   retrieveData("Ex", Ex);
   retrieveData("Ey", Ey);
@@ -29,7 +31,9 @@ void MPIIonization::init()
 }
 
 void MPIIonization::execute()
-{
+{ 
+  std::cout << "MPIIonization::execute called" << std::endl;
+
   double dt = getContext().getDt();
   Index low = Electrons.getLo();
   Index high = Electrons.getHi();
@@ -42,13 +46,19 @@ void MPIIonization::execute()
   double sigmaMax = 0;
   
 #ifdef HUERTO_ONE_DIM
-  for (int i=low[0]; i<=high[0]; ++i)
+  Range1d::LimitType low1D(low[0]);
+  Range1d::LimitType high1D(high[0]);
+  Range1d range(low1D, high1D);
+
+  std::cout<<"MPIIonization: 1D Range"<<std::endl;
+
+  for (auto &pos : range)
   {
-    double ex = Ex(i);
-    double ey = Ey(i);
-    double ez = Ez(i);
-    double &rho = Electrons(i);
-    double &neut = Neutrals(i);
+    double ex = Ex[pos];
+    double ey = Ey[pos];
+    double ez = Ez[pos];
+    double &rho = Electrons[pos];
+    double &neut = Neutrals[pos];
 #endif
 
 #ifdef HUERTO_TWO_DIM
