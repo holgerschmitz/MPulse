@@ -2,11 +2,15 @@
 
 #include "../huerto/electromagnetics/fieldsolver.hpp"
 
+#include <Kokkos_Core.hpp>
+
 #include <memory>
 #include <chrono>
 
+
 std::chrono::duration<double> total_time1(0);
 std::chrono::duration<double> total_time2(0);
+std::chrono::duration<double> total_time3(0);
 int iteration_count = 0;
 
 void PlasmaCurrentBlock::initParameters(schnek::BlockParameters &blockPars)
@@ -133,9 +137,39 @@ void PlasmaCurrent::stepScheme(double dt)
   duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
   total_time2 += duration;
 
+  // Case 3
+  start = std::chrono::high_resolution_clock::now();
+
+  // Kokkos::parallel_for(
+  //   Kokkos::MDRangePolicy<Kokkos::Rank<2>>({0, 0}, {dims[0], dims[1]}),
+  //   KOKKOS_LAMBDA (const int i_local, const int j_local) {
+  //     int i = i_local + range.getLo(0);
+  //     int j = j_local + range.getLo(1);
+
+  //     typename KokkosGridStorage<double, 2>::IndexType pos;
+  //     pos[0] = i;
+  //     pos[1] = j;
+
+  //     double &jx = Jx.get(pos);
+  //     double &jy = Jy.get(pos);
+  //     double &jz = Jz.get(pos);
+  //     double rho = Rho.get(pos);
+      
+  //     jx = (jx*gdtn + emdt*Ex.get(pos)*rho)/gdtd;
+  //     jy = (jy*gdtn + emdt*Ey.get(pos)*rho)/gdtd;
+  //     jz = (jz*gdtn + emdt*Ez.get(pos)*rho)/gdtd;
+  //   }
+  // );
+
+  end = std::chrono::high_resolution_clock::now();
+  
+  duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+  total_time3 += duration;
+
   if (iteration_count % 100 == 0){
     std::cout << "Total execution time (1): " << total_time1.count() << " ms" << std::endl;
     std::cout << "Total execution time (2): " << total_time2.count() << " ms" << std::endl;
+    std::cout << "Total execution time (3): " << total_time3.count() << " ms" << std::endl;
     iteration_count = 0;
   }
 
