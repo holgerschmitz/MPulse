@@ -26,7 +26,7 @@ void PlasmaDensity::registerData() {
 }
 
 void PlasmaDensity::fillValues() {
-  std::cout << "Filling fields" << std::endl;
+  std::cout << "Filling fields (PlasmaDensity::fillValues)" << std::endl;
   schnek::pBlockVariables blockVars = getVariables();
   schnek::pDependencyMap depMap(new schnek::DependencyMap(blockVars));
 

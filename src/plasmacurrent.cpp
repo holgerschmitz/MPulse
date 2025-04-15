@@ -6,7 +6,7 @@
 #include <schnek/grid/array.hpp>
 #include <schnek/grid/grid.hpp>
 #include <schnek/grid/field.hpp>
-#include <schnek/grid/grid_utils.hpp>
+// #include <schnek/grid/grid_utils.hpp>
 
 // #include <Kokkos_Core.hpp>
 
@@ -44,6 +44,8 @@ PlasmaCurrent::PlasmaCurrent(double charge_, double mass_, double Z_, double gam
 {}
 
 void PlasmaCurrent::registerData() {
+  std::cout << "PlasmaCurrent::registerData called" << std::endl;
+
   plasmaBlock.addData("PlasmaJx", Jx);
   plasmaBlock.addData("PlasmaJy", Jy);
   plasmaBlock.addData("PlasmaJz", Jz);
@@ -64,7 +66,6 @@ void PlasmaCurrent::init()
 
   plasmaBlock.retrieveData("Rho", Rho);
 
-
   Jx.resize(lowIn, highIn);
   Jy.resize(lowIn, highIn);
   Jz.resize(lowIn, highIn);
@@ -78,12 +79,13 @@ void PlasmaCurrent::stepScheme(double dt)
   const double gdtn = 1-0.5*gamma*dt;
   const double gdtd = 1+0.5*gamma*dt;
   const double emdt = dt*Z*Z*charge*charge/mass;
+  
+  std::cout<<"PlasmaCurrent:stepScheme"<<std::endl;
 
 #ifdef HUERTO_ONE_DIM
   Range1d::LimitType low1D(low[0]), high1D(high[0]);
   Range1d range(low1D, high1D);
 
-  // std::cout<<"PlasmaCurrent:stepScheme 1D Range"<<std::endl;
 
   for (auto &pos : range) {
     double &jx = Jx[pos];
@@ -103,11 +105,24 @@ void PlasmaCurrent::stepScheme(double dt)
 
   iteration_count++;
 
+  std::cout<<"Before Case 1"<<std::endl;
+
+  auto dims = Jx.getDims();
+  std::cout << "Jx Dims : " << dims[0] << ", " << dims[1] << std::endl;
+  dims = Jy.getDims();
+  std::cout << "Jy Dims : " << dims[0] << ", " << dims[1] << std::endl;
+  dims = Jz.getDims();
+  std::cout << "Jz Dims : " << dims[0] << ", " << dims[1] << std::endl;
+  dims = Rho.getDims();
+  std::cout << "Rho Dims : " << dims[0] << ", " << dims[1] << std::endl;
+
   // Case 1
   auto start = std::chrono::high_resolution_clock::now();
 
   for (int i=low[0]; i<high[0]; ++i) {
     for (int j=low[1]; j<high[1]; ++j) {
+      // std::cout<<"Case 1: ("<<i<<" ,"<<j<<")"<<std::endl;
+
       double &jx = Jx(i,j);
       double &jy = Jy(i,j);
       double &jz = Jz(i,j);
@@ -124,31 +139,31 @@ void PlasmaCurrent::stepScheme(double dt)
   std::chrono::duration<double> duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
   total_time1 += duration;
 
+  std::cout<<"Passed Case 1"<<std::endl;
+  
   // Case 2
   start = std::chrono::high_resolution_clock::now();
-
+  
   for (auto &pos : range) {
-      double &jx = Jx[pos];
-      double &jy = Jy[pos];
-      double &jz = Jz[pos];
-      double rho = Rho[pos];
-
-      jx = (jx*gdtn + emdt*Ex[pos]*rho)/gdtd;
-      jy = (jy*gdtn + emdt*Ey[pos]*rho)/gdtd;
-      jz = (jz*gdtn + emdt*Ez[pos]*rho)/gdtd;
+    double &jx = Jx[pos];
+    double &jy = Jy[pos];
+    double &jz = Jz[pos];
+    double rho = Rho[pos];
+    
+    jx = (jx*gdtn + emdt*Ex[pos]*rho)/gdtd;
+    jy = (jy*gdtn + emdt*Ey[pos]*rho)/gdtd;
+    jz = (jz*gdtn + emdt*Ez[pos]*rho)/gdtd;
   }
-
+  
   end = std::chrono::high_resolution_clock::now();
   
   duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
   total_time2 += duration;
+  
+  std::cout<<"Passed Case 2"<<std::endl;  
 
   // Case 3
   start = std::chrono::high_resolution_clock::now();
-
-  // auto& storage = static_cast<schnek::KokkosDefaultGridStorage<double, 2>&>(Jx);
-  
-  // double jxSum = storage.reduce(std::plus<double>(), 0.0);
   
   // double jxSum = Jx.reduce(std::plus<double>(), 0.0);
   
@@ -156,16 +171,12 @@ void PlasmaCurrent::stepScheme(double dt)
   Grid2d g1(low2D, high2D);
 
   // g(low2D[0], high2D[1]) = 1.0;
-  grid_utils::fill_grid(g, 0.5);
+  fill_kokkos_grid(g, 0.5);
 
   g1 = g;
 
-  // typedef schnek::Grid<double, 2, schnek::GridAssertCheck> GridN;
-  // typedef schnek::Field<double, 2, schnek::GridAssertCheck> FieldN;
-  // GridN g(low2D, high2D);
-  
-  // Jx.resize(low2D, high2D);
-  auto dims = Jx.getDims();
+  // auto dims = Jx.getDims();
+  dims = Jx.getDims();
 
   std::cout << "Jx Dims : " << dims[0] << ", " << dims[1] << std::endl;
 
@@ -175,9 +186,24 @@ void PlasmaCurrent::stepScheme(double dt)
    
   end = std::chrono::high_resolution_clock::now();
   
-  // std::cout << "Sum of jxSum elements: " << JxSum << std::endl;
+  // std::cout << "Sum of jxSum elements: " << jxSum << std::endl;
   std::cout << "Sum of g elements: " << gSum << std::endl;
   std::cout << "Sum of g1 elements: " << g1Sum << std::endl;
+  
+  auto gSize = g.getSize();
+  std::cout << "Size of g: " << gSize << std::endl;
+
+  typedef schnek::Field<double, 2, HuertoGridChecker, schnek::KokkosDefaultGridStorage> Field2N;
+  int n = 100;
+
+  Field2N f1;
+  // Field2N f1(Field2N::IndexType(n, n));
+
+  // Range2d::LimitType l(0, 0), h(n-1, n-1);
+  // Range2d range(l, h);
+
+  auto f1dims = f1.getDims();
+  std::cout << "f1 Dims : " << f1dims[0] << ", " << f1dims[1] << std::endl;
 
   duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
   total_time3 += duration;
