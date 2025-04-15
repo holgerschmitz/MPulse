@@ -2,16 +2,22 @@
 
 #include "../huerto/electromagnetics/fieldsolver.hpp"
 
-#include <Kokkos_Core.hpp>
+#include <schnek/grid/gridstorage/kokkos-storage.hpp>
+#include <schnek/grid/array.hpp>
+#include <schnek/grid/grid.hpp>
+#include <schnek/grid/field.hpp>
+#include <schnek/grid/grid_utils.hpp>
+
+// #include <Kokkos_Core.hpp>
 
 #include <memory>
 #include <chrono>
-
 
 std::chrono::duration<double> total_time1(0);
 std::chrono::duration<double> total_time2(0);
 std::chrono::duration<double> total_time3(0);
 int iteration_count = 0;
+
 
 void PlasmaCurrentBlock::initParameters(schnek::BlockParameters &blockPars)
 {
@@ -140,29 +146,39 @@ void PlasmaCurrent::stepScheme(double dt)
   // Case 3
   start = std::chrono::high_resolution_clock::now();
 
-  // Kokkos::parallel_for(
-  //   Kokkos::MDRangePolicy<Kokkos::Rank<2>>({0, 0}, {dims[0], dims[1]}),
-  //   KOKKOS_LAMBDA (const int i_local, const int j_local) {
-  //     int i = i_local + range.getLo(0);
-  //     int j = j_local + range.getLo(1);
+  // auto& storage = static_cast<schnek::KokkosDefaultGridStorage<double, 2>&>(Jx);
+  
+  // double jxSum = storage.reduce(std::plus<double>(), 0.0);
+  
+  // double jxSum = Jx.reduce(std::plus<double>(), 0.0);
+  
+  Grid2d g(low2D, high2D);
+  Grid2d g1(low2D, high2D);
 
-  //     typename KokkosGridStorage<double, 2>::IndexType pos;
-  //     pos[0] = i;
-  //     pos[1] = j;
+  // g(low2D[0], high2D[1]) = 1.0;
+  grid_utils::fill_grid(g, 0.5);
 
-  //     double &jx = Jx.get(pos);
-  //     double &jy = Jy.get(pos);
-  //     double &jz = Jz.get(pos);
-  //     double rho = Rho.get(pos);
-      
-  //     jx = (jx*gdtn + emdt*Ex.get(pos)*rho)/gdtd;
-  //     jy = (jy*gdtn + emdt*Ey.get(pos)*rho)/gdtd;
-  //     jz = (jz*gdtn + emdt*Ez.get(pos)*rho)/gdtd;
-  //   }
-  // );
+  g1 = g;
 
+  // typedef schnek::Grid<double, 2, schnek::GridAssertCheck> GridN;
+  // typedef schnek::Field<double, 2, schnek::GridAssertCheck> FieldN;
+  // GridN g(low2D, high2D);
+  
+  // Jx.resize(low2D, high2D);
+  auto dims = Jx.getDims();
+
+  std::cout << "Jx Dims : " << dims[0] << ", " << dims[1] << std::endl;
+
+  // double jxSum = Jx.reduce(std::plus<double>(), 0.0);
+  double gSum = g.reduce(std::plus<double>(), 0.0);
+  double g1Sum = g1.reduce(std::plus<double>(), 0.0);
+   
   end = std::chrono::high_resolution_clock::now();
   
+  // std::cout << "Sum of jxSum elements: " << JxSum << std::endl;
+  std::cout << "Sum of g elements: " << gSum << std::endl;
+  std::cout << "Sum of g1 elements: " << g1Sum << std::endl;
+
   duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
   total_time3 += duration;
 

@@ -35,6 +35,8 @@
 
 #include <mpi.h>
 
+#include <Kokkos_Core.hpp>
+
 #include <fstream>
 #include <string>
 #include <unistd.h>
@@ -111,6 +113,13 @@ void MPulse::execute()
 int main (int argc, char** argv) {
 
   MPI_Init(&argc, &argv);
+
+  Kokkos::InitializationSettings args;
+
+  args.set_num_threads(0);
+  args.set_map_device_id_by("random");
+
+  Kokkos::initialize(args);
 
   int mpi_rank;
   MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
@@ -252,6 +261,8 @@ int main (int argc, char** argv) {
 
   std::cout<<"Rank : "<<mpi_rank<<std::endl;
 
+  Kokkos::finalize();
+  
   MPI_Finalize();
 
   std::cout<<"Program Ends"<<std::endl;

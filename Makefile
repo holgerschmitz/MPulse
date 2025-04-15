@@ -1,4 +1,4 @@
-export LD_LIBRARY_PATH := /home/terence411/resources/lib:$(LD_LIBRARY_PATH)
+export LD_LIBRARY_PATH := /home/terence411/resources/lib:$(LD_LIBRARY_PATH) # resolves the libsz.so issue
 
 # export LD_LIBRARY_PATH=/home/terence411/resources/lib:$LD_LIBRARY_PATH (in terminal)
 
@@ -10,10 +10,11 @@ DIMENSIONS = 1 2 3
 #OFLAGS  = -g -O0 -Wall -std=c++17
 OFLAGS  = -O3 -Wall -std=c++17
 
+
 INCLUDE = -I/usr/local/include \
+          -I/home/terence411/resources/include \
           -I/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/boost-1.82.0-3zvrwkhbsxoaivfmmy2gonv4qwdn36fb/include \
           -I/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hdf5-1.14.5-6ibf3iy452splddw7bjwtnmu3ayj6q5t/include \
-          -I/home/terence411/resources/include \
           -I/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/kokkos-4.4.01-pytybmwfndyyu6x2f5uqo5ucjgfojxzp/include
 
 CXX     = mpiCC
@@ -37,10 +38,12 @@ SOURCES = $(wildcard src/*.cpp) \
 BUILD_DIR = build
 BIN_DIR = bin
 
-LDFLAGS = $(HDF_LDFLAGS) -L/home/terence411/resources/lib -Wl,-rpath,/home/terence411/resources/lib \
-                         -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hdf5-1.14.5-6ibf3iy452splddw7bjwtnmu3ayj6q5t/lib -Wl,-rpath,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hdf5-1.14.5-6ibf3iy452splddw7bjwtnmu3ayj6q5t/lib
+LDFLAGS = $(HDF_LDFLAGS) -L/usr/local/lib -Wl,-rpath,/usr/local/lib \
+                         -L/home/terence411/resources/lib -Wl,-rpath,/home/terence411/resources/lib \
+                         -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hdf5-1.14.5-6ibf3iy452splddw7bjwtnmu3ayj6q5t/lib -Wl,-rpath,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hdf5-1.14.5-6ibf3iy452splddw7bjwtnmu3ayj6q5t/lib \
+                         -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/kokkos-4.4.01-pytybmwfndyyu6x2f5uqo5ucjgfojxzp/lib
 
-LOADLIBS = -lhdf5 -lschnek -lfftw3 -lm
+LOADLIBS = -lhdf5 -lschnek -lfftw3 -lm -lkokkoscore -lkokkoscontainers -lkokkossimd
 
 DIM1_FLAGS = -DHUERTO_ONE_DIM
 DIM2_FLAGS = -DHUERTO_TWO_DIM
@@ -67,5 +70,3 @@ $(foreach dimension,$(DIMENSIONS),$(eval $(call PROGRAM_template,$(dimension))))
 
 clean:
 	-rm -f $(ALL_OBJS) core $(FULLTARGET)
-
-
