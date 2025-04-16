@@ -105,8 +105,6 @@ void PlasmaCurrent::stepScheme(double dt)
 
   iteration_count++;
 
-  std::cout<<"Before Case 1"<<std::endl;
-
   auto dims = Jx.getDims();
   std::cout << "Jx Dims : " << dims[0] << ", " << dims[1] << std::endl;
   dims = Jy.getDims();
@@ -121,8 +119,6 @@ void PlasmaCurrent::stepScheme(double dt)
 
   for (int i=low[0]; i<high[0]; ++i) {
     for (int j=low[1]; j<high[1]; ++j) {
-      // std::cout<<"Case 1: ("<<i<<" ,"<<j<<")"<<std::endl;
-
       double &jx = Jx(i,j);
       double &jy = Jy(i,j);
       double &jz = Jz(i,j);
@@ -138,8 +134,6 @@ void PlasmaCurrent::stepScheme(double dt)
   
   std::chrono::duration<double> duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
   total_time1 += duration;
-
-  std::cout<<"Passed Case 1"<<std::endl;
   
   // Case 2
   start = std::chrono::high_resolution_clock::now();
@@ -159,13 +153,9 @@ void PlasmaCurrent::stepScheme(double dt)
   
   duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
   total_time2 += duration;
-  
-  std::cout<<"Passed Case 2"<<std::endl;  
 
   // Case 3
   start = std::chrono::high_resolution_clock::now();
-  
-  // double jxSum = Jx.reduce(std::plus<double>(), 0.0);
   
   Grid2d g(low2D, high2D);
   Grid2d g1(low2D, high2D);
@@ -192,18 +182,30 @@ void PlasmaCurrent::stepScheme(double dt)
   
   auto gSize = g.getSize();
   std::cout << "Size of g: " << gSize << std::endl;
-
+  
   typedef schnek::Field<double, 2, HuertoGridChecker, schnek::KokkosDefaultGridStorage> Field2N;
   int n = 100;
-
+  
   Field2N f1;
   // Field2N f1(Field2N::IndexType(n, n));
-
+  
   // Range2d::LimitType l(0, 0), h(n-1, n-1);
   // Range2d range(l, h);
+  
+  double f1Sum = f1.reduce(std::plus<double>(), 0.0);
+  std::cout << "Sum of f1 elements: " << f1Sum << std::endl;
+
+  auto f1Size = f1.getSize();
+  std::cout << "f1 Size : " << f1Size << std::endl;
 
   auto f1dims = f1.getDims();
   std::cout << "f1 Dims : " << f1dims[0] << ", " << f1dims[1] << std::endl;
+
+  auto JxSize = Jx.getSize();
+  std::cout << "Jx Size : " << JxSize << std::endl;
+
+  // double JxSum = Jx.reduce(std::plus<double>(), 0.0);
+  // std::cout << "Sum of Jx elements: " << JxSum << std::endl;
 
   duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
   total_time3 += duration;

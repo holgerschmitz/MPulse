@@ -234,13 +234,7 @@ FFTW_LIBRARY:FILEPATH=/home/terence411/resources/lib/libfftw3.so
 HDF5_LIBRARY:FILEPATH=/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hdf5-1.14.5-6ibf3iy452splddw7bjwtnmu3ayj6q5t/lib/libhdf5.so
 
 //Path to a library.
-KOKKOS_CONTAINERS_LIBRARY:FILEPATH=/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/kokkos-4.4.01-pytybmwfndyyu6x2f5uqo5ucjgfojxzp/lib/libkokkoscontainers.so
-
-//Path to a library.
 KOKKOS_CORE_LIBRARY:FILEPATH=/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/kokkos-4.4.01-pytybmwfndyyu6x2f5uqo5ucjgfojxzp/lib/libkokkoscore.so
-
-//Path to a library.
-KOKKOS_SIMD_LIBRARY:FILEPATH=/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/kokkos-4.4.01-pytybmwfndyyu6x2f5uqo5ucjgfojxzp/lib/libkokkossimd.so
 
 //Executable for running MPI programs.
 MPIEXEC_EXECUTABLE:FILEPATH=/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/bin/mpiexec
