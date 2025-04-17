@@ -1269,3 +1269,1347 @@ events:
         
       exitCode: 0
 ...
+
+---
+events:
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1278 (try_compile)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1322 (_MPI_try_staged_settings)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1645 (_MPI_check_lang_works)"
+      - "CMakeLists.txt:23 (find_package)"
+    description: "The MPI test test_mpi for C in mode normal"
+    directories:
+      source: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-FdNzRq"
+      binary: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-FdNzRq"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "MPI_RESULT_C_test_mpi_normal"
+      cached: true
+      stdout: |
+        Change Dir: /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-FdNzRq
+        
+        Run Build Command(s):/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E env VERBOSE=1 /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake -f Makefile cmTC_2c1c4/fast && /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake  -f CMakeFiles/cmTC_2c1c4.dir/build.make CMakeFiles/cmTC_2c1c4.dir/build
+        gmake[1]: Entering directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-FdNzRq'
+        Building C object CMakeFiles/cmTC_2c1c4.dir/test_mpi.c.o
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/gcc  -isystem /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/include  -o CMakeFiles/cmTC_2c1c4.dir/test_mpi.c.o -c /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-FdNzRq/test_mpi.c
+        Linking C executable cmTC_2c1c4
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E cmake_link_script CMakeFiles/cmTC_2c1c4.dir/link.txt --verbose=1
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/gcc -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib CMakeFiles/cmTC_2c1c4.dir/test_mpi.c.o -o cmTC_2c1c4  -Wl,-rpath,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib/libmpi.so 
+        gmake[1]: Leaving directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-FdNzRq'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1278 (try_compile)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1322 (_MPI_try_staged_settings)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1645 (_MPI_check_lang_works)"
+      - "CMakeLists.txt:23 (find_package)"
+    description: "The MPI test test_mpi for CXX in mode normal"
+    directories:
+      source: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-mnS8Ei"
+      binary: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-mnS8Ei"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: "-Wall"
+      CMAKE_CXX_FLAGS_DEBUG: "-g -O0"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "MPI_RESULT_CXX_test_mpi_normal"
+      cached: true
+      stdout: |
+        Change Dir: /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-mnS8Ei
+        
+        Run Build Command(s):/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E env VERBOSE=1 /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake -f Makefile cmTC_69289/fast && /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake  -f CMakeFiles/cmTC_69289.dir/build.make CMakeFiles/cmTC_69289.dir/build
+        gmake[1]: Entering directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-mnS8Ei'
+        Building CXX object CMakeFiles/cmTC_69289.dir/test_mpi.cpp.o
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++  -isystem /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/include -Wall  -std=c++17 -o CMakeFiles/cmTC_69289.dir/test_mpi.cpp.o -c /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-mnS8Ei/test_mpi.cpp
+        Linking CXX executable cmTC_69289
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E cmake_link_script CMakeFiles/cmTC_69289.dir/link.txt --verbose=1
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++ -Wall  -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib CMakeFiles/cmTC_69289.dir/test_mpi.cpp.o -o cmTC_69289  -Wl,-rpath,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib/libmpi.so 
+        gmake[1]: Leaving directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-mnS8Ei'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1278 (try_compile)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1672 (_MPI_try_staged_settings)"
+      - "CMakeLists.txt:23 (find_package)"
+    description: "The MPI test test_mpi for CXX in mode MPICXX"
+    directories:
+      source: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-CJZzhM"
+      binary: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-CJZzhM"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: "-Wall"
+      CMAKE_CXX_FLAGS_DEBUG: "-g -O0"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "MPI_RESULT_CXX_test_mpi_MPICXX"
+      cached: true
+      stdout: |
+        Change Dir: /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-CJZzhM
+        
+        Run Build Command(s):/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E env VERBOSE=1 /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake -f Makefile cmTC_18aba/fast && /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake  -f CMakeFiles/cmTC_18aba.dir/build.make CMakeFiles/cmTC_18aba.dir/build
+        gmake[1]: Entering directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-CJZzhM'
+        Building CXX object CMakeFiles/cmTC_18aba.dir/test_mpi.cpp.o
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++  -isystem /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/include -Wall  -std=c++17 -o CMakeFiles/cmTC_18aba.dir/test_mpi.cpp.o -c /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-CJZzhM/test_mpi.cpp
+        Linking CXX executable cmTC_18aba
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E cmake_link_script CMakeFiles/cmTC_18aba.dir/link.txt --verbose=1
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++ -Wall  -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib CMakeFiles/cmTC_18aba.dir/test_mpi.cpp.o -o cmTC_18aba  -Wl,-rpath,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib/libmpi.so 
+        gmake[1]: Leaving directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-CJZzhM'
+        
+      exitCode: 0
+...
+
+---
+events:
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1278 (try_compile)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1322 (_MPI_try_staged_settings)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1645 (_MPI_check_lang_works)"
+      - "CMakeLists.txt:23 (find_package)"
+    description: "The MPI test test_mpi for C in mode normal"
+    directories:
+      source: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-3DQiUn"
+      binary: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-3DQiUn"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "MPI_RESULT_C_test_mpi_normal"
+      cached: true
+      stdout: |
+        Change Dir: /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-3DQiUn
+        
+        Run Build Command(s):/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E env VERBOSE=1 /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake -f Makefile cmTC_7ff15/fast && /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake  -f CMakeFiles/cmTC_7ff15.dir/build.make CMakeFiles/cmTC_7ff15.dir/build
+        gmake[1]: Entering directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-3DQiUn'
+        Building C object CMakeFiles/cmTC_7ff15.dir/test_mpi.c.o
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/gcc  -isystem /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/include  -o CMakeFiles/cmTC_7ff15.dir/test_mpi.c.o -c /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-3DQiUn/test_mpi.c
+        Linking C executable cmTC_7ff15
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E cmake_link_script CMakeFiles/cmTC_7ff15.dir/link.txt --verbose=1
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/gcc -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib CMakeFiles/cmTC_7ff15.dir/test_mpi.c.o -o cmTC_7ff15  -Wl,-rpath,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib/libmpi.so 
+        gmake[1]: Leaving directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-3DQiUn'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1278 (try_compile)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1322 (_MPI_try_staged_settings)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1645 (_MPI_check_lang_works)"
+      - "CMakeLists.txt:23 (find_package)"
+    description: "The MPI test test_mpi for CXX in mode normal"
+    directories:
+      source: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-W5hNCA"
+      binary: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-W5hNCA"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: "-Wall"
+      CMAKE_CXX_FLAGS_DEBUG: "-g -O0"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "MPI_RESULT_CXX_test_mpi_normal"
+      cached: true
+      stdout: |
+        Change Dir: /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-W5hNCA
+        
+        Run Build Command(s):/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E env VERBOSE=1 /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake -f Makefile cmTC_9cf4e/fast && /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake  -f CMakeFiles/cmTC_9cf4e.dir/build.make CMakeFiles/cmTC_9cf4e.dir/build
+        gmake[1]: Entering directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-W5hNCA'
+        Building CXX object CMakeFiles/cmTC_9cf4e.dir/test_mpi.cpp.o
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++  -isystem /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/include -Wall  -std=c++17 -o CMakeFiles/cmTC_9cf4e.dir/test_mpi.cpp.o -c /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-W5hNCA/test_mpi.cpp
+        Linking CXX executable cmTC_9cf4e
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E cmake_link_script CMakeFiles/cmTC_9cf4e.dir/link.txt --verbose=1
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++ -Wall  -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib CMakeFiles/cmTC_9cf4e.dir/test_mpi.cpp.o -o cmTC_9cf4e  -Wl,-rpath,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib/libmpi.so 
+        gmake[1]: Leaving directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-W5hNCA'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1278 (try_compile)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1672 (_MPI_try_staged_settings)"
+      - "CMakeLists.txt:23 (find_package)"
+    description: "The MPI test test_mpi for CXX in mode MPICXX"
+    directories:
+      source: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-0KDM7Q"
+      binary: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-0KDM7Q"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: "-Wall"
+      CMAKE_CXX_FLAGS_DEBUG: "-g -O0"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "MPI_RESULT_CXX_test_mpi_MPICXX"
+      cached: true
+      stdout: |
+        Change Dir: /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-0KDM7Q
+        
+        Run Build Command(s):/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E env VERBOSE=1 /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake -f Makefile cmTC_8c377/fast && /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake  -f CMakeFiles/cmTC_8c377.dir/build.make CMakeFiles/cmTC_8c377.dir/build
+        gmake[1]: Entering directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-0KDM7Q'
+        Building CXX object CMakeFiles/cmTC_8c377.dir/test_mpi.cpp.o
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++  -isystem /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/include -Wall  -std=c++17 -o CMakeFiles/cmTC_8c377.dir/test_mpi.cpp.o -c /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-0KDM7Q/test_mpi.cpp
+        Linking CXX executable cmTC_8c377
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E cmake_link_script CMakeFiles/cmTC_8c377.dir/link.txt --verbose=1
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++ -Wall  -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib CMakeFiles/cmTC_8c377.dir/test_mpi.cpp.o -o cmTC_8c377  -Wl,-rpath,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib/libmpi.so 
+        gmake[1]: Leaving directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-0KDM7Q'
+        
+      exitCode: 0
+...
+
+---
+events:
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1278 (try_compile)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1322 (_MPI_try_staged_settings)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1645 (_MPI_check_lang_works)"
+      - "CMakeLists.txt:23 (find_package)"
+    description: "The MPI test test_mpi for C in mode normal"
+    directories:
+      source: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-nCUBJJ"
+      binary: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-nCUBJJ"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "MPI_RESULT_C_test_mpi_normal"
+      cached: true
+      stdout: |
+        Change Dir: /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-nCUBJJ
+        
+        Run Build Command(s):/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E env VERBOSE=1 /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake -f Makefile cmTC_f541f/fast && /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake  -f CMakeFiles/cmTC_f541f.dir/build.make CMakeFiles/cmTC_f541f.dir/build
+        gmake[1]: Entering directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-nCUBJJ'
+        Building C object CMakeFiles/cmTC_f541f.dir/test_mpi.c.o
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/gcc  -isystem /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/include  -o CMakeFiles/cmTC_f541f.dir/test_mpi.c.o -c /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-nCUBJJ/test_mpi.c
+        Linking C executable cmTC_f541f
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E cmake_link_script CMakeFiles/cmTC_f541f.dir/link.txt --verbose=1
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/gcc -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib CMakeFiles/cmTC_f541f.dir/test_mpi.c.o -o cmTC_f541f  -Wl,-rpath,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib/libmpi.so 
+        gmake[1]: Leaving directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-nCUBJJ'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1278 (try_compile)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1322 (_MPI_try_staged_settings)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1645 (_MPI_check_lang_works)"
+      - "CMakeLists.txt:23 (find_package)"
+    description: "The MPI test test_mpi for CXX in mode normal"
+    directories:
+      source: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-PnFKpp"
+      binary: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-PnFKpp"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: "-Wall"
+      CMAKE_CXX_FLAGS_DEBUG: "-g -O0"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "MPI_RESULT_CXX_test_mpi_normal"
+      cached: true
+      stdout: |
+        Change Dir: /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-PnFKpp
+        
+        Run Build Command(s):/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E env VERBOSE=1 /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake -f Makefile cmTC_219cf/fast && /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake  -f CMakeFiles/cmTC_219cf.dir/build.make CMakeFiles/cmTC_219cf.dir/build
+        gmake[1]: Entering directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-PnFKpp'
+        Building CXX object CMakeFiles/cmTC_219cf.dir/test_mpi.cpp.o
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++  -isystem /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/include -Wall  -std=c++17 -o CMakeFiles/cmTC_219cf.dir/test_mpi.cpp.o -c /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-PnFKpp/test_mpi.cpp
+        Linking CXX executable cmTC_219cf
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E cmake_link_script CMakeFiles/cmTC_219cf.dir/link.txt --verbose=1
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++ -Wall  -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib CMakeFiles/cmTC_219cf.dir/test_mpi.cpp.o -o cmTC_219cf  -Wl,-rpath,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib/libmpi.so 
+        gmake[1]: Leaving directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-PnFKpp'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1278 (try_compile)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1672 (_MPI_try_staged_settings)"
+      - "CMakeLists.txt:23 (find_package)"
+    description: "The MPI test test_mpi for CXX in mode MPICXX"
+    directories:
+      source: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-Dkr5IA"
+      binary: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-Dkr5IA"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: "-Wall"
+      CMAKE_CXX_FLAGS_DEBUG: "-g -O0"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "MPI_RESULT_CXX_test_mpi_MPICXX"
+      cached: true
+      stdout: |
+        Change Dir: /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-Dkr5IA
+        
+        Run Build Command(s):/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E env VERBOSE=1 /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake -f Makefile cmTC_214e4/fast && /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake  -f CMakeFiles/cmTC_214e4.dir/build.make CMakeFiles/cmTC_214e4.dir/build
+        gmake[1]: Entering directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-Dkr5IA'
+        Building CXX object CMakeFiles/cmTC_214e4.dir/test_mpi.cpp.o
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++  -isystem /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/include -Wall  -std=c++17 -o CMakeFiles/cmTC_214e4.dir/test_mpi.cpp.o -c /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-Dkr5IA/test_mpi.cpp
+        Linking CXX executable cmTC_214e4
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E cmake_link_script CMakeFiles/cmTC_214e4.dir/link.txt --verbose=1
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++ -Wall  -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib CMakeFiles/cmTC_214e4.dir/test_mpi.cpp.o -o cmTC_214e4  -Wl,-rpath,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib/libmpi.so 
+        gmake[1]: Leaving directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-Dkr5IA'
+        
+      exitCode: 0
+...
+
+---
+events:
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1278 (try_compile)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1322 (_MPI_try_staged_settings)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1645 (_MPI_check_lang_works)"
+      - "CMakeLists.txt:23 (find_package)"
+    description: "The MPI test test_mpi for C in mode normal"
+    directories:
+      source: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-ct8uzu"
+      binary: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-ct8uzu"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "MPI_RESULT_C_test_mpi_normal"
+      cached: true
+      stdout: |
+        Change Dir: /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-ct8uzu
+        
+        Run Build Command(s):/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E env VERBOSE=1 /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake -f Makefile cmTC_c783e/fast && /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake  -f CMakeFiles/cmTC_c783e.dir/build.make CMakeFiles/cmTC_c783e.dir/build
+        gmake[1]: Entering directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-ct8uzu'
+        Building C object CMakeFiles/cmTC_c783e.dir/test_mpi.c.o
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/gcc  -isystem /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/include  -o CMakeFiles/cmTC_c783e.dir/test_mpi.c.o -c /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-ct8uzu/test_mpi.c
+        Linking C executable cmTC_c783e
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E cmake_link_script CMakeFiles/cmTC_c783e.dir/link.txt --verbose=1
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/gcc -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib CMakeFiles/cmTC_c783e.dir/test_mpi.c.o -o cmTC_c783e  -Wl,-rpath,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib/libmpi.so 
+        gmake[1]: Leaving directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-ct8uzu'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1278 (try_compile)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1322 (_MPI_try_staged_settings)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1645 (_MPI_check_lang_works)"
+      - "CMakeLists.txt:23 (find_package)"
+    description: "The MPI test test_mpi for CXX in mode normal"
+    directories:
+      source: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-3RlO7z"
+      binary: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-3RlO7z"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: "-Wall"
+      CMAKE_CXX_FLAGS_DEBUG: "-g -O0"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "MPI_RESULT_CXX_test_mpi_normal"
+      cached: true
+      stdout: |
+        Change Dir: /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-3RlO7z
+        
+        Run Build Command(s):/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E env VERBOSE=1 /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake -f Makefile cmTC_5a2dd/fast && /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake  -f CMakeFiles/cmTC_5a2dd.dir/build.make CMakeFiles/cmTC_5a2dd.dir/build
+        gmake[1]: Entering directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-3RlO7z'
+        Building CXX object CMakeFiles/cmTC_5a2dd.dir/test_mpi.cpp.o
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++  -isystem /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/include -Wall  -std=c++17 -o CMakeFiles/cmTC_5a2dd.dir/test_mpi.cpp.o -c /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-3RlO7z/test_mpi.cpp
+        Linking CXX executable cmTC_5a2dd
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E cmake_link_script CMakeFiles/cmTC_5a2dd.dir/link.txt --verbose=1
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++ -Wall  -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib CMakeFiles/cmTC_5a2dd.dir/test_mpi.cpp.o -o cmTC_5a2dd  -Wl,-rpath,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib/libmpi.so 
+        gmake[1]: Leaving directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-3RlO7z'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1278 (try_compile)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1672 (_MPI_try_staged_settings)"
+      - "CMakeLists.txt:23 (find_package)"
+    description: "The MPI test test_mpi for CXX in mode MPICXX"
+    directories:
+      source: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-0UA6Hh"
+      binary: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-0UA6Hh"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: "-Wall"
+      CMAKE_CXX_FLAGS_DEBUG: "-g -O0"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "MPI_RESULT_CXX_test_mpi_MPICXX"
+      cached: true
+      stdout: |
+        Change Dir: /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-0UA6Hh
+        
+        Run Build Command(s):/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E env VERBOSE=1 /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake -f Makefile cmTC_5465e/fast && /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake  -f CMakeFiles/cmTC_5465e.dir/build.make CMakeFiles/cmTC_5465e.dir/build
+        gmake[1]: Entering directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-0UA6Hh'
+        Building CXX object CMakeFiles/cmTC_5465e.dir/test_mpi.cpp.o
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++  -isystem /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/include -Wall  -std=c++17 -o CMakeFiles/cmTC_5465e.dir/test_mpi.cpp.o -c /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-0UA6Hh/test_mpi.cpp
+        Linking CXX executable cmTC_5465e
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E cmake_link_script CMakeFiles/cmTC_5465e.dir/link.txt --verbose=1
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++ -Wall  -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib CMakeFiles/cmTC_5465e.dir/test_mpi.cpp.o -o cmTC_5465e  -Wl,-rpath,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib/libmpi.so 
+        gmake[1]: Leaving directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-0UA6Hh'
+        
+      exitCode: 0
+...
+
+---
+events:
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1278 (try_compile)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1322 (_MPI_try_staged_settings)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1645 (_MPI_check_lang_works)"
+      - "CMakeLists.txt:23 (find_package)"
+    description: "The MPI test test_mpi for C in mode normal"
+    directories:
+      source: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-LRnQaV"
+      binary: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-LRnQaV"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "MPI_RESULT_C_test_mpi_normal"
+      cached: true
+      stdout: |
+        Change Dir: /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-LRnQaV
+        
+        Run Build Command(s):/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E env VERBOSE=1 /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake -f Makefile cmTC_78c75/fast && /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake  -f CMakeFiles/cmTC_78c75.dir/build.make CMakeFiles/cmTC_78c75.dir/build
+        gmake[1]: Entering directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-LRnQaV'
+        Building C object CMakeFiles/cmTC_78c75.dir/test_mpi.c.o
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/gcc  -isystem /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/include  -o CMakeFiles/cmTC_78c75.dir/test_mpi.c.o -c /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-LRnQaV/test_mpi.c
+        Linking C executable cmTC_78c75
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E cmake_link_script CMakeFiles/cmTC_78c75.dir/link.txt --verbose=1
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/gcc -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib CMakeFiles/cmTC_78c75.dir/test_mpi.c.o -o cmTC_78c75  -Wl,-rpath,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib/libmpi.so 
+        gmake[1]: Leaving directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-LRnQaV'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1278 (try_compile)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1322 (_MPI_try_staged_settings)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1645 (_MPI_check_lang_works)"
+      - "CMakeLists.txt:23 (find_package)"
+    description: "The MPI test test_mpi for CXX in mode normal"
+    directories:
+      source: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-rWUK9D"
+      binary: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-rWUK9D"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: "-Wall"
+      CMAKE_CXX_FLAGS_DEBUG: "-g -O0"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "MPI_RESULT_CXX_test_mpi_normal"
+      cached: true
+      stdout: |
+        Change Dir: /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-rWUK9D
+        
+        Run Build Command(s):/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E env VERBOSE=1 /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake -f Makefile cmTC_7a233/fast && /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake  -f CMakeFiles/cmTC_7a233.dir/build.make CMakeFiles/cmTC_7a233.dir/build
+        gmake[1]: Entering directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-rWUK9D'
+        Building CXX object CMakeFiles/cmTC_7a233.dir/test_mpi.cpp.o
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++  -isystem /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/include -Wall  -std=c++17 -o CMakeFiles/cmTC_7a233.dir/test_mpi.cpp.o -c /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-rWUK9D/test_mpi.cpp
+        Linking CXX executable cmTC_7a233
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E cmake_link_script CMakeFiles/cmTC_7a233.dir/link.txt --verbose=1
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++ -Wall  -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib CMakeFiles/cmTC_7a233.dir/test_mpi.cpp.o -o cmTC_7a233  -Wl,-rpath,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib/libmpi.so 
+        gmake[1]: Leaving directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-rWUK9D'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1278 (try_compile)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1672 (_MPI_try_staged_settings)"
+      - "CMakeLists.txt:23 (find_package)"
+    description: "The MPI test test_mpi for CXX in mode MPICXX"
+    directories:
+      source: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-zmKH6r"
+      binary: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-zmKH6r"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: "-Wall"
+      CMAKE_CXX_FLAGS_DEBUG: "-g -O0"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "MPI_RESULT_CXX_test_mpi_MPICXX"
+      cached: true
+      stdout: |
+        Change Dir: /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-zmKH6r
+        
+        Run Build Command(s):/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E env VERBOSE=1 /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake -f Makefile cmTC_a7fe6/fast && /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake  -f CMakeFiles/cmTC_a7fe6.dir/build.make CMakeFiles/cmTC_a7fe6.dir/build
+        gmake[1]: Entering directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-zmKH6r'
+        Building CXX object CMakeFiles/cmTC_a7fe6.dir/test_mpi.cpp.o
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++  -isystem /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/include -Wall  -std=c++17 -o CMakeFiles/cmTC_a7fe6.dir/test_mpi.cpp.o -c /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-zmKH6r/test_mpi.cpp
+        Linking CXX executable cmTC_a7fe6
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E cmake_link_script CMakeFiles/cmTC_a7fe6.dir/link.txt --verbose=1
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++ -Wall  -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib CMakeFiles/cmTC_a7fe6.dir/test_mpi.cpp.o -o cmTC_a7fe6  -Wl,-rpath,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib/libmpi.so 
+        gmake[1]: Leaving directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-zmKH6r'
+        
+      exitCode: 0
+...
+
+---
+events:
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1278 (try_compile)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1322 (_MPI_try_staged_settings)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1645 (_MPI_check_lang_works)"
+      - "CMakeLists.txt:23 (find_package)"
+    description: "The MPI test test_mpi for C in mode normal"
+    directories:
+      source: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-gN9gRV"
+      binary: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-gN9gRV"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "MPI_RESULT_C_test_mpi_normal"
+      cached: true
+      stdout: |
+        Change Dir: /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-gN9gRV
+        
+        Run Build Command(s):/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E env VERBOSE=1 /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake -f Makefile cmTC_3d271/fast && /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake  -f CMakeFiles/cmTC_3d271.dir/build.make CMakeFiles/cmTC_3d271.dir/build
+        gmake[1]: Entering directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-gN9gRV'
+        Building C object CMakeFiles/cmTC_3d271.dir/test_mpi.c.o
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/gcc  -isystem /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/include  -o CMakeFiles/cmTC_3d271.dir/test_mpi.c.o -c /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-gN9gRV/test_mpi.c
+        Linking C executable cmTC_3d271
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E cmake_link_script CMakeFiles/cmTC_3d271.dir/link.txt --verbose=1
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/gcc -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib CMakeFiles/cmTC_3d271.dir/test_mpi.c.o -o cmTC_3d271  -Wl,-rpath,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib/libmpi.so 
+        gmake[1]: Leaving directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-gN9gRV'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1278 (try_compile)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1322 (_MPI_try_staged_settings)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1645 (_MPI_check_lang_works)"
+      - "CMakeLists.txt:23 (find_package)"
+    description: "The MPI test test_mpi for CXX in mode normal"
+    directories:
+      source: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-mh2meS"
+      binary: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-mh2meS"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: "-Wall"
+      CMAKE_CXX_FLAGS_DEBUG: "-g -O0"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "MPI_RESULT_CXX_test_mpi_normal"
+      cached: true
+      stdout: |
+        Change Dir: /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-mh2meS
+        
+        Run Build Command(s):/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E env VERBOSE=1 /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake -f Makefile cmTC_aa0dd/fast && /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake  -f CMakeFiles/cmTC_aa0dd.dir/build.make CMakeFiles/cmTC_aa0dd.dir/build
+        gmake[1]: Entering directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-mh2meS'
+        Building CXX object CMakeFiles/cmTC_aa0dd.dir/test_mpi.cpp.o
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++  -isystem /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/include -Wall  -std=c++17 -o CMakeFiles/cmTC_aa0dd.dir/test_mpi.cpp.o -c /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-mh2meS/test_mpi.cpp
+        Linking CXX executable cmTC_aa0dd
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E cmake_link_script CMakeFiles/cmTC_aa0dd.dir/link.txt --verbose=1
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++ -Wall  -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib CMakeFiles/cmTC_aa0dd.dir/test_mpi.cpp.o -o cmTC_aa0dd  -Wl,-rpath,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib/libmpi.so 
+        gmake[1]: Leaving directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-mh2meS'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1278 (try_compile)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1672 (_MPI_try_staged_settings)"
+      - "CMakeLists.txt:23 (find_package)"
+    description: "The MPI test test_mpi for CXX in mode MPICXX"
+    directories:
+      source: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-vwmGLs"
+      binary: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-vwmGLs"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: "-Wall"
+      CMAKE_CXX_FLAGS_DEBUG: "-g -O0"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "MPI_RESULT_CXX_test_mpi_MPICXX"
+      cached: true
+      stdout: |
+        Change Dir: /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-vwmGLs
+        
+        Run Build Command(s):/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E env VERBOSE=1 /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake -f Makefile cmTC_b9f95/fast && /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake  -f CMakeFiles/cmTC_b9f95.dir/build.make CMakeFiles/cmTC_b9f95.dir/build
+        gmake[1]: Entering directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-vwmGLs'
+        Building CXX object CMakeFiles/cmTC_b9f95.dir/test_mpi.cpp.o
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++  -isystem /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/include -Wall  -std=c++17 -o CMakeFiles/cmTC_b9f95.dir/test_mpi.cpp.o -c /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-vwmGLs/test_mpi.cpp
+        Linking CXX executable cmTC_b9f95
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E cmake_link_script CMakeFiles/cmTC_b9f95.dir/link.txt --verbose=1
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++ -Wall  -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib CMakeFiles/cmTC_b9f95.dir/test_mpi.cpp.o -o cmTC_b9f95  -Wl,-rpath,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib/libmpi.so 
+        gmake[1]: Leaving directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-vwmGLs'
+        
+      exitCode: 0
+...
+
+---
+events:
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1278 (try_compile)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1322 (_MPI_try_staged_settings)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1645 (_MPI_check_lang_works)"
+      - "CMakeLists.txt:23 (find_package)"
+    description: "The MPI test test_mpi for C in mode normal"
+    directories:
+      source: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-stD6wG"
+      binary: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-stD6wG"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "MPI_RESULT_C_test_mpi_normal"
+      cached: true
+      stdout: |
+        Change Dir: /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-stD6wG
+        
+        Run Build Command(s):/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E env VERBOSE=1 /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake -f Makefile cmTC_14566/fast && /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake  -f CMakeFiles/cmTC_14566.dir/build.make CMakeFiles/cmTC_14566.dir/build
+        gmake[1]: Entering directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-stD6wG'
+        Building C object CMakeFiles/cmTC_14566.dir/test_mpi.c.o
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/gcc  -isystem /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/include  -o CMakeFiles/cmTC_14566.dir/test_mpi.c.o -c /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-stD6wG/test_mpi.c
+        Linking C executable cmTC_14566
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E cmake_link_script CMakeFiles/cmTC_14566.dir/link.txt --verbose=1
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/gcc -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib CMakeFiles/cmTC_14566.dir/test_mpi.c.o -o cmTC_14566  -Wl,-rpath,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib/libmpi.so 
+        gmake[1]: Leaving directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-stD6wG'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1278 (try_compile)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1322 (_MPI_try_staged_settings)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1645 (_MPI_check_lang_works)"
+      - "CMakeLists.txt:23 (find_package)"
+    description: "The MPI test test_mpi for CXX in mode normal"
+    directories:
+      source: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-Mz8Ep2"
+      binary: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-Mz8Ep2"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: "-Wall"
+      CMAKE_CXX_FLAGS_DEBUG: "-g -O0"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "MPI_RESULT_CXX_test_mpi_normal"
+      cached: true
+      stdout: |
+        Change Dir: /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-Mz8Ep2
+        
+        Run Build Command(s):/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E env VERBOSE=1 /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake -f Makefile cmTC_e3ac8/fast && /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake  -f CMakeFiles/cmTC_e3ac8.dir/build.make CMakeFiles/cmTC_e3ac8.dir/build
+        gmake[1]: Entering directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-Mz8Ep2'
+        Building CXX object CMakeFiles/cmTC_e3ac8.dir/test_mpi.cpp.o
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++  -isystem /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/include -Wall  -std=c++17 -o CMakeFiles/cmTC_e3ac8.dir/test_mpi.cpp.o -c /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-Mz8Ep2/test_mpi.cpp
+        Linking CXX executable cmTC_e3ac8
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E cmake_link_script CMakeFiles/cmTC_e3ac8.dir/link.txt --verbose=1
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++ -Wall  -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib CMakeFiles/cmTC_e3ac8.dir/test_mpi.cpp.o -o cmTC_e3ac8  -Wl,-rpath,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib/libmpi.so 
+        gmake[1]: Leaving directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-Mz8Ep2'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1278 (try_compile)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1672 (_MPI_try_staged_settings)"
+      - "CMakeLists.txt:23 (find_package)"
+    description: "The MPI test test_mpi for CXX in mode MPICXX"
+    directories:
+      source: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-jzq9LO"
+      binary: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-jzq9LO"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: "-Wall"
+      CMAKE_CXX_FLAGS_DEBUG: "-g -O0"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "MPI_RESULT_CXX_test_mpi_MPICXX"
+      cached: true
+      stdout: |
+        Change Dir: /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-jzq9LO
+        
+        Run Build Command(s):/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E env VERBOSE=1 /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake -f Makefile cmTC_daf90/fast && /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake  -f CMakeFiles/cmTC_daf90.dir/build.make CMakeFiles/cmTC_daf90.dir/build
+        gmake[1]: Entering directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-jzq9LO'
+        Building CXX object CMakeFiles/cmTC_daf90.dir/test_mpi.cpp.o
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++  -isystem /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/include -Wall  -std=c++17 -o CMakeFiles/cmTC_daf90.dir/test_mpi.cpp.o -c /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-jzq9LO/test_mpi.cpp
+        Linking CXX executable cmTC_daf90
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E cmake_link_script CMakeFiles/cmTC_daf90.dir/link.txt --verbose=1
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++ -Wall  -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib CMakeFiles/cmTC_daf90.dir/test_mpi.cpp.o -o cmTC_daf90  -Wl,-rpath,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib/libmpi.so 
+        gmake[1]: Leaving directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-jzq9LO'
+        
+      exitCode: 0
+...
+
+---
+events:
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1278 (try_compile)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1322 (_MPI_try_staged_settings)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1645 (_MPI_check_lang_works)"
+      - "CMakeLists.txt:23 (find_package)"
+    description: "The MPI test test_mpi for C in mode normal"
+    directories:
+      source: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-ZL4VnV"
+      binary: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-ZL4VnV"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "MPI_RESULT_C_test_mpi_normal"
+      cached: true
+      stdout: |
+        Change Dir: /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-ZL4VnV
+        
+        Run Build Command(s):/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E env VERBOSE=1 /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake -f Makefile cmTC_080af/fast && /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake  -f CMakeFiles/cmTC_080af.dir/build.make CMakeFiles/cmTC_080af.dir/build
+        gmake[1]: Entering directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-ZL4VnV'
+        Building C object CMakeFiles/cmTC_080af.dir/test_mpi.c.o
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/gcc  -isystem /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/include  -o CMakeFiles/cmTC_080af.dir/test_mpi.c.o -c /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-ZL4VnV/test_mpi.c
+        Linking C executable cmTC_080af
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E cmake_link_script CMakeFiles/cmTC_080af.dir/link.txt --verbose=1
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/gcc -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib CMakeFiles/cmTC_080af.dir/test_mpi.c.o -o cmTC_080af  -Wl,-rpath,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib/libmpi.so 
+        gmake[1]: Leaving directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-ZL4VnV'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1278 (try_compile)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1322 (_MPI_try_staged_settings)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1645 (_MPI_check_lang_works)"
+      - "CMakeLists.txt:23 (find_package)"
+    description: "The MPI test test_mpi for CXX in mode normal"
+    directories:
+      source: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-hgeh4I"
+      binary: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-hgeh4I"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: "-Wall"
+      CMAKE_CXX_FLAGS_DEBUG: "-g -O0"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "MPI_RESULT_CXX_test_mpi_normal"
+      cached: true
+      stdout: |
+        Change Dir: /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-hgeh4I
+        
+        Run Build Command(s):/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E env VERBOSE=1 /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake -f Makefile cmTC_20bd5/fast && /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake  -f CMakeFiles/cmTC_20bd5.dir/build.make CMakeFiles/cmTC_20bd5.dir/build
+        gmake[1]: Entering directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-hgeh4I'
+        Building CXX object CMakeFiles/cmTC_20bd5.dir/test_mpi.cpp.o
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++  -isystem /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/include -Wall  -std=c++17 -o CMakeFiles/cmTC_20bd5.dir/test_mpi.cpp.o -c /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-hgeh4I/test_mpi.cpp
+        Linking CXX executable cmTC_20bd5
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E cmake_link_script CMakeFiles/cmTC_20bd5.dir/link.txt --verbose=1
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++ -Wall  -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib CMakeFiles/cmTC_20bd5.dir/test_mpi.cpp.o -o cmTC_20bd5  -Wl,-rpath,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib/libmpi.so 
+        gmake[1]: Leaving directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-hgeh4I'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1278 (try_compile)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1672 (_MPI_try_staged_settings)"
+      - "CMakeLists.txt:23 (find_package)"
+    description: "The MPI test test_mpi for CXX in mode MPICXX"
+    directories:
+      source: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-3zgRnQ"
+      binary: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-3zgRnQ"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: "-Wall"
+      CMAKE_CXX_FLAGS_DEBUG: "-g -O0"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "MPI_RESULT_CXX_test_mpi_MPICXX"
+      cached: true
+      stdout: |
+        Change Dir: /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-3zgRnQ
+        
+        Run Build Command(s):/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E env VERBOSE=1 /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake -f Makefile cmTC_b6b73/fast && /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake  -f CMakeFiles/cmTC_b6b73.dir/build.make CMakeFiles/cmTC_b6b73.dir/build
+        gmake[1]: Entering directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-3zgRnQ'
+        Building CXX object CMakeFiles/cmTC_b6b73.dir/test_mpi.cpp.o
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++  -isystem /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/include -Wall  -std=c++17 -o CMakeFiles/cmTC_b6b73.dir/test_mpi.cpp.o -c /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-3zgRnQ/test_mpi.cpp
+        Linking CXX executable cmTC_b6b73
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E cmake_link_script CMakeFiles/cmTC_b6b73.dir/link.txt --verbose=1
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++ -Wall  -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib CMakeFiles/cmTC_b6b73.dir/test_mpi.cpp.o -o cmTC_b6b73  -Wl,-rpath,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib/libmpi.so 
+        gmake[1]: Leaving directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-3zgRnQ'
+        
+      exitCode: 0
+...
+
+---
+events:
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1278 (try_compile)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1322 (_MPI_try_staged_settings)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1645 (_MPI_check_lang_works)"
+      - "CMakeLists.txt:23 (find_package)"
+    description: "The MPI test test_mpi for C in mode normal"
+    directories:
+      source: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-3gzwAT"
+      binary: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-3gzwAT"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "MPI_RESULT_C_test_mpi_normal"
+      cached: true
+      stdout: |
+        Change Dir: /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-3gzwAT
+        
+        Run Build Command(s):/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E env VERBOSE=1 /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake -f Makefile cmTC_de786/fast && /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake  -f CMakeFiles/cmTC_de786.dir/build.make CMakeFiles/cmTC_de786.dir/build
+        gmake[1]: Entering directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-3gzwAT'
+        Building C object CMakeFiles/cmTC_de786.dir/test_mpi.c.o
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/gcc  -isystem /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/include  -o CMakeFiles/cmTC_de786.dir/test_mpi.c.o -c /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-3gzwAT/test_mpi.c
+        Linking C executable cmTC_de786
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E cmake_link_script CMakeFiles/cmTC_de786.dir/link.txt --verbose=1
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/gcc -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib CMakeFiles/cmTC_de786.dir/test_mpi.c.o -o cmTC_de786  -Wl,-rpath,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib/libmpi.so 
+        gmake[1]: Leaving directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-3gzwAT'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1278 (try_compile)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1322 (_MPI_try_staged_settings)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1645 (_MPI_check_lang_works)"
+      - "CMakeLists.txt:23 (find_package)"
+    description: "The MPI test test_mpi for CXX in mode normal"
+    directories:
+      source: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-ckLklw"
+      binary: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-ckLklw"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: "-Wall"
+      CMAKE_CXX_FLAGS_DEBUG: "-g -O0"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "MPI_RESULT_CXX_test_mpi_normal"
+      cached: true
+      stdout: |
+        Change Dir: /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-ckLklw
+        
+        Run Build Command(s):/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E env VERBOSE=1 /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake -f Makefile cmTC_d4ba2/fast && /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake  -f CMakeFiles/cmTC_d4ba2.dir/build.make CMakeFiles/cmTC_d4ba2.dir/build
+        gmake[1]: Entering directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-ckLklw'
+        Building CXX object CMakeFiles/cmTC_d4ba2.dir/test_mpi.cpp.o
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++  -isystem /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/include -Wall  -std=c++17 -o CMakeFiles/cmTC_d4ba2.dir/test_mpi.cpp.o -c /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-ckLklw/test_mpi.cpp
+        Linking CXX executable cmTC_d4ba2
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E cmake_link_script CMakeFiles/cmTC_d4ba2.dir/link.txt --verbose=1
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++ -Wall  -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib CMakeFiles/cmTC_d4ba2.dir/test_mpi.cpp.o -o cmTC_d4ba2  -Wl,-rpath,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib/libmpi.so 
+        gmake[1]: Leaving directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-ckLklw'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1278 (try_compile)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1672 (_MPI_try_staged_settings)"
+      - "CMakeLists.txt:23 (find_package)"
+    description: "The MPI test test_mpi for CXX in mode MPICXX"
+    directories:
+      source: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-fznv0e"
+      binary: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-fznv0e"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: "-Wall"
+      CMAKE_CXX_FLAGS_DEBUG: "-g -O0"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "MPI_RESULT_CXX_test_mpi_MPICXX"
+      cached: true
+      stdout: |
+        Change Dir: /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-fznv0e
+        
+        Run Build Command(s):/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E env VERBOSE=1 /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake -f Makefile cmTC_4f676/fast && /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake  -f CMakeFiles/cmTC_4f676.dir/build.make CMakeFiles/cmTC_4f676.dir/build
+        gmake[1]: Entering directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-fznv0e'
+        Building CXX object CMakeFiles/cmTC_4f676.dir/test_mpi.cpp.o
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++  -isystem /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/include -Wall  -std=c++17 -o CMakeFiles/cmTC_4f676.dir/test_mpi.cpp.o -c /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-fznv0e/test_mpi.cpp
+        Linking CXX executable cmTC_4f676
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E cmake_link_script CMakeFiles/cmTC_4f676.dir/link.txt --verbose=1
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++ -Wall  -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib CMakeFiles/cmTC_4f676.dir/test_mpi.cpp.o -o cmTC_4f676  -Wl,-rpath,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib/libmpi.so 
+        gmake[1]: Leaving directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-fznv0e'
+        
+      exitCode: 0
+...
+
+---
+events:
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1278 (try_compile)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1322 (_MPI_try_staged_settings)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1645 (_MPI_check_lang_works)"
+      - "CMakeLists.txt:23 (find_package)"
+    description: "The MPI test test_mpi for C in mode normal"
+    directories:
+      source: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-aHTMrb"
+      binary: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-aHTMrb"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "MPI_RESULT_C_test_mpi_normal"
+      cached: true
+      stdout: |
+        Change Dir: /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-aHTMrb
+        
+        Run Build Command(s):/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E env VERBOSE=1 /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake -f Makefile cmTC_4e35b/fast && /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake  -f CMakeFiles/cmTC_4e35b.dir/build.make CMakeFiles/cmTC_4e35b.dir/build
+        gmake[1]: Entering directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-aHTMrb'
+        Building C object CMakeFiles/cmTC_4e35b.dir/test_mpi.c.o
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/gcc  -isystem /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/include  -o CMakeFiles/cmTC_4e35b.dir/test_mpi.c.o -c /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-aHTMrb/test_mpi.c
+        Linking C executable cmTC_4e35b
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E cmake_link_script CMakeFiles/cmTC_4e35b.dir/link.txt --verbose=1
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/gcc -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib CMakeFiles/cmTC_4e35b.dir/test_mpi.c.o -o cmTC_4e35b  -Wl,-rpath,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib/libmpi.so 
+        gmake[1]: Leaving directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-aHTMrb'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1278 (try_compile)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1322 (_MPI_try_staged_settings)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1645 (_MPI_check_lang_works)"
+      - "CMakeLists.txt:23 (find_package)"
+    description: "The MPI test test_mpi for CXX in mode normal"
+    directories:
+      source: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-jxdtwg"
+      binary: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-jxdtwg"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: "-Wall"
+      CMAKE_CXX_FLAGS_DEBUG: "-g -O0"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "MPI_RESULT_CXX_test_mpi_normal"
+      cached: true
+      stdout: |
+        Change Dir: /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-jxdtwg
+        
+        Run Build Command(s):/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E env VERBOSE=1 /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake -f Makefile cmTC_ff87d/fast && /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake  -f CMakeFiles/cmTC_ff87d.dir/build.make CMakeFiles/cmTC_ff87d.dir/build
+        gmake[1]: Entering directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-jxdtwg'
+        Building CXX object CMakeFiles/cmTC_ff87d.dir/test_mpi.cpp.o
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++  -isystem /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/include -Wall  -std=c++17 -o CMakeFiles/cmTC_ff87d.dir/test_mpi.cpp.o -c /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-jxdtwg/test_mpi.cpp
+        Linking CXX executable cmTC_ff87d
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ff87d.dir/link.txt --verbose=1
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++ -Wall  -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib CMakeFiles/cmTC_ff87d.dir/test_mpi.cpp.o -o cmTC_ff87d  -Wl,-rpath,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib/libmpi.so 
+        gmake[1]: Leaving directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-jxdtwg'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1278 (try_compile)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1672 (_MPI_try_staged_settings)"
+      - "CMakeLists.txt:23 (find_package)"
+    description: "The MPI test test_mpi for CXX in mode MPICXX"
+    directories:
+      source: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-jVEsnr"
+      binary: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-jVEsnr"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: "-Wall"
+      CMAKE_CXX_FLAGS_DEBUG: "-g -O0"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "MPI_RESULT_CXX_test_mpi_MPICXX"
+      cached: true
+      stdout: |
+        Change Dir: /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-jVEsnr
+        
+        Run Build Command(s):/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E env VERBOSE=1 /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake -f Makefile cmTC_0b01c/fast && /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake  -f CMakeFiles/cmTC_0b01c.dir/build.make CMakeFiles/cmTC_0b01c.dir/build
+        gmake[1]: Entering directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-jVEsnr'
+        Building CXX object CMakeFiles/cmTC_0b01c.dir/test_mpi.cpp.o
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++  -isystem /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/include -Wall  -std=c++17 -o CMakeFiles/cmTC_0b01c.dir/test_mpi.cpp.o -c /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-jVEsnr/test_mpi.cpp
+        Linking CXX executable cmTC_0b01c
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E cmake_link_script CMakeFiles/cmTC_0b01c.dir/link.txt --verbose=1
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++ -Wall  -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib CMakeFiles/cmTC_0b01c.dir/test_mpi.cpp.o -o cmTC_0b01c  -Wl,-rpath,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib/libmpi.so 
+        gmake[1]: Leaving directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-jVEsnr'
+        
+      exitCode: 0
+...
+
+---
+events:
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1278 (try_compile)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1322 (_MPI_try_staged_settings)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1645 (_MPI_check_lang_works)"
+      - "CMakeLists.txt:23 (find_package)"
+    description: "The MPI test test_mpi for C in mode normal"
+    directories:
+      source: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-9NzFV2"
+      binary: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-9NzFV2"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "MPI_RESULT_C_test_mpi_normal"
+      cached: true
+      stdout: |
+        Change Dir: /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-9NzFV2
+        
+        Run Build Command(s):/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E env VERBOSE=1 /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake -f Makefile cmTC_a22e1/fast && /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake  -f CMakeFiles/cmTC_a22e1.dir/build.make CMakeFiles/cmTC_a22e1.dir/build
+        gmake[1]: Entering directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-9NzFV2'
+        Building C object CMakeFiles/cmTC_a22e1.dir/test_mpi.c.o
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/gcc  -isystem /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/include  -o CMakeFiles/cmTC_a22e1.dir/test_mpi.c.o -c /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-9NzFV2/test_mpi.c
+        Linking C executable cmTC_a22e1
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E cmake_link_script CMakeFiles/cmTC_a22e1.dir/link.txt --verbose=1
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/gcc -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib CMakeFiles/cmTC_a22e1.dir/test_mpi.c.o -o cmTC_a22e1  -Wl,-rpath,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib/libmpi.so 
+        gmake[1]: Leaving directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-9NzFV2'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1278 (try_compile)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1322 (_MPI_try_staged_settings)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1645 (_MPI_check_lang_works)"
+      - "CMakeLists.txt:23 (find_package)"
+    description: "The MPI test test_mpi for CXX in mode normal"
+    directories:
+      source: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-rZU37U"
+      binary: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-rZU37U"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: "-Wall"
+      CMAKE_CXX_FLAGS_DEBUG: "-g -O0"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "MPI_RESULT_CXX_test_mpi_normal"
+      cached: true
+      stdout: |
+        Change Dir: /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-rZU37U
+        
+        Run Build Command(s):/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E env VERBOSE=1 /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake -f Makefile cmTC_7b7d0/fast && /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake  -f CMakeFiles/cmTC_7b7d0.dir/build.make CMakeFiles/cmTC_7b7d0.dir/build
+        gmake[1]: Entering directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-rZU37U'
+        Building CXX object CMakeFiles/cmTC_7b7d0.dir/test_mpi.cpp.o
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++  -isystem /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/include -Wall  -std=c++17 -o CMakeFiles/cmTC_7b7d0.dir/test_mpi.cpp.o -c /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-rZU37U/test_mpi.cpp
+        Linking CXX executable cmTC_7b7d0
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E cmake_link_script CMakeFiles/cmTC_7b7d0.dir/link.txt --verbose=1
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++ -Wall  -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib CMakeFiles/cmTC_7b7d0.dir/test_mpi.cpp.o -o cmTC_7b7d0  -Wl,-rpath,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib/libmpi.so 
+        gmake[1]: Leaving directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-rZU37U'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1278 (try_compile)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1672 (_MPI_try_staged_settings)"
+      - "CMakeLists.txt:23 (find_package)"
+    description: "The MPI test test_mpi for CXX in mode MPICXX"
+    directories:
+      source: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-gl23UC"
+      binary: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-gl23UC"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: "-Wall"
+      CMAKE_CXX_FLAGS_DEBUG: "-g -O0"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "MPI_RESULT_CXX_test_mpi_MPICXX"
+      cached: true
+      stdout: |
+        Change Dir: /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-gl23UC
+        
+        Run Build Command(s):/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E env VERBOSE=1 /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake -f Makefile cmTC_f1f14/fast && /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake  -f CMakeFiles/cmTC_f1f14.dir/build.make CMakeFiles/cmTC_f1f14.dir/build
+        gmake[1]: Entering directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-gl23UC'
+        Building CXX object CMakeFiles/cmTC_f1f14.dir/test_mpi.cpp.o
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++  -isystem /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/include -Wall  -std=c++17 -o CMakeFiles/cmTC_f1f14.dir/test_mpi.cpp.o -c /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-gl23UC/test_mpi.cpp
+        Linking CXX executable cmTC_f1f14
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E cmake_link_script CMakeFiles/cmTC_f1f14.dir/link.txt --verbose=1
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++ -Wall  -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib CMakeFiles/cmTC_f1f14.dir/test_mpi.cpp.o -o cmTC_f1f14  -Wl,-rpath,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib/libmpi.so 
+        gmake[1]: Leaving directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-gl23UC'
+        
+      exitCode: 0
+...
+
+---
+events:
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1278 (try_compile)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1322 (_MPI_try_staged_settings)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1645 (_MPI_check_lang_works)"
+      - "CMakeLists.txt:23 (find_package)"
+    description: "The MPI test test_mpi for C in mode normal"
+    directories:
+      source: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-uBLDLp"
+      binary: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-uBLDLp"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "MPI_RESULT_C_test_mpi_normal"
+      cached: true
+      stdout: |
+        Change Dir: /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-uBLDLp
+        
+        Run Build Command(s):/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E env VERBOSE=1 /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake -f Makefile cmTC_252b5/fast && /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake  -f CMakeFiles/cmTC_252b5.dir/build.make CMakeFiles/cmTC_252b5.dir/build
+        gmake[1]: Entering directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-uBLDLp'
+        Building C object CMakeFiles/cmTC_252b5.dir/test_mpi.c.o
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/gcc  -isystem /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/include  -o CMakeFiles/cmTC_252b5.dir/test_mpi.c.o -c /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-uBLDLp/test_mpi.c
+        Linking C executable cmTC_252b5
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E cmake_link_script CMakeFiles/cmTC_252b5.dir/link.txt --verbose=1
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/gcc -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib CMakeFiles/cmTC_252b5.dir/test_mpi.c.o -o cmTC_252b5  -Wl,-rpath,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib/libmpi.so 
+        gmake[1]: Leaving directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-uBLDLp'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1278 (try_compile)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1322 (_MPI_try_staged_settings)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1645 (_MPI_check_lang_works)"
+      - "CMakeLists.txt:23 (find_package)"
+    description: "The MPI test test_mpi for CXX in mode normal"
+    directories:
+      source: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-kpmnrX"
+      binary: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-kpmnrX"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: "-Wall"
+      CMAKE_CXX_FLAGS_DEBUG: "-g -O0"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "MPI_RESULT_CXX_test_mpi_normal"
+      cached: true
+      stdout: |
+        Change Dir: /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-kpmnrX
+        
+        Run Build Command(s):/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E env VERBOSE=1 /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake -f Makefile cmTC_beb87/fast && /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake  -f CMakeFiles/cmTC_beb87.dir/build.make CMakeFiles/cmTC_beb87.dir/build
+        gmake[1]: Entering directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-kpmnrX'
+        Building CXX object CMakeFiles/cmTC_beb87.dir/test_mpi.cpp.o
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++  -isystem /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/include -Wall  -std=c++17 -o CMakeFiles/cmTC_beb87.dir/test_mpi.cpp.o -c /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-kpmnrX/test_mpi.cpp
+        Linking CXX executable cmTC_beb87
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E cmake_link_script CMakeFiles/cmTC_beb87.dir/link.txt --verbose=1
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++ -Wall  -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib CMakeFiles/cmTC_beb87.dir/test_mpi.cpp.o -o cmTC_beb87  -Wl,-rpath,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib/libmpi.so 
+        gmake[1]: Leaving directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-kpmnrX'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1278 (try_compile)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1672 (_MPI_try_staged_settings)"
+      - "CMakeLists.txt:23 (find_package)"
+    description: "The MPI test test_mpi for CXX in mode MPICXX"
+    directories:
+      source: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-9lHfMj"
+      binary: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-9lHfMj"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: "-Wall"
+      CMAKE_CXX_FLAGS_DEBUG: "-g -O0"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "MPI_RESULT_CXX_test_mpi_MPICXX"
+      cached: true
+      stdout: |
+        Change Dir: /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-9lHfMj
+        
+        Run Build Command(s):/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E env VERBOSE=1 /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake -f Makefile cmTC_437d2/fast && /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake  -f CMakeFiles/cmTC_437d2.dir/build.make CMakeFiles/cmTC_437d2.dir/build
+        gmake[1]: Entering directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-9lHfMj'
+        Building CXX object CMakeFiles/cmTC_437d2.dir/test_mpi.cpp.o
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++  -isystem /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/include -Wall  -std=c++17 -o CMakeFiles/cmTC_437d2.dir/test_mpi.cpp.o -c /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-9lHfMj/test_mpi.cpp
+        Linking CXX executable cmTC_437d2
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E cmake_link_script CMakeFiles/cmTC_437d2.dir/link.txt --verbose=1
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++ -Wall  -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib CMakeFiles/cmTC_437d2.dir/test_mpi.cpp.o -o cmTC_437d2  -Wl,-rpath,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib/libmpi.so 
+        gmake[1]: Leaving directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-9lHfMj'
+        
+      exitCode: 0
+...
+
+---
+events:
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1278 (try_compile)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1322 (_MPI_try_staged_settings)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1645 (_MPI_check_lang_works)"
+      - "CMakeLists.txt:23 (find_package)"
+    description: "The MPI test test_mpi for C in mode normal"
+    directories:
+      source: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-yS1Zv0"
+      binary: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-yS1Zv0"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "MPI_RESULT_C_test_mpi_normal"
+      cached: true
+      stdout: |
+        Change Dir: /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-yS1Zv0
+        
+        Run Build Command(s):/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E env VERBOSE=1 /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake -f Makefile cmTC_ee12e/fast && /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake  -f CMakeFiles/cmTC_ee12e.dir/build.make CMakeFiles/cmTC_ee12e.dir/build
+        gmake[1]: Entering directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-yS1Zv0'
+        Building C object CMakeFiles/cmTC_ee12e.dir/test_mpi.c.o
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/gcc  -isystem /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/include  -o CMakeFiles/cmTC_ee12e.dir/test_mpi.c.o -c /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-yS1Zv0/test_mpi.c
+        Linking C executable cmTC_ee12e
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ee12e.dir/link.txt --verbose=1
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/gcc -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib CMakeFiles/cmTC_ee12e.dir/test_mpi.c.o -o cmTC_ee12e  -Wl,-rpath,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib/libmpi.so 
+        gmake[1]: Leaving directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-yS1Zv0'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1278 (try_compile)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1322 (_MPI_try_staged_settings)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1645 (_MPI_check_lang_works)"
+      - "CMakeLists.txt:23 (find_package)"
+    description: "The MPI test test_mpi for CXX in mode normal"
+    directories:
+      source: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-ENmxcp"
+      binary: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-ENmxcp"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: "-Wall"
+      CMAKE_CXX_FLAGS_DEBUG: "-g -O0"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "MPI_RESULT_CXX_test_mpi_normal"
+      cached: true
+      stdout: |
+        Change Dir: /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-ENmxcp
+        
+        Run Build Command(s):/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E env VERBOSE=1 /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake -f Makefile cmTC_eff52/fast && /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake  -f CMakeFiles/cmTC_eff52.dir/build.make CMakeFiles/cmTC_eff52.dir/build
+        gmake[1]: Entering directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-ENmxcp'
+        Building CXX object CMakeFiles/cmTC_eff52.dir/test_mpi.cpp.o
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++  -isystem /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/include -Wall  -std=c++17 -o CMakeFiles/cmTC_eff52.dir/test_mpi.cpp.o -c /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-ENmxcp/test_mpi.cpp
+        Linking CXX executable cmTC_eff52
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E cmake_link_script CMakeFiles/cmTC_eff52.dir/link.txt --verbose=1
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++ -Wall  -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib CMakeFiles/cmTC_eff52.dir/test_mpi.cpp.o -o cmTC_eff52  -Wl,-rpath,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib/libmpi.so 
+        gmake[1]: Leaving directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-ENmxcp'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1278 (try_compile)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1672 (_MPI_try_staged_settings)"
+      - "CMakeLists.txt:23 (find_package)"
+    description: "The MPI test test_mpi for CXX in mode MPICXX"
+    directories:
+      source: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-T8cSXn"
+      binary: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-T8cSXn"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: "-Wall"
+      CMAKE_CXX_FLAGS_DEBUG: "-g -O0"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "MPI_RESULT_CXX_test_mpi_MPICXX"
+      cached: true
+      stdout: |
+        Change Dir: /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-T8cSXn
+        
+        Run Build Command(s):/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E env VERBOSE=1 /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake -f Makefile cmTC_efd37/fast && /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake  -f CMakeFiles/cmTC_efd37.dir/build.make CMakeFiles/cmTC_efd37.dir/build
+        gmake[1]: Entering directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-T8cSXn'
+        Building CXX object CMakeFiles/cmTC_efd37.dir/test_mpi.cpp.o
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++  -isystem /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/include -Wall  -std=c++17 -o CMakeFiles/cmTC_efd37.dir/test_mpi.cpp.o -c /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-T8cSXn/test_mpi.cpp
+        Linking CXX executable cmTC_efd37
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E cmake_link_script CMakeFiles/cmTC_efd37.dir/link.txt --verbose=1
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++ -Wall  -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib CMakeFiles/cmTC_efd37.dir/test_mpi.cpp.o -o cmTC_efd37  -Wl,-rpath,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib/libmpi.so 
+        gmake[1]: Leaving directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-T8cSXn'
+        
+      exitCode: 0
+...
+
+---
+events:
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1278 (try_compile)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1322 (_MPI_try_staged_settings)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1645 (_MPI_check_lang_works)"
+      - "CMakeLists.txt:23 (find_package)"
+    description: "The MPI test test_mpi for C in mode normal"
+    directories:
+      source: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-Qjfux4"
+      binary: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-Qjfux4"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "MPI_RESULT_C_test_mpi_normal"
+      cached: true
+      stdout: |
+        Change Dir: /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-Qjfux4
+        
+        Run Build Command(s):/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E env VERBOSE=1 /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake -f Makefile cmTC_05808/fast && /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake  -f CMakeFiles/cmTC_05808.dir/build.make CMakeFiles/cmTC_05808.dir/build
+        gmake[1]: Entering directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-Qjfux4'
+        Building C object CMakeFiles/cmTC_05808.dir/test_mpi.c.o
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/gcc  -isystem /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/include  -o CMakeFiles/cmTC_05808.dir/test_mpi.c.o -c /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-Qjfux4/test_mpi.c
+        Linking C executable cmTC_05808
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E cmake_link_script CMakeFiles/cmTC_05808.dir/link.txt --verbose=1
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/gcc -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib CMakeFiles/cmTC_05808.dir/test_mpi.c.o -o cmTC_05808  -Wl,-rpath,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib/libmpi.so 
+        gmake[1]: Leaving directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-Qjfux4'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1278 (try_compile)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1322 (_MPI_try_staged_settings)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1645 (_MPI_check_lang_works)"
+      - "CMakeLists.txt:23 (find_package)"
+    description: "The MPI test test_mpi for CXX in mode normal"
+    directories:
+      source: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-h6dYRr"
+      binary: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-h6dYRr"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: "-Wall"
+      CMAKE_CXX_FLAGS_DEBUG: "-g -O0"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "MPI_RESULT_CXX_test_mpi_normal"
+      cached: true
+      stdout: |
+        Change Dir: /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-h6dYRr
+        
+        Run Build Command(s):/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E env VERBOSE=1 /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake -f Makefile cmTC_6978a/fast && /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake  -f CMakeFiles/cmTC_6978a.dir/build.make CMakeFiles/cmTC_6978a.dir/build
+        gmake[1]: Entering directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-h6dYRr'
+        Building CXX object CMakeFiles/cmTC_6978a.dir/test_mpi.cpp.o
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++  -isystem /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/include -Wall  -std=c++17 -o CMakeFiles/cmTC_6978a.dir/test_mpi.cpp.o -c /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-h6dYRr/test_mpi.cpp
+        Linking CXX executable cmTC_6978a
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E cmake_link_script CMakeFiles/cmTC_6978a.dir/link.txt --verbose=1
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++ -Wall  -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib CMakeFiles/cmTC_6978a.dir/test_mpi.cpp.o -o cmTC_6978a  -Wl,-rpath,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib/libmpi.so 
+        gmake[1]: Leaving directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-h6dYRr'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1278 (try_compile)"
+      - "/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/share/cmake-3.26/Modules/FindMPI.cmake:1672 (_MPI_try_staged_settings)"
+      - "CMakeLists.txt:23 (find_package)"
+    description: "The MPI test test_mpi for CXX in mode MPICXX"
+    directories:
+      source: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-7KdY0y"
+      binary: "/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-7KdY0y"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: "-Wall"
+      CMAKE_CXX_FLAGS_DEBUG: "-g -O0"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "MPI_RESULT_CXX_test_mpi_MPICXX"
+      cached: true
+      stdout: |
+        Change Dir: /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-7KdY0y
+        
+        Run Build Command(s):/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E env VERBOSE=1 /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake -f Makefile cmTC_97fe5/fast && /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gmake-4.4.1-64dgqm6uum7ziqwmn2ytuf7s4xl2u3pv/bin/gmake  -f CMakeFiles/cmTC_97fe5.dir/build.make CMakeFiles/cmTC_97fe5.dir/build
+        gmake[1]: Entering directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-7KdY0y'
+        Building CXX object CMakeFiles/cmTC_97fe5.dir/test_mpi.cpp.o
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++  -isystem /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/include -Wall  -std=c++17 -o CMakeFiles/cmTC_97fe5.dir/test_mpi.cpp.o -c /home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-7KdY0y/test_mpi.cpp
+        Linking CXX executable cmTC_97fe5
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/cmake-3.26.6-lshue3vxztgk6eduyj6stdvr43xwin2w/bin/cmake -E cmake_link_script CMakeFiles/cmTC_97fe5.dir/link.txt --verbose=1
+        /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++ -Wall  -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -Wl,-rpath -Wl,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/hwloc-2.11.1-5dqqnvbgxfh5kiwgddxpu43cgppo2egc/lib -L/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/libevent-2.1.12-bown3ztvkaxyan3kkfokiwltwha454m2/lib CMakeFiles/cmTC_97fe5.dir/test_mpi.cpp.o -o cmTC_97fe5  -Wl,-rpath,/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib /home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/openmpi-4.1.5-maj4je6qnid6xalzegmrdchsubghbumc/lib/libmpi.so 
+        gmake[1]: Leaving directory '/home/terence411/proj2/MPulse/build/CMakeFiles/CMakeScratch/TryCompile-7KdY0y'
+        
+      exitCode: 0
+...

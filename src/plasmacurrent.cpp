@@ -49,13 +49,19 @@ void PlasmaCurrent::registerData() {
   plasmaBlock.addData("PlasmaJx", Jx);
   plasmaBlock.addData("PlasmaJy", Jy);
   plasmaBlock.addData("PlasmaJz", Jz);
+
+  // plasmaBlock.addData("Ex", Ex);
+  // plasmaBlock.addData("Ey", Ey);
+  // plasmaBlock.addData("Ez", Ez);
+
+  // plasmaBlock.addData("Rho", Rho);
 }
 
 void PlasmaCurrent::init()
 {
   schnek::DomainSubdivision<Field> &subdivision = plasmaBlock.getContext().getSubdivision();
 
-  std::cout << "PlasmaCurrent::init called" << std::endl;
+  // std::cout << "PlasmaCurrent::init called" << std::endl;
 
   Index lowIn  = subdivision.getInnerLo();
   Index highIn = subdivision.getInnerHi();
@@ -80,7 +86,7 @@ void PlasmaCurrent::stepScheme(double dt)
   const double gdtd = 1+0.5*gamma*dt;
   const double emdt = dt*Z*Z*charge*charge/mass;
   
-  std::cout<<"PlasmaCurrent:stepScheme"<<std::endl;
+  // std::cout<<"PlasmaCurrent:stepScheme"<<std::endl;
 
 #ifdef HUERTO_ONE_DIM
   Range1d::LimitType low1D(low[0]), high1D(high[0]);
@@ -105,14 +111,15 @@ void PlasmaCurrent::stepScheme(double dt)
 
   iteration_count++;
 
+  // std::cout << std::endl;
   auto dims = Jx.getDims();
-  std::cout << "Jx Dims : " << dims[0] << ", " << dims[1] << std::endl;
+  // std::cout << "Jx Dims : " << dims[0] << ", " << dims[1] << std::endl;
   dims = Jy.getDims();
-  std::cout << "Jy Dims : " << dims[0] << ", " << dims[1] << std::endl;
+  // std::cout << "Jy Dims : " << dims[0] << ", " << dims[1] << std::endl;
   dims = Jz.getDims();
-  std::cout << "Jz Dims : " << dims[0] << ", " << dims[1] << std::endl;
+  // std::cout << "Jz Dims : " << dims[0] << ", " << dims[1] << std::endl;
   dims = Rho.getDims();
-  std::cout << "Rho Dims : " << dims[0] << ", " << dims[1] << std::endl;
+  // std::cout << "Rho Dims : " << dims[0] << ", " << dims[1] << std::endl;
 
   // Case 1
   auto start = std::chrono::high_resolution_clock::now();
@@ -154,63 +161,141 @@ void PlasmaCurrent::stepScheme(double dt)
   duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
   total_time2 += duration;
 
-  // Case 3
-  start = std::chrono::high_resolution_clock::now();
-  
-  Grid2d g(low2D, high2D);
-  Grid2d g1(low2D, high2D);
+  // Testing
+  Grid2d grid1(low2D, high2D);
+  Grid2d grid2(low2D, high2D);
 
   // g(low2D[0], high2D[1]) = 1.0;
-  fill_kokkos_grid(g, 0.5);
+  fill_kokkos_grid(grid1, 0.5);
 
-  g1 = g;
+  grid2 = grid1;
 
   // auto dims = Jx.getDims();
   dims = Jx.getDims();
 
-  std::cout << "Jx Dims : " << dims[0] << ", " << dims[1] << std::endl;
+  // std::cout << "Jx Dims : " << dims[0] << ", " << dims[1] << std::endl;
 
-  // double jxSum = Jx.reduce(std::plus<double>(), 0.0);
-  double gSum = g.reduce(std::plus<double>(), 0.0);
-  double g1Sum = g1.reduce(std::plus<double>(), 0.0);
-   
-  end = std::chrono::high_resolution_clock::now();
+  double grid1Sum = grid1.reduce(std::plus<double>(), 0.0);
+  double grid2Sum = grid2.reduce(std::plus<double>(), 0.0);
   
-  // std::cout << "Sum of jxSum elements: " << jxSum << std::endl;
-  std::cout << "Sum of g elements: " << gSum << std::endl;
-  std::cout << "Sum of g1 elements: " << g1Sum << std::endl;
+  // std::cout << "Sum of grid1 elements: " << grid1Sum << std::endl;
+  // std::cout << "Sum of grid2 elements: " << grid2Sum << std::endl;
   
-  auto gSize = g.getSize();
-  std::cout << "Size of g: " << gSize << std::endl;
+  auto grid1Size = grid1.getSize();
+  // std::cout << "Size of grid1 : " << grid1Size << std::endl;
   
   typedef schnek::Field<double, 2, HuertoGridChecker, schnek::KokkosDefaultGridStorage> Field2N;
-  int n = 100;
+  typedef schnek::Grid<double, 2, HuertoGridChecker, schnek::KokkosDefaultGridStorage> Grid2N;
+  // int n = 100;
   
-  Field2N f1;
-  // Field2N f1(Field2N::IndexType(n, n));
+  Grid2N Jx_1, Jy_1, Jz_1;
+  Field2N Ex_1, Ey_1, Ez_1;
   
-  // Range2d::LimitType l(0, 0), h(n-1, n-1);
-  // Range2d range(l, h);
+  Jx_1.resize(Jx.getLo(), Jx.getHi());
+  Jy_1.resize(Jy.getLo(), Jy.getHi());
+  Jz_1.resize(Jz.getLo(), Jz.getHi());
   
-  double f1Sum = f1.reduce(std::plus<double>(), 0.0);
-  std::cout << "Sum of f1 elements: " << f1Sum << std::endl;
+  for (auto &pos : range) {
+    Jx_1[pos] = Jx[pos];
+    Jy_1[pos] = Jy[pos];
+    Jz_1[pos] = Jz[pos];
 
-  auto f1Size = f1.getSize();
-  std::cout << "f1 Size : " << f1Size << std::endl;
+    // if (Jx[pos] != 0) std::cout << "Jx("<<pos[0]<<" ,"<<pos[1]<<") : "<<Jx_1[pos]<<" - "<<Jx[pos]<<std::endl;
+    // if (Jy[pos] != 0) std::cout << "Jy("<<pos[0]<<" ,"<<pos[1]<<") : "<<Jy_1[pos]<<" - "<<Jy[pos]<<std::endl;
+    // if (Jz[pos] != 0) std::cout << "Jz("<<pos[0]<<" ,"<<pos[1]<<") : "<<Jz_1[pos]<<" - "<<Jz[pos]<<std::endl;
+  }
+
+  Ex_1.resize(Ex.getLo(), Ex.getHi(), Ex.getDomain(), Ex.getStagger(), Ex.getghostCells());
+  Ey_1.resize(Ey.getLo(), Ey.getHi(), Ey.getDomain(), Ey.getStagger(), Ey.getghostCells());
+  Ez_1.resize(Ez.getLo(), Ez.getHi(), Ez.getDomain(), Ez.getStagger(), Ez.getghostCells());
+  
+  for (auto &pos : range) {
+    Ex_1[pos] = Ex[pos];
+    Ey_1[pos] = Ey[pos];
+    Ez_1[pos] = Ez[pos];
+
+    // if (Ex[pos] != 0) std::cout << "Ex("<<pos[0]<<" ,"<<pos[1]<<") : "<<Ex_1[pos]<<" - "<<Ex[pos]<<std::endl;
+    // if (Ey[pos] != 0) std::cout << "Ey("<<pos[0]<<" ,"<<pos[1]<<") : "<<Ey_1[pos]<<" - "<<Ey[pos]<<std::endl;
+    // if (Ez[pos] != 0) std::cout << "Ez("<<pos[0]<<" ,"<<pos[1]<<") : "<<Ez_1[pos]<<" - "<<Ez[pos]<<std::endl;
+  }
+
+  Field2N f1;
 
   auto f1dims = f1.getDims();
-  std::cout << "f1 Dims : " << f1dims[0] << ", " << f1dims[1] << std::endl;
+  auto f1Size = f1.getSize();
+  double f1Sum = f1.reduce(std::plus<double>(), 0.0);
 
+  // std::cout << "f1 Dims : " << f1dims[0] << ", " << f1dims[1] << std::endl;
+  // std::cout << "f1 Size : " << f1Size << std::endl;
+  // std::cout << "f1 Sum  : " << f1Sum << std::endl;
+  
   auto JxSize = Jx.getSize();
-  std::cout << "Jx Size : " << JxSize << std::endl;
+  // std::cout << "Jx Size : " << JxSize << std::endl;
 
+  Field2N Rho_1;
+
+  Rho_1.resize(
+    Rho.getLo(), 
+    Rho.getHi(),     
+    Rho.getDomain(), 
+    Rho.getStagger(),
+    Rho.getghostCells()
+    // 0
+  );
+
+  // std::cout << "Rho ghostCells : "<<Rho.getghostCells()<<std::endl;
+
+  for (auto &pos : range) {
+    Rho_1[pos] = Rho[pos];
+    // std::cout << "Rho("<<pos[0]<<" ,"<<pos[1]<<") : "<<Rho_1[pos]<<" - "<<Rho[pos]<<std::endl;
+  }
+
+  // throws error
   // double JxSum = Jx.reduce(std::plus<double>(), 0.0);
   // std::cout << "Sum of Jx elements: " << JxSum << std::endl;
 
+  double Jz1Sum = Jz_1.reduce(std::plus<double>(), 0.0);
+  std::cout << "Sum of Jz_1 elements: " << Jz1Sum << std::endl;
+
+  // Case 3
+  start = std::chrono::high_resolution_clock::now();
+
+  Kokkos::parallel_for("plasmacurrent_2D",
+    Kokkos::MDRangePolicy<Kokkos::Rank<2>>(
+      {low[0], low[1]}, 
+      {high[0], high[1]}
+    ),
+    KOKKOS_LAMBDA (const int i, const int j) {
+      // Create index for the current position
+      typename Field2N::IndexType pos;
+      pos[0] = i;
+      pos[1] = j;
+      
+      // Access field values
+      double jx = Jx_1[pos];
+      double jy = Jy_1[pos];
+      double jz = Jz_1[pos];
+      double rho = Rho_1[pos];
+      
+      // Calculate new values
+      // Jx_1[pos] = (jx*gdtn + emdt*Ex_1[pos]*rho)/gdtd;
+      // Jy_1[pos] = (jy*gdtn + emdt*Ey_1[pos]*rho)/gdtd;
+      // Jz_1[pos] = (jz*gdtn + emdt*Ez_1[pos]*rho)/gdtd;
+
+      Jx_1.set(pos, (jx*gdtn + emdt*Ex_1[pos]*rho)/gdtd);
+      Jy_1.set(pos, (jy*gdtn + emdt*Ey_1[pos]*rho)/gdtd);
+      Jz_1.set(pos, (jz*gdtn + emdt*Ez_1[pos]*rho)/gdtd);
+    }
+  );
+
+  // Kokkos::fence();
+
+  end = std::chrono::high_resolution_clock::now();
+  
   duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
   total_time3 += duration;
 
-  if (iteration_count % 100 == 0){
+  if (iteration_count % 10 == 0){
     std::cout << "Total execution time (1): " << total_time1.count() << " ms" << std::endl;
     std::cout << "Total execution time (2): " << total_time2.count() << " ms" << std::endl;
     std::cout << "Total execution time (3): " << total_time3.count() << " ms" << std::endl;

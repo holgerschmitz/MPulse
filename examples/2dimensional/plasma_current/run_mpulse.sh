@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # processes used
-NP=2
+NP=4
 
 # executable path
 EXEC="./../../../build/bin/mpulse2d"
