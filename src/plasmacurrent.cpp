@@ -16,6 +16,7 @@
 std::chrono::duration<double> total_time1(0);
 std::chrono::duration<double> total_time2(0);
 std::chrono::duration<double> total_time3(0);
+std::chrono::duration<double> total_time4(0);
 int iteration_count = 0;
 
 
@@ -260,6 +261,7 @@ void PlasmaCurrent::stepScheme(double dt)
   // Case 3
   start = std::chrono::high_resolution_clock::now();
 
+  // WORKS using redefined variables
   Kokkos::parallel_for("plasmacurrent_2D",
     Kokkos::MDRangePolicy<Kokkos::Rank<2>>(
       {low[0], low[1]}, 
@@ -277,7 +279,9 @@ void PlasmaCurrent::stepScheme(double dt)
       double jz = Jz_1[pos];
       double rho = Rho_1[pos];
       
-      // Calculate new values
+      // THESE ASSIGNMENT OPERATIONS DO NOT WORK - error
+      // error occurs because when using [] inside a KOKKOS_LAMBDA, you don't get a reference that can be modified
+      // it is designed to execute on devices (not the host) - so references to the host are not allowed
       // Jx_1[pos] = (jx*gdtn + emdt*Ex_1[pos]*rho)/gdtd;
       // Jy_1[pos] = (jy*gdtn + emdt*Ey_1[pos]*rho)/gdtd;
       // Jz_1[pos] = (jz*gdtn + emdt*Ez_1[pos]*rho)/gdtd;
@@ -288,17 +292,54 @@ void PlasmaCurrent::stepScheme(double dt)
     }
   );
 
-  // Kokkos::fence();
+  Kokkos::fence();
 
   end = std::chrono::high_resolution_clock::now();
   
   duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
   total_time3 += duration;
 
+  // Case 4
+  start = std::chrono::high_resolution_clock::now();
+
+  Jx_1.parallel_func(low, high, [&](const auto& pos) {
+    // Access field values
+    double jx = Jx_1[pos];
+    double jy = Jy_1[pos];
+    double jz = Jz_1[pos];
+    double rho = Rho_1[pos];
+    
+    // Calculate new values using set method
+    Jx_1.set(pos, (jx*gdtn + emdt*Ex_1[pos]*rho)/gdtd);
+    Jy_1.set(pos, (jy*gdtn + emdt*Ey_1[pos]*rho)/gdtd);
+    Jz_1.set(pos, (jz*gdtn + emdt*Ez_1[pos]*rho)/gdtd);
+  });
+
+  // Jx.parallel_func(low, high, [&](const auto& pos) {
+  //   // Access field values
+  //   double jx = Jx[pos];
+  //   double jy = Jy[pos];
+  //   double jz = Jz[pos];
+  //   double rho = Rho[pos];
+    
+  //   // Calculate new values using set method
+  //   Jx.set(pos, (jx*gdtn + emdt*Ex[pos]*rho)/gdtd);
+  //   Jy.set(pos, (jy*gdtn + emdt*Ey[pos]*rho)/gdtd);
+  //   Jz.set(pos, (jz*gdtn + emdt*Ez[pos]*rho)/gdtd);
+  // });
+
+  Kokkos::fence();
+
+  end = std::chrono::high_resolution_clock::now();
+  
+  duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+  total_time4 += duration;
+
   if (iteration_count % 10 == 0){
     std::cout << "Total execution time (1): " << total_time1.count() << " ms" << std::endl;
     std::cout << "Total execution time (2): " << total_time2.count() << " ms" << std::endl;
     std::cout << "Total execution time (3): " << total_time3.count() << " ms" << std::endl;
+    std::cout << "Total execution time (4): " << total_time4.count() << " ms" << std::endl;
     iteration_count = 0;
   }
 
