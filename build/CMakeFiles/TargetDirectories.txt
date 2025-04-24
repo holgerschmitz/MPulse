@@ -1,5 +1,0 @@
-/home/terence411/proj2/MPulse/build/CMakeFiles/mpulse1d.dir
-/home/terence411/proj2/MPulse/build/CMakeFiles/mpulse2d.dir
-/home/terence411/proj2/MPulse/build/CMakeFiles/mpulse3d.dir
-/home/terence411/proj2/MPulse/build/CMakeFiles/edit_cache.dir
-/home/terence411/proj2/MPulse/build/CMakeFiles/rebuild_cache.dir
