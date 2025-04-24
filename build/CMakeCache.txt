@@ -28,7 +28,7 @@ CMAKE_BUILD_TYPE:STRING=
 CMAKE_COLOR_MAKEFILE:BOOL=ON
 
 //CXX compiler
-CMAKE_CXX_COMPILER:FILEPATH=/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++
+CMAKE_CXX_COMPILER:STRING=/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/c++
 
 //A wrapper around 'ar' adding the appropriate '--plugin' option
 // for the GCC compiler
@@ -54,7 +54,7 @@ CMAKE_CXX_FLAGS_RELEASE:STRING=-O3 -DNDEBUG
 CMAKE_CXX_FLAGS_RELWITHDEBINFO:STRING=-O2 -g -DNDEBUG
 
 //C compiler
-CMAKE_C_COMPILER:FILEPATH=/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/gcc
+CMAKE_C_COMPILER:STRING=/home/terence411/spack/opt/spack/linux-ubuntu22.04-skylake/gcc-12.3.0/gcc-12.3.0-hzxqajpv35ner7kkkae74b7j5bifo2cz/bin/gcc
 
 //A wrapper around 'ar' adding the appropriate '--plugin' option
 // for the GCC compiler

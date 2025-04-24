@@ -4,6 +4,9 @@
 *.o
 *.obj
 
+# CMake files
+build/
+
 # Precompiled Headers
 *.gch
 *.pch
