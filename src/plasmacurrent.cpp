@@ -16,9 +16,11 @@ std::chrono::duration<double> total_time1(0);
 std::chrono::duration<double> total_time2(0);
 std::chrono::duration<double> total_time3(0);
 std::chrono::duration<double> total_time4(0);
+double total_time41(0);
 std::chrono::duration<double> total_time5(0);
+double total_time51(0);
+std::chrono::duration<double> total_time6(0);
 int iteration_count = 0;
-
 
 void PlasmaCurrentBlock::initParameters(schnek::BlockParameters &blockPars)
 {
@@ -138,6 +140,18 @@ void PlasmaCurrent::stepScheme(double dt)
   Ey1.resize(Ey.getLo(), Ey.getHi(), Ey.getDomain(), Ey.getStagger(), Ey.getghostCells());
   Ez1.resize(Ez.getLo(), Ez.getHi(), Ez.getDomain(), Ez.getStagger(), Ez.getghostCells());
   Rho1.resize(Rho.getLo(), Rho.getHi(), Rho.getDomain(), Rho.getStagger(), Rho.getghostCells());
+
+  Grid Jx2, Jy2, Jz2;
+  Field Ex2, Ey2, Ez2, Rho2;
+
+  // Creating temporary vars
+  Jx2.resize(Jx.getLo(), Jx.getHi());
+  Jy2.resize(Jy.getLo(), Jy.getHi());
+  Jz2.resize(Jz.getLo(), Jz.getHi());
+  Ex2.resize(Ex.getLo(), Ex.getHi(), Ex.getDomain(), Ex.getStagger(), Ex.getghostCells());
+  Ey2.resize(Ey.getLo(), Ey.getHi(), Ey.getDomain(), Ey.getStagger(), Ey.getghostCells());
+  Ez2.resize(Ez.getLo(), Ez.getHi(), Ez.getDomain(), Ez.getStagger(), Ez.getghostCells());
+  Rho2.resize(Rho.getLo(), Rho.getHi(), Rho.getDomain(), Rho.getStagger(), Rho.getghostCells());
   
   for (auto &pos : range) {
     Jx1[pos] = Jx[pos]; Jy1[pos] = Jy[pos]; Jz1[pos] = Jz[pos];
@@ -167,6 +181,18 @@ void PlasmaCurrent::stepScheme(double dt)
   }
 
   auto end = std::chrono::high_resolution_clock::now();
+
+  for (auto &pos : range) {
+    Jx1[pos] = Jx[pos]; Jy1[pos] = Jy[pos]; Jz1[pos] = Jz[pos];
+    Ex1[pos] = Ex[pos]; Ey1[pos] = Ey[pos]; Ez1[pos] = Ez[pos];
+    Rho1[pos] = Rho[pos];
+  }
+
+  for (auto &pos : range) {
+    Jx2[pos] = Jx[pos]; Jy2[pos] = Jy[pos]; Jz2[pos] = Jz[pos];
+    Ex2[pos] = Ex[pos]; Ey2[pos] = Ey[pos]; Ez2[pos] = Ez[pos];
+    Rho2[pos] = Rho[pos];
+  }
 
   if (Jx(rn, rn) != 0) std::cout << "(After 1)  Jx("<<rn<<", "<<rn<<") : "<<Jx(rn, rn)<<" - "<<Jx1(rn, rn)<<std::endl;
   if (Jy(rn, rn) != 0) std::cout << "(After 1)  Jy("<<rn<<", "<<rn<<") : "<<Jy(rn, rn)<<" - "<<Jy1(rn, rn)<<std::endl;
@@ -209,6 +235,18 @@ void PlasmaCurrent::stepScheme(double dt)
   
   duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
   total_time2 += duration;
+  
+  // perform check
+  bool equalFlag = true;
+
+  for (auto &pos : range) {
+    if ((Jx[pos] != Jx2[pos] && Jx[pos] != 0) || (Jy[pos] != Jy2[pos] && Jy[pos] != 0) || (Jy[pos] != Jy2[pos] && Jy[pos] != 0)){
+      equalFlag = false;
+      break;
+    }
+  }
+  
+  if (!equalFlag) std::cout << "For Case 2, the data equal check is : " << equalFlag << std::endl;
   
   // Re-assignment
   for (auto &pos : range) {
@@ -266,9 +304,15 @@ void PlasmaCurrent::stepScheme(double dt)
     double jz = Jz[pos];  
     double rho = Rho[pos];
     
+    // Kokkos::Timer timer;
+    
     Jx.set(pos, (jx*gdtn + emdt*Ex[pos]*rho)/gdtd);
     Jy.set(pos, (jy*gdtn + emdt*Ey[pos]*rho)/gdtd);
     Jz.set(pos, (jz*gdtn + emdt*Ez[pos]*rho)/gdtd);
+
+    // double elapsed = timer.seconds(); // Convert to ms
+
+    // Kokkos::atomic_add(&total_time41, elapsed);
   });
 
   end = std::chrono::high_resolution_clock::now();
@@ -300,10 +344,16 @@ void PlasmaCurrent::stepScheme(double dt)
     double jy = Jy[pos];
     double jz = Jz[pos];  
     double rho = Rho[pos];
+
+    // Kokkos::Timer timer;
     
-    Jx.set(pos, (jx*gdtn + emdt*Ex[pos]*rho)/gdtd);s
+    Jx.set(pos, (jx*gdtn + emdt*Ex[pos]*rho)/gdtd);
     Jy.set(pos, (jy*gdtn + emdt*Ey[pos]*rho)/gdtd);
     Jz.set(pos, (jz*gdtn + emdt*Ez[pos]*rho)/gdtd);
+    
+    // double elapsed = timer.seconds(); // Convert to ms
+
+    // Kokkos::atomic_add(&total_time51, elapsed);
   });
 
   end = std::chrono::high_resolution_clock::now();
@@ -314,13 +364,49 @@ void PlasmaCurrent::stepScheme(double dt)
 
   duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
   total_time5 += duration;
+
+  // Re-assignment
+  for (auto &pos : range) {
+    Jx[pos] = Jx1[pos];
+    Jy[pos] = Jy1[pos];
+    Jz[pos] = Jz1[pos];
+  }
+  // Re-assignment
+
+  if (Jx(rn, rn) != 0) std::cout << "(Before 6) Jx("<<rn<<", "<<rn<<") : "<<Jx(rn, rn)<<" - "<<Jx1(rn, rn)<<std::endl;
+  if (Jy(rn, rn) != 0) std::cout << "(Before 6) Jy("<<rn<<", "<<rn<<") : "<<Jy(rn, rn)<<" - "<<Jy1(rn, rn)<<std::endl;
+  if (Jz(rn, rn) != 0) std::cout << "(Before 6) Jz("<<rn<<", "<<rn<<") : "<<Jz(rn, rn)<<" - "<<Jz1(rn, rn)<<std::endl;
+
+  // Case 6
+  start = std::chrono::high_resolution_clock::now();
+
+  schnek::kokkos_utils::parallel_kokkos_parallel_for_v1<Field>(low, high, SCHNEK_DEVICE_LAMBDA(const auto& pos) {
+    double jx = Jx[pos];
+    double jy = Jy[pos];
+    double jz = Jz[pos];  
+    double rho = Rho[pos];
+    
+    Jx.set(pos, (jx*gdtn + emdt*Ex[pos]*rho)/gdtd);
+    Jy.set(pos, (jy*gdtn + emdt*Ey[pos]*rho)/gdtd);
+    Jz.set(pos, (jz*gdtn + emdt*Ez[pos]*rho)/gdtd);
+  });
+
+  end = std::chrono::high_resolution_clock::now();
+
+  if (Jx(rn, rn) != 0) std::cout << "(After 6)  Jx("<<rn<<", "<<rn<<") : "<<Jx(rn, rn)<<" - "<<Jx1(rn, rn)<<std::endl;
+  if (Jy(rn, rn) != 0) std::cout << "(After 6)  Jy("<<rn<<", "<<rn<<") : "<<Jy(rn, rn)<<" - "<<Jy1(rn, rn)<<std::endl;
+  if (Jz(rn, rn) != 0) std::cout << "(After 6)  Jz("<<rn<<", "<<rn<<") : "<<Jz(rn, rn)<<" - "<<Jz1(rn, rn)<<std::endl;
+  
+  duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+  total_time6 += duration;
   
   if (iteration_count % 10 == 0){
     std::cout << "Total execution time (1): " << total_time1.count() << " ms" << std::endl;
     std::cout << "Total execution time (2): " << total_time2.count() << " ms" << std::endl;
     std::cout << "Total execution time (3): " << total_time3.count() << " ms" << std::endl;
-    std::cout << "Total execution time (4): " << total_time4.count() << " ms" << std::endl;
-    std::cout << "Total execution time (5): " << total_time5.count() << " ms" << std::endl;
+    std::cout << "Total execution time (4): " << total_time4.count() << " ms " << total_time41 << std::endl;
+    std::cout << "Total execution time (5): " << total_time5.count() << " ms " << total_time51 << std::endl;
+    std::cout << "Total execution time (6): " << total_time6.count() << " ms" << std::endl;
     iteration_count = 0;
   }
 

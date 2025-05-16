@@ -3,6 +3,8 @@
 
 #include "../huerto/electromagnetics/current.hpp"
 
+#define S_LAMBDA [=] __host__ __device__
+
 class PlasmaCurrent;
 
 class PlasmaCurrentBlock : public CurrentBlock
