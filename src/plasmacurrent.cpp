@@ -16,9 +16,7 @@ std::chrono::duration<double> total_time1(0);
 std::chrono::duration<double> total_time2(0);
 std::chrono::duration<double> total_time3(0);
 std::chrono::duration<double> total_time4(0);
-double total_time41(0);
 std::chrono::duration<double> total_time5(0);
-double total_time51(0);
 std::chrono::duration<double> total_time6(0);
 int iteration_count = 0;
 
@@ -47,24 +45,14 @@ PlasmaCurrent::PlasmaCurrent(double charge_, double mass_, double Z_, double gam
 {}
 
 void PlasmaCurrent::registerData() {
-  std::cout << "PlasmaCurrent::registerData called" << std::endl;
-
   plasmaBlock.addData("PlasmaJx", Jx);
   plasmaBlock.addData("PlasmaJy", Jy);
   plasmaBlock.addData("PlasmaJz", Jz);
-
-  // plasmaBlock.addData("Ex", Ex);
-  // plasmaBlock.addData("Ey", Ey);
-  // plasmaBlock.addData("Ez", Ez);
-
-  // plasmaBlock.addData("Rho", Rho);
 }
 
 void PlasmaCurrent::init()
 {
   schnek::DomainSubdivision<Field> &subdivision = plasmaBlock.getContext().getSubdivision();
-
-  // std::cout << "PlasmaCurrent::init called" << std::endl;
 
   Index lowIn  = subdivision.getInnerLo();
   Index highIn = subdivision.getInnerHi();
@@ -88,8 +76,6 @@ void PlasmaCurrent::stepScheme(double dt)
   const double gdtn = 1-0.5*gamma*dt;
   const double gdtd = 1+0.5*gamma*dt;
   const double emdt = dt*Z*Z*charge*charge/mass;
-  
-  // std::cout<<"PlasmaCurrent:stepScheme"<<std::endl;
 
 #ifdef HUERTO_ONE_DIM
   Range1d::LimitType low1D(low[0]), high1D(high[0]);
@@ -113,16 +99,6 @@ void PlasmaCurrent::stepScheme(double dt)
   Range2d range(low2D, high2D);
 
   iteration_count++;
-
-  // std::cout << std::endl;
-  auto dims = Jx.getDims();
-  // std::cout << "Jx Dims : " << dims[0] << ", " << dims[1] << std::endl;
-  dims = Jy.getDims();
-  // std::cout << "Jy Dims : " << dims[0] << ", " << dims[1] << std::endl;
-  dims = Jz.getDims();
-  // std::cout << "Jz Dims : " << dims[0] << ", " << dims[1] << std::endl;
-  dims = Rho.getDims();
-  // std::cout << "Rho Dims : " << dims[0] << ", " << dims[1] << std::endl;
   
   srand(99);
   int rn = low[0] + (rand() % (high[0] - low[0] + 1));
@@ -164,7 +140,7 @@ void PlasmaCurrent::stepScheme(double dt)
   if (Jy(rn, rn) != 0) std::cout << "(Before 1) Jy("<<rn<<", "<<rn<<") : "<<Jy(rn, rn)<<" - "<<Jy1(rn, rn)<<std::endl;
   if (Jz(rn, rn) != 0) std::cout << "(Before 1) Jz("<<rn<<", "<<rn<<") : "<<Jz(rn, rn)<<" - "<<Jz1(rn, rn)<<std::endl;
 
-  // Case 1
+  // Case 1 - for-loop based iteration
   auto start = std::chrono::high_resolution_clock::now();
 
   for (int i=low[0]; i<high[0]; ++i) {
@@ -213,7 +189,7 @@ void PlasmaCurrent::stepScheme(double dt)
   if (Jy(rn, rn) != 0) std::cout << "(Before 2) Jy("<<rn<<", "<<rn<<") : "<<Jy(rn, rn)<<" - "<<Jy1(rn, rn)<<std::endl;
   if (Jz(rn, rn) != 0) std::cout << "(Before 2) Jz("<<rn<<", "<<rn<<") : "<<Jz(rn, rn)<<" - "<<Jz1(rn, rn)<<std::endl;
   
-  // Case 2
+  // Case 2 - range-basd iteration
   start = std::chrono::high_resolution_clock::now();
   
   for (auto &pos : range) {
@@ -260,7 +236,7 @@ void PlasmaCurrent::stepScheme(double dt)
   if (Jy(rn, rn) != 0) std::cout << "(Before 3) Jy("<<rn<<", "<<rn<<") : "<<Jy(rn, rn)<<" - "<<Jy1(rn, rn)<<std::endl;
   if (Jz(rn, rn) != 0) std::cout << "(Before 3) Jz("<<rn<<", "<<rn<<") : "<<Jz(rn, rn)<<" - "<<Jz1(rn, rn)<<std::endl;
   
-  // Case 3
+  // Case 3 - parallel_func is a member function (Updated to 4 which is not a member function of kokkos-storage)
   start = std::chrono::high_resolution_clock::now();
   
   Jx.parallel_func(low, high, SCHNEK_DEVICE_LAMBDA(const auto& pos) {
@@ -295,24 +271,18 @@ void PlasmaCurrent::stepScheme(double dt)
   if (Jy(rn, rn) != 0) std::cout << "(Before 4) Jy("<<rn<<", "<<rn<<") : "<<Jy(rn, rn)<<" - "<<Jy1(rn, rn)<<std::endl;
   if (Jz(rn, rn) != 0) std::cout << "(Before 4) Jz("<<rn<<", "<<rn<<") : "<<Jz(rn, rn)<<" - "<<Jz1(rn, rn)<<std::endl;
 
-  // Case 4
+  // Case 4 - Implements MDRangePolicy (not a member of kokkos-storage)
   start = std::chrono::high_resolution_clock::now();
 
-  schnek::kokkos_utils::parallel_kokkos_parallel_for<Field>(low, high, SCHNEK_DEVICE_LAMBDA(const auto& pos) {
+  schnek::kokkos_utils::parallel_kokkos_parallel_for<Grid>(low, high, SCHNEK_DEVICE_LAMBDA(const auto& pos) {
     double jx = Jx[pos];
     double jy = Jy[pos];
     double jz = Jz[pos];  
     double rho = Rho[pos];
     
-    // Kokkos::Timer timer;
-    
     Jx.set(pos, (jx*gdtn + emdt*Ex[pos]*rho)/gdtd);
     Jy.set(pos, (jy*gdtn + emdt*Ey[pos]*rho)/gdtd);
     Jz.set(pos, (jz*gdtn + emdt*Ez[pos]*rho)/gdtd);
-
-    // double elapsed = timer.seconds(); // Convert to ms
-
-    // Kokkos::atomic_add(&total_time41, elapsed);
   });
 
   end = std::chrono::high_resolution_clock::now();
@@ -336,10 +306,10 @@ void PlasmaCurrent::stepScheme(double dt)
   if (Jy(rn, rn) != 0) std::cout << "(Before 5) Jy("<<rn<<", "<<rn<<") : "<<Jy(rn, rn)<<" - "<<Jy1(rn, rn)<<std::endl;
   if (Jz(rn, rn) != 0) std::cout << "(Before 5) Jz("<<rn<<", "<<rn<<") : "<<Jz(rn, rn)<<" - "<<Jz1(rn, rn)<<std::endl;
 
-  // Case 5
+  // Case 5 - Implements Schnek's Range Abstraction through forEach from kokkos-iteration
   start = std::chrono::high_resolution_clock::now();
 
-  schnek::kokkos_utils::parallel_kokkos_iteration<Field>(low, high, SCHNEK_DEVICE_LAMBDA(const auto& pos) {
+  schnek::kokkos_utils::parallel_kokkos_iteration<Grid>(low, high, SCHNEK_DEVICE_LAMBDA(const auto& pos) {
     double jx = Jx[pos];
     double jy = Jy[pos];
     double jz = Jz[pos];  
@@ -377,10 +347,10 @@ void PlasmaCurrent::stepScheme(double dt)
   if (Jy(rn, rn) != 0) std::cout << "(Before 6) Jy("<<rn<<", "<<rn<<") : "<<Jy(rn, rn)<<" - "<<Jy1(rn, rn)<<std::endl;
   if (Jz(rn, rn) != 0) std::cout << "(Before 6) Jz("<<rn<<", "<<rn<<") : "<<Jz(rn, rn)<<" - "<<Jz1(rn, rn)<<std::endl;
 
-  // Case 6
+  // Case 6 - Uses a defined team_size (auto deduced through kokkos) which is different for diff hardware
   start = std::chrono::high_resolution_clock::now();
 
-  schnek::kokkos_utils::parallel_kokkos_parallel_for_v1<Field>(low, high, SCHNEK_DEVICE_LAMBDA(const auto& pos) {
+  schnek::kokkos_utils::parallel_kokkos_parallel_for_v1<Grid>(low, high, SCHNEK_DEVICE_LAMBDA(const auto& pos) {
     double jx = Jx[pos];
     double jy = Jy[pos];
     double jz = Jz[pos];  
@@ -404,8 +374,8 @@ void PlasmaCurrent::stepScheme(double dt)
     std::cout << "Total execution time (1): " << total_time1.count() << " ms" << std::endl;
     std::cout << "Total execution time (2): " << total_time2.count() << " ms" << std::endl;
     std::cout << "Total execution time (3): " << total_time3.count() << " ms" << std::endl;
-    std::cout << "Total execution time (4): " << total_time4.count() << " ms " << total_time41 << std::endl;
-    std::cout << "Total execution time (5): " << total_time5.count() << " ms " << total_time51 << std::endl;
+    std::cout << "Total execution time (4): " << total_time4.count() << " ms" << std::endl;
+    std::cout << "Total execution time (5): " << total_time5.count() << " ms" << std::endl;
     std::cout << "Total execution time (6): " << total_time6.count() << " ms" << std::endl;
     iteration_count = 0;
   }
